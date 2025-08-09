@@ -3,18 +3,18 @@ export default function Collections() {
   return (
     <section className="w-full min-h-screen bg-black flex flex-col items-center justify-center p-0 m-0">
       {/* Luxury Intro Text */}
-      <div className="text-center mt-16 mb-12 px-6">
+      <div className="text-center mt-16  mb-12 px-6">
         <h2 className="text-white text-2xl md:text-3xl font-serif uppercase tracking-[0.25em] mb-4">
           A Season for Every Soul
         </h2>
-        <p className="text-white/70 text-sm md:text-base font-light tracking-widest max-w-2xl mx-auto">
+        <p className="text-white/70  text-sm md:text-base font-light tracking-widest max-w-2xl mx-auto">
           From the frost-kissed silhouettes of winter to the radiant ease of
           summer — discover creations crafted for timeless elegance.
         </p>
       </div>
 
       {/* Side-by-side full-height cards */}
-      <div className="flex flex-col md:flex-row w-full h-screen gap-[2px]">
+      <div className="flex flex-col mt-16 md:flex-row w-full h-screen gap-[2px]">
         {/* Winter Collection */}
         <a
           href="#winter"

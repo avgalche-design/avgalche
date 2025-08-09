@@ -4,37 +4,39 @@ import { FaShoppingBag } from "react-icons/fa";
 export default function Products() {
   const products = [
     {
-      image:
-        "https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=700&q=80",
+      image: "/images/p1.avif",
       href: "#",
       alt: "Classic Gold Clock",
     },
     {
-      image:
-        "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=700&q=80",
+      image: "/images/p2.avif",
       href: "#",
       alt: "Royal Chair",
     },
     {
-      image:
-        "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=700&q=80",
+      image: "/images/p3.avif",
       href: "#",
       alt: "Jewelled Apples",
     },
     {
-      image:
-        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=700&q=80",
+      image: "/images/p4.avif",
       href: "#",
       alt: "Garden Jewel",
     },
   ];
 
   return (
-    <section className="w-full bg-black flex flex-col items-center py-24 px-0">
+    <section className="w-full bg-black flex flex-col items-center py-20 px-0">
       {/* Section Heading */}
-      <h2 className="text-white text-4xl md:text-5xl font-serif font-bold mb-16 tracking-[0.2em] text-center uppercase">
-        Signature Collection
-      </h2>
+      <div className="text-center   mb-12 px-6">
+        {/* <h2 className="text-white text-4xl md:text-5xl font-serif font-bold mb-16 tracking-[0.2em] text-center uppercase">
+          Signature Collection
+        </h2> */}
+        <h3 className="text-white/70  text-sm md:text-2xl font-light tracking-widest max-w-2xl mx-auto">
+          Where artistry meets elegance — each piece a testament to timeless
+          design.
+        </h3>
+      </div>
 
       {/* Product Grid */}
       <div className="flex flex-wrap justify-center gap-8 px-4 max-w-9xl">
