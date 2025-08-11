@@ -4,12 +4,19 @@ import { FaUser, FaShoppingBag } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 import AnimatedHamburger from "./AnimatedHamburger";
 import Dropdown from "./Dropdown";
+import { usePathname } from "next/navigation"; // App Router hook
+// If using Pages Router => import { useRouter } from "next/router";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const lastScrollY = useRef(0);
+
+  // Example cart count (replace with your cart state/context)
+  const [cartCount, setCartCount] = useState(0);
+
+  const pathname = usePathname(); // Current URL path
 
   // Show/hide navbar on scroll direction
   useEffect(() => {
@@ -20,22 +27,21 @@ export default function Navbar() {
       setIsScrolled(currentScroll > 0);
 
       if (currentScroll <= 0) {
-        setShowNavbar(true); // Always show at top
+        setShowNavbar(true);
       } else if (currentScroll > lastScrollY.current) {
-        setShowNavbar(false); // scrolling down: hide navbar
+        setShowNavbar(false);
       } else if (currentScroll < lastScrollY.current) {
-        setShowNavbar(true); // scrolling up: show navbar
+        setShowNavbar(true);
       }
 
       lastScrollY.current = currentScroll;
     };
 
     window.addEventListener("scroll", handleScroll);
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Allow ESC to close menu
+  // ESC closes menu
   useEffect(() => {
     if (!menuOpen) return;
     const handleEsc = (e) => {
@@ -44,6 +50,9 @@ export default function Navbar() {
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [menuOpen]);
+
+  // Logic for showing cart icon
+  const shouldShowCart = pathname !== "/" || cartCount > 0;
 
   return (
     <>
@@ -68,7 +77,7 @@ export default function Navbar() {
           />
         </div>
 
-        {/* Center: Logo and h1 */}
+        {/* Center: Logo */}
         <div className="absolute left-0 right-0 mx-auto flex items-center justify-center gap-4 pointer-events-none">
           <img
             src="/logos/GoldPh.png"
@@ -86,9 +95,18 @@ export default function Navbar() {
           <button aria-label="Account">
             <FaUser className="text-white text-xl" />
           </button>
-          <button aria-label="Cart">
-            <FaShoppingBag className="text-white text-xl" />
-          </button>
+
+          {/* Cart Icon */}
+          {shouldShowCart && (
+            <button aria-label="Cart">
+              <FaShoppingBag className="text-white text-xl" />
+              {cartCount > 0 && (
+                <span className="ml-1 text-sm text-yellow-400">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+          )}
         </div>
       </nav>
 

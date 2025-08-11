@@ -18,7 +18,7 @@ export default function HeroSection() {
 
       {/* Content */}
       <div className="relative flex flex-col items-center justify-center h-full z-10 text-white px-6">
-        <h1 className="text-2xl md:text-5xl  tracking-[0.2em] uppercase mb-6 animate-fadeIn">
+        <h1 className="text-2xl md:text-5xl logo  tracking-[0.2em] uppercase mb-6 animate-fadeIn">
           AV GaLche
         </h1>
         {/* <p className="text-lg md:text-lg max-w-2xl text-center mb-10 font-light animate-fadeIn delay-200">

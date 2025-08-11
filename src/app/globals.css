@@ -15,12 +15,19 @@
   --font-montserrat: "Montserrat", sans-serif;
 }
 
-h1,
-h2,
-h3 {
+/* Logo text */
+.logo {
   font-family: var(--font-branch);
 }
 
+/* Headings - now using Raleway */
+h1,
+h2,
+h3 {
+  font-family: var(--font-raleway);
+}
+
+/* Paragraphs */
 p {
   font-family: var(--font-montserrat);
 }

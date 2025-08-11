@@ -12,7 +12,7 @@ import { FaXTwitter } from "react-icons/fa6";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0A0A09] text-white px-6 py-10">
+    <footer className="bg-[black] text-white px-6 py-10">
       <div className="max-w-7xl mx-auto">
         {/* Newsletter */}
         <div className="mb-10">
@@ -23,7 +23,7 @@ export default function Footer() {
             <input
               type="email"
               placeholder="* E-mail"
-              className="flex-1 bg-[#0A0A09] border border-gray-500 px-4 py-2 rounded text-white placeholder-gray-400 focus:outline-none"
+              className="flex-1 bg-[black] border border-gray-500 px-4 py-2 rounded text-white placeholder-gray-400 focus:outline-none"
             />
             <button className="bg-gray-200 text-black px-6 py-2 rounded hover:bg-white transition-colors">
               Confirm
@@ -88,7 +88,7 @@ export default function Footer() {
 
           {/* Logo */}
           <div>
-            <h1 className="text-[white] text-xl md:text-4xl font-serif pointer-events-auto">
+            <h1 className="text-[white] logo text-xl md:text-4xl font-serif pointer-events-auto">
               AV GaLche
             </h1>
           </div>
