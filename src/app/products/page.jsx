@@ -70,7 +70,7 @@ export default async function ProductsPage() {
   return (
     <main className="bg-black min-h-screen text-white px-4 sm:px-12 py-12">
       {/* Dior-like intro */}
-      <section className="max-w-3xl mx-auto text-center mb-12">
+      <section className="max-w-3xl mx-auto text-center mt-10 mb-12">
         <p className="text-sm text-gray-400 mb-2">Winter 2025-2026</p>
         <h1 className="text-3xl md:text-4xl font-serif mb-4">AV GaLche</h1>
         <p className="text-sm text-gray-300 leading-relaxed">

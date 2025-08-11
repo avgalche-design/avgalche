@@ -1,4 +1,6 @@
 // components/HeroSection.jsx
+import Link from "next/link";
+
 export default function HeroSection() {
   return (
     <section className="relative h-screen w-full overflow-hidden">
@@ -24,9 +26,11 @@ export default function HeroSection() {
         {/* <p className="text-lg md:text-lg max-w-2xl text-center mb-10 font-light animate-fadeIn delay-200">
           Unveil Your Elegance
         </p> */}
-        <button className="border rounded-sm border-white px-8 py-3 text-sm tracking-widest uppercase font-light hover:bg-white hover:text-black transition duration-300 animate-fadeIn delay-100">
-          Discover Collection
-        </button>
+        <Link href="/products">
+          <button className="border rounded-sm border-white px-8 py-3 text-sm tracking-widest uppercase font-light hover:bg-white hover:text-black transition duration-300 animate-fadeIn delay-100">
+            Discover Collection
+          </button>
+        </Link>
       </div>
     </section>
   );
