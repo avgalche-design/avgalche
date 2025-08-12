@@ -9,65 +9,87 @@ import {
   FaPodcast,
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { FiPhone, FiMail } from "react-icons/fi";
 
 export default function Footer() {
   return (
     <footer className="bg-[black] text-white  px-6 py-10">
-      <div className="max-w-7xl mx-auto">
-        {/* Newsletter */}
-        <div className="mb-10">
-          <p className="text-lg font-light mb-4">
-            Inspire me with all the latest AV GaLche news
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 max-w-md">
-            <input
-              type="email"
-              placeholder="* E-mail"
-              className="flex-1 bg-[black] border border-gray-500 px-4 py-2 rounded text-white placeholder-gray-400 focus:outline-none"
-            />
-            <button className="bg-gray-200 text-black px-6 py-2 rounded hover:bg-white transition-colors">
-              Confirm
-            </button>
+      {/* Premium Newsletter Section */}
+      <section className="border-t border-white/10 py-24 md:py-32 backdrop-blur-sm bg-black">
+        <div className="max-w-4xl mx-auto text-center px-6">
+          <div className="space-y-8">
+            <div className="space-y-6">
+              <h2 className="text-3xl md:text-4xl font-extralight tracking-[0.05em] text-white">
+                Stay Connected
+              </h2>
+              <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto"></div>
+              <p className="text-neutral-400 text-base leading-[1.8] font-extralight tracking-[0.02em] max-w-2xl mx-auto">
+                Be the first to discover new collections, exclusive pieces, and
+                private events. Join our inner circle.
+              </p>
+            </div>
+
+            <div className="pt-8">
+              <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+                <input
+                  type="email"
+                  placeholder="Enter your email address"
+                  className="flex-1 px-6 py-4 bg-white/5 border border-white/20 text-white placeholder-white/40 text-sm font-extralight tracking-wide focus:outline-none focus:border-white/60 focus:bg-white/10 transition-all duration-300 backdrop-blur-sm"
+                />
+                <button className="relative bg-white text-black px-8 py-4 text-xs uppercase tracking-[0.2em] font-light hover:bg-neutral-100 transition-all duration-300 group overflow-hidden">
+                  <span className="relative z-10">Subscribe</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-
+      </section>
+      <div className="max-w-7xl mx-auto">
         {/* Links */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 text-sm">
-          {/* Boutiques */}
+          {/* support */}
           <div>
-            <h3 className="font-serif text-lg mb-3">AV GaLche Boutiques</h3>
+            <h3 className="font-serif text-lg mb-3">AV GaLche Support</h3>
             <ul className="space-y-1 text-gray-300">
-              <li>AV GaLche Couture</li>
-              <li>Parfums AV GaLche</li>
+              <li className="flex items-center gap-2">
+                <FiPhone className="text-gray-400" />
+                +91 88517 60427
+              </li>
+              <li className="flex items-center gap-2">
+                <FiMail className="text-gray-400" />
+                support@avgalche.com
+              </li>
             </ul>
           </div>
 
           {/* Client Services */}
           <div>
-            <h3 className="font-serif text-lg mb-3">Client Services</h3>
+            <h3 className="font-serif text-lg mb-3">AV GaLche Concierge</h3>
             <ul className="space-y-1 text-gray-300">
               <li>Contact</li>
               <li>FAQ</li>
+              <li>Return & Refund</li>
             </ul>
           </div>
 
           {/* House of AV GaLche */}
           <div>
-            <h3 className="font-serif text-lg mb-3">The House Of AV GaLche</h3>
+            <h3 className="font-serif text-lg mb-3">The AV GaLche Atelier</h3>
             <ul className="space-y-1 text-gray-300">
-              <li>AV GaLche Sustainability</li>
-              <li>Ethics & Compliance</li>
+              <li>About Us</li>
+              <li>Discover More</li>
               <li>Careers</li>
             </ul>
           </div>
 
           {/* Legal */}
           <div>
-            <h3 className="font-serif text-lg mb-3">Legal Terms</h3>
+            <h3 className="font-serif text-lg mb-3">Legal & Policies</h3>
             <ul className="space-y-1 text-gray-300">
-              <li>Legal Terms</li>
+              <li>Shipping Policy</li>
               <li>Privacy Notice</li>
-              <li>Sitemap</li>
+              <li>Terms & Conditions</li>
             </ul>
           </div>
         </div>
@@ -76,14 +98,12 @@ export default function Footer() {
         <div className="mt-10 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-[#a4a4a7] pt-6">
           {/* Social Icons */}
           <div className="flex gap-4 text-lg text-gray-400">
-            <FaTiktok className="hover:text-white cursor-pointer" />
             <FaInstagram className="hover:text-white cursor-pointer" />
             <FaXTwitter className="hover:text-white cursor-pointer" />
             <FaFacebookF className="hover:text-white cursor-pointer" />
             <FaPinterestP className="hover:text-white cursor-pointer" />
             <FaSnapchatGhost className="hover:text-white cursor-pointer" />
             <FaLinkedinIn className="hover:text-white cursor-pointer" />
-            <FaPodcast className="hover:text-white cursor-pointer" />
           </div>
 
           {/* Logo */}

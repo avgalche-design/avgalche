@@ -2,6 +2,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import YouMayAlsoLike from "../components/YouMayAlsoLike";
+import Image from "next/image";
 
 function RenderShopifyRichText({ richTextJson }) {
   if (!richTextJson) return null;
@@ -101,7 +102,7 @@ function RenderShopifyRichText({ richTextJson }) {
 // Animated Background Component
 function AnimatedBackground() {
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10 ">
       {/* Base solid black background */}
       <div className="absolute inset-0 bg-black">
         {/* Gradients: overlays only, not changing the base background */}
@@ -201,6 +202,10 @@ export default function ProductPageClient({
   const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
+    setImageLoaded(false); // reset loader when selected image changes
+  }, [selectedImageIndex]);
+
+  useEffect(() => {
     setIsLoaded(true);
   }, []);
 
@@ -296,7 +301,8 @@ export default function ProductPageClient({
                 <div className="aspect-[4/5] bg-gradient-to-br from-neutral-900/50 to-black/50 backdrop-blur-sm border border-white/5 overflow-hidden rounded-sm shadow-2xl">
                   {product.images.edges.length > 0 ? (
                     <>
-                      <img
+                      <Image
+                        key={selectedImageIndex}
                         src={
                           product.images.edges[selectedImageIndex]?.node.url ||
                           product.images.edges[0].node.url
@@ -305,12 +311,14 @@ export default function ProductPageClient({
                           product.images.edges[selectedImageIndex]?.node
                             .altText || product.title
                         }
-                        className={`w-full h-full object-cover transition-all duration-1000 ${
+                        fill
+                        sizes="(max-width:768px) 100vw, 50vw"
+                        className={`object-cover transition-transform duration-1000 ${
                           imageLoaded
                             ? "scale-100 opacity-100"
                             : "scale-105 opacity-0"
                         } group-hover:scale-110`}
-                        onLoad={() => setImageLoaded(true)}
+                        onLoadingComplete={() => setImageLoaded(true)}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                     </>

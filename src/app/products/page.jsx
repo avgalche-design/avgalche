@@ -193,7 +193,7 @@ export default async function ProductsPage() {
             <div className="space-y-8">
               {/* Collection Title */}
               <div className="space-y-6">
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-extralight tracking-[0.05em] text-white leading-tight">
+                <h1 className="text-5xl md:text-6xl logo lg:text-7xl font-extralight tracking-[0.05em] text-white leading-tight">
                   AV GALCHE
                 </h1>
                 <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto"></div>
@@ -209,16 +209,6 @@ export default async function ProductsPage() {
                   Galche capsule collection reveals an iconic signature inspired
                   by timeless artistry.
                 </p>
-
-                {/* Items Count */}
-                <div className="pt-8">
-                  <div className="inline-block">
-                    <div className="text-xs text-white/60 tracking-[0.3em] uppercase font-extralight">
-                      {products.length} Pieces
-                    </div>
-                    <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent mt-2"></div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -230,147 +220,6 @@ export default async function ProductsPage() {
             <ProductGridClient products={products} />
           </div>
         </section>
-
-        {/* Premium Newsletter Section */}
-        <section className="border-t border-white/10 py-24 md:py-32 backdrop-blur-sm bg-white/[0.01]">
-          <div className="max-w-4xl mx-auto text-center px-6">
-            <div className="space-y-8">
-              <div className="space-y-6">
-                <h2 className="text-3xl md:text-4xl font-extralight tracking-[0.05em] text-white">
-                  Stay Connected
-                </h2>
-                <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto"></div>
-                <p className="text-neutral-400 text-base leading-[1.8] font-extralight tracking-[0.02em] max-w-2xl mx-auto">
-                  Be the first to discover new collections, exclusive pieces,
-                  and private events. Join our inner circle.
-                </p>
-              </div>
-
-              <div className="pt-8">
-                <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
-                  <input
-                    type="email"
-                    placeholder="Enter your email address"
-                    className="flex-1 px-6 py-4 bg-white/5 border border-white/20 text-white placeholder-white/40 text-sm font-extralight tracking-wide focus:outline-none focus:border-white/60 focus:bg-white/10 transition-all duration-300 backdrop-blur-sm"
-                  />
-                  <button className="relative bg-white text-black px-8 py-4 text-xs uppercase tracking-[0.2em] font-light hover:bg-neutral-100 transition-all duration-300 group overflow-hidden">
-                    <span className="relative z-10">Subscribe</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Premium Footer */}
-        <footer className="border-t border-white/10 py-20 backdrop-blur-sm">
-          <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-20">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-              <div className="space-y-6">
-                <h3 className="text-sm uppercase tracking-[0.2em] font-extralight text-white mb-6">
-                  Support
-                </h3>
-                <ul className="space-y-4">
-                  {[
-                    "Size Guide",
-                    "Care Instructions",
-                    "Returns",
-                    "Contact",
-                  ].map((item) => (
-                    <li key={item}>
-                      <a
-                        href="#"
-                        className="text-sm text-neutral-400 hover:text-white transition-all duration-300 font-extralight tracking-wide relative group"
-                      >
-                        {item}
-                        <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-white/40 group-hover:w-full transition-all duration-300"></div>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="space-y-6">
-                <h3 className="text-sm uppercase tracking-[0.2em] font-extralight text-white mb-6">
-                  About
-                </h3>
-                <ul className="space-y-4">
-                  {[
-                    "Our Heritage",
-                    "Craftsmanship",
-                    "Sustainability",
-                    "Careers",
-                  ].map((item) => (
-                    <li key={item}>
-                      <a
-                        href="#"
-                        className="text-sm text-neutral-400 hover:text-white transition-all duration-300 font-extralight tracking-wide relative group"
-                      >
-                        {item}
-                        <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-white/40 group-hover:w-full transition-all duration-300"></div>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="space-y-6">
-                <h3 className="text-sm uppercase tracking-[0.2em] font-extralight text-white mb-6">
-                  Connect
-                </h3>
-                <ul className="space-y-4">
-                  {["Instagram", "Facebook", "Twitter", "Pinterest"].map(
-                    (item) => (
-                      <li key={item}>
-                        <a
-                          href="#"
-                          className="text-sm text-neutral-400 hover:text-white transition-all duration-300 font-extralight tracking-wide relative group"
-                        >
-                          {item}
-                          <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-white/40 group-hover:w-full transition-all duration-300"></div>
-                        </a>
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-
-              <div className="space-y-6">
-                <h3 className="text-sm uppercase tracking-[0.2em] font-extralight text-white mb-6">
-                  Legal
-                </h3>
-                <ul className="space-y-4">
-                  {[
-                    "Privacy Policy",
-                    "Terms of Service",
-                    "Cookies",
-                    "Accessibility",
-                  ].map((item) => (
-                    <li key={item}>
-                      <a
-                        href="#"
-                        className="text-sm text-neutral-400 hover:text-white transition-all duration-300 font-extralight tracking-wide relative group"
-                      >
-                        {item}
-                        <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-white/40 group-hover:w-full transition-all duration-300"></div>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            <div className="border-t border-white/10 pt-12 text-center">
-              <div className="space-y-4">
-                <div className="w-8 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent mx-auto"></div>
-                <p className="text-xs text-neutral-500 tracking-[0.15em] font-extralight uppercase">
-                  © 2025 AV Galche. All Rights Reserved.
-                </p>
-              </div>
-            </div>
-          </div>
-        </footer>
       </main>
     </>
   );

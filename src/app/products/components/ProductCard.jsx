@@ -26,7 +26,7 @@ export default function LuxuryProductCard({ product, index }) {
       viewport={{ once: true, amount: 0.1 }}
       transition={{
         duration: 0.8,
-        delay: index * 0.1,
+        delay: index * 0.05,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
       className="group relative select-none"
@@ -52,7 +52,7 @@ export default function LuxuryProductCard({ product, index }) {
                 initial={{ opacity: 0, scale: 1.05 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.02 }}
-                transition={{ duration: 0.6 }}
+                transition={{ duration: 0.3 }}
               />
             </AnimatePresence>
           ) : (
