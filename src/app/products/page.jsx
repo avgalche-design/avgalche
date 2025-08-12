@@ -142,7 +142,10 @@ function AtmosphericBackground() {
 }
 
 export default async function ProductsPage() {
-  const data = await shopifyFetch({ query: PRODUCTS_QUERY });
+  const data = await shopifyFetch(
+    { query: PRODUCTS_QUERY },
+    { next: { revalidate: 30 } } // Refresh every 30 seconds
+  );
 
   // Defensive mapping: build a simple, serializable product shape
   const products =

@@ -1,5 +1,8 @@
 // lib/shopify.js
-export async function shopifyFetch({ query, variables = {} }) {
+export async function shopifyFetch(
+  { query, variables = {} },
+  fetchOptions = {}
+) {
   const endpoint = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN;
   const token = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
 
@@ -10,6 +13,8 @@ export async function shopifyFetch({ query, variables = {} }) {
       "X-Shopify-Storefront-Access-Token": token,
     },
     body: JSON.stringify({ query, variables }),
+    cache: fetchOptions.cache || "no-store", // 👈 force fresh fetch
+    next: fetchOptions.next, // optional for ISR
   });
 
   if (!res.ok) {

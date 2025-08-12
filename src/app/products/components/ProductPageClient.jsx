@@ -3,11 +3,108 @@
 import { useState, useEffect } from "react";
 import YouMayAlsoLike from "../components/YouMayAlsoLike";
 
+function RenderShopifyRichText({ richTextJson }) {
+  if (!richTextJson) return null;
+
+  let data;
+  try {
+    data =
+      typeof richTextJson === "string"
+        ? JSON.parse(richTextJson)
+        : richTextJson;
+  } catch {
+    // If parsing fails, render as plain text
+    return <p>{richTextJson}</p>;
+  }
+
+  // Recursively render rich text nodes
+  function renderNodes(nodes) {
+    return nodes.map((node, idx) => {
+      switch (node.type) {
+        case "paragraph":
+          return (
+            <p key={idx} className="mb-4">
+              {renderNodes(node.children)}
+            </p>
+          );
+
+        case "text":
+          let textElement = node.value;
+          if (node.marks) {
+            node.marks.forEach((mark) => {
+              switch (mark.type) {
+                case "bold":
+                  textElement = <strong key={idx}>{textElement}</strong>;
+                  break;
+                case "italic":
+                  textElement = <em key={idx}>{textElement}</em>;
+                  break;
+                // Add underline or other formats if needed
+                default:
+                  break;
+              }
+            });
+          }
+          return textElement;
+
+        case "list":
+          if (node.listType === "ordered") {
+            return (
+              <ol key={idx} className="list-decimal list-inside mb-4">
+                {renderNodes(node.children)}
+              </ol>
+            );
+          }
+          return (
+            <ul key={idx} className="list-disc list-inside mb-4">
+              {renderNodes(node.children)}
+            </ul>
+          );
+
+        case "list-item":
+          return <li key={idx}>{renderNodes(node.children)}</li>;
+
+        case "heading":
+          const Tag = `h${node.level || 3}`;
+          return (
+            <Tag key={idx} className="font-semibold mt-4 mb-2">
+              {renderNodes(node.children)}
+            </Tag>
+          );
+
+        case "link":
+          return (
+            <a
+              key={idx}
+              href={node.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 underline"
+            >
+              {renderNodes(node.children)}
+            </a>
+          );
+
+        default:
+          // For unknown node types just render children recursively
+          if (node.children) {
+            return <>{renderNodes(node.children)}</>;
+          }
+          return null;
+      }
+    });
+  }
+
+  return <div>{renderNodes(data.children || [])}</div>;
+}
+
 // Animated Background Component
 function AnimatedBackground() {
   return (
-    <div className="fixed  inset-0 overflow-hidden pointer-events-none">
-      <div className="absolute inset-0 bg-black opacity-50">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      {/* Base solid black background */}
+      <div className="absolute inset-0 bg-black">
+        {/* Gradients: overlays only, not changing the base background */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-radial from-white/[0.02] to-transparent rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-1/3 right-1/3 w-80 h-80 bg-gradient-radial from-neutral-300/[0.01] to-transparent rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
@@ -141,20 +238,7 @@ export default function ProductPageClient({
             </div>
             <div className="backdrop-blur-sm bg-white/[0.02] border border-white/10 rounded-lg p-8">
               <div className="space-y-3">
-                {washCareInfo.split("\n").map(
-                  (line, index) =>
-                    line.trim() && (
-                      <div
-                        key={index}
-                        className="flex items-center space-x-3 group"
-                      >
-                        <div className="w-1 h-1 bg-white/40 rounded-full group-hover:bg-white/60 transition-colors"></div>
-                        <p className="text-sm font-extralight tracking-[0.05em] text-neutral-300 group-hover:text-white transition-colors">
-                          {line.trim().replace("•", "").trim()}
-                        </p>
-                      </div>
-                    )
-                )}
+                <RenderShopifyRichText richTextJson={washCareInfo} />
               </div>
             </div>
           </div>

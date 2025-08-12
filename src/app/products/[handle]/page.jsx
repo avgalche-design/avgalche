@@ -12,6 +12,8 @@ const PRODUCT_QUERY = `
       productType
       metafields(identifiers: [
         {namespace: "custom", key: "wash_care_instructions"},
+        {namespace: "custom", key: "composition_care"},
+  {namespace: "custom", key: "fabric_and_care"},
         {namespace: "custom", key: "shipping_info"},
         {namespace: "custom", key: "size_guide"}
       ]) {
@@ -94,10 +96,13 @@ export async function generateStaticParams() {
 export default async function ProductPage({ params }) {
   const { handle } = await params;
 
-  const data = await shopifyFetch({
-    query: PRODUCT_QUERY,
-    variables: { handle },
-  });
+  const data = await shopifyFetch(
+    {
+      query: PRODUCT_QUERY,
+      variables: { handle },
+    },
+    { next: { revalidate: 30 } } // regenerate every 30 seconds
+  );
 
   const product = data?.productByHandle;
   if (!product) {
@@ -128,6 +133,8 @@ export default async function ProductPage({ params }) {
     : {};
 
   const washCareInfo =
+    metafields.composition_care ||
+    metafields.fabric_and_care ||
     metafields.wash_care_instructions ||
     `
     • Machine wash cold with like colors
