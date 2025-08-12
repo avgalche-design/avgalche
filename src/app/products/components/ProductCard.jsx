@@ -1,99 +1,89 @@
 "use client";
+
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import PropTypes from "prop-types";
+import Link from "next/link";
 
-export default function ProductCard({ product }) {
-  const router = useRouter();
-  const images = product.images || [];
-  const [currentIndex, setCurrentIndex] = useState(0);
+export default function LuxuryProductCard({ product, index }) {
   const [isHovered, setIsHovered] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
-  const handlePrev = (e) => {
-    e.stopPropagation();
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
+  const images =
+    product.images?.map((img) => (typeof img === "string" ? img : img.url)) ??
+    [];
 
-  const handleNext = (e) => {
-    e.stopPropagation();
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  };
+  const price = parseFloat(product.variants?.[0]?.price?.amount ?? 0);
+  const currency = product.variants?.[0]?.price?.currencyCode ?? "";
 
-  const handleClick = () => {
-    router.push(`/products/${product.handle}`);
-  };
-
-  const progressWidth =
-    images.length > 1
-      ? `${((currentIndex + 1) / images.length) * 100}%`
-      : "100%";
+  // Show first image by default, second image on hover
+  const currentImage = isHovered && images.length > 1 ? images[1] : images[0];
 
   return (
-    <div
-      className="group relative w-full max-w-xs mx-auto cursor-pointer"
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{
+        duration: 0.8,
+        delay: index * 0.1,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      }}
+      className="group relative select-none"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={handleClick}
     >
-      {/* Image */}
-      <div className="relative aspect-square overflow-hidden">
-        {images.length > 0 && (
-          <img
-            src={images[currentIndex]}
-            alt={product.title}
-            className="w-full h-full object-cover transition-transform duration-300 "
-          />
-        )}
+      <Link href={`/products/${product.handle}`} className="block">
+        {/* IMAGE WRAPPER */}
+        <div className="relative aspect-[3/4] mb-5 overflow-hidden border border-neutral-200/20">
+          {/* Fade Overlay */}
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-700" />
 
-        {/* Prev/Next Arrows */}
-        {isHovered && images.length > 1 && (
-          <>
-            <button
-              onClick={handlePrev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-1 hover:bg-white"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <button
-              onClick={handleNext}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-1 hover:bg-white"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </>
-        )}
+          {images.length > 0 ? (
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={currentImage} // triggers animation on change
+                src={currentImage}
+                alt={product.title}
+                className={`w-full h-full object-cover transition-transform duration-1000 ease-out ${
+                  imageLoaded ? "scale-100 opacity-100" : "scale-105 opacity-0"
+                } group-hover:scale-105`}
+                onLoad={() => setImageLoaded(true)}
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.02 }}
+                transition={{ duration: 0.6 }}
+              />
+            </AnimatePresence>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-neutral-100">
+              <span className="text-neutral-500 tracking-[0.2em] text-xs uppercase">
+                No Image
+              </span>
+            </div>
+          )}
+        </div>
 
-        {/* Slider bar */}
-        {/* {images.length > 1 && (
-          <div className="absolute bottom-2 left-0 w-full h-1 bg-gray-200 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-black transition-transform duration-300"
-              style={{
-                width: `${100 / images.length}%`, // width = 1/nth of total images
-                transform: `translateX(${
-                  currentIndex * (100 / images.length)
-                }%)`, // move in steps
-              }}
-            />
-          </div>
-        )} */}
-      </div>
-
-      {/* Product Info */}
-      <div className="mt-3 text-center group">
-        <h3 className="font-semibold">{product.title}</h3>
-        <p className="text-gray-700">{product.price}</p>
-
-        <p
-          className="text-gray-400 text-[12px] mt-1 line-clamp-1 overflow-hidden transition-opacity duration-300"
-          style={{
-            minHeight: "1.2em", // keeps the height fixed
-            opacity: isHovered ? 1 : 0, // fades in/out
-          }}
-        >
-          {product.description || ""}
-        </p>
-      </div>
-    </div>
+        {/* TEXT CONTENT */}
+        <div className="text-center space-y-1">
+          {product.category && (
+            <p className="text-neutral-500 text-[10px] uppercase tracking-[0.3em] font-light">
+              {product.category}
+            </p>
+          )}
+          <h3 className="text-[12px] tracking-[0.08em] uppercase font-extralight text-[#A1A1A1] group-hover:text-white transition-colors duration-300">
+            {product.title}
+          </h3>
+          <p className="text-[11px] font-light tracking-wider text-white">
+            {currency} {price.toFixed(2)}
+          </p>
+        </div>
+      </Link>
+    </motion.div>
   );
 }
+
+LuxuryProductCard.propTypes = {
+  product: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
+};

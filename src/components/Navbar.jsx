@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { FaUser, FaShoppingBag } from "react-icons/fa";
+import { FaUser, FaShoppingBag, FaRegUser } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
+import { CiUser } from "react-icons/ci";
 import AnimatedHamburger from "./AnimatedHamburger";
 import Dropdown from "./Dropdown";
 import { usePathname } from "next/navigation"; // App Router hook
@@ -93,7 +94,7 @@ export default function Navbar() {
             <FiSearch className="text-white text-xl" />
           </button>
           <button aria-label="Account">
-            <FaUser className="text-white text-xl" />
+            <FaRegUser className="text-white font-bold text-xl" />
           </button>
 
           {/* Cart Icon */}

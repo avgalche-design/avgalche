@@ -1,6 +1,7 @@
 // app/products/[handle]/page.js
 import { shopifyFetch } from "../../../lib/shopify";
 import YouMayAlsoLike from "../components/YouMayAlsoLike";
+import ProductPageClient from "../components/ProductPageClient";
 
 const PRODUCT_QUERY = `
   query ProductByHandle($handle: String!) {
@@ -9,6 +10,14 @@ const PRODUCT_QUERY = `
       title
       description
       productType
+      metafields(identifiers: [
+        {namespace: "custom", key: "wash_care_instructions"},
+        {namespace: "custom", key: "shipping_info"},
+        {namespace: "custom", key: "size_guide"}
+      ]) {
+        key
+        value
+      }
       images(first: 10) {
         edges {
           node {
@@ -83,7 +92,7 @@ export async function generateStaticParams() {
 }
 
 export default async function ProductPage({ params }) {
-  const { handle } = await params; // ✅ no await here
+  const { handle } = await params;
 
   const data = await shopifyFetch({
     query: PRODUCT_QUERY,
@@ -93,11 +102,53 @@ export default async function ProductPage({ params }) {
   const product = data?.productByHandle;
   if (!product) {
     return (
-      <main className="p-8 text-center text-gray-500">Product not found</main>
+      <main className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-light tracking-wide text-neutral-400 mb-2">
+            Product Not Found
+          </h1>
+          <p className="text-sm text-neutral-500 tracking-wider">
+            The requested item is not available.
+          </p>
+        </div>
+      </main>
     );
   }
 
   const price = product.variants.edges[0]?.node.price;
+
+  // Extract metafield data
+  const metafields = product.metafields
+    ? product.metafields.reduce((acc, metafield) => {
+        if (metafield && metafield.key && metafield.value) {
+          acc[metafield.key] = metafield.value;
+        }
+        return acc;
+      }, {})
+    : {};
+
+  const washCareInfo =
+    metafields.wash_care_instructions ||
+    `
+    • Machine wash cold with like colors
+    • Do not bleach
+    • Tumble dry low heat
+    • Iron on low temperature
+    • Do not dry clean
+    • Wash inside out to preserve print and color
+  `;
+
+  const shippingInfo =
+    metafields.shipping_info ||
+    `
+    Shipping Method: Orders are shipped via registered courier or speed post—internationally through international couriers and domestically through domestic couriers.
+
+Dispatch Timeline: Orders are dispatched within 6–8 days or as per the confirmed delivery date; delays by courier/postal services are beyond AG Enterprises' control.
+
+Delivery & Support: Orders are delivered to the buyer's provided address, with confirmation sent to the registered email; for support, contact 8851760427 or support@avgalche.com.
+
+Refund & Return Policy: Returns and refunds are accepted within 14 days of delivery, subject to our return policy terms.
+  `;
 
   // Fetch related products
   const relatedData = await shopifyFetch({ query: RELATED_PRODUCTS_QUERY });
@@ -109,92 +160,16 @@ export default async function ProductPage({ params }) {
         price: vEdge.node.price,
       })),
     }))
-    .filter((prod) => prod.handle !== product.handle);
+    .filter((prod) => prod.handle !== handle);
 
   return (
-    <main className="bg-black text-white px-6 md:px-20 py-12 max-w-9xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-        {/* LEFT */}
-        <div className="flex flex-col gap-4">
-          {product.images.edges.length > 0 ? (
-            product.images.edges.map(({ node }, index) => (
-              <img
-                key={index}
-                src={node.url}
-                alt={node.altText || product.title}
-                className="w-full object-contain rounded"
-              />
-            ))
-          ) : (
-            <div className="h-96 bg-gray-800 flex items-center justify-center">
-              No Image
-            </div>
-          )}
-        </div>
-
-        {/* RIGHT */}
-        <div className="md:sticky md:top-8 p-4 self-start">
-          <h1 className="text-3xl font-serif">{product.title}</h1>
-          <p className="mt-1 text-gray-400">{product.productType}</p>
-
-          {price && (
-            <p className="mt-4 text-2xl text-center font-medium">
-              {price.currencyCode} {price.amount}
-            </p>
-          )}
-
-          <div className="mt-6 flex flex-col gap-3">
-            <button className="border border-gray-600 py-3 rounded hover:bg-gray-900 transition">
-              Add to Wishlist
-            </button>
-            <button className="bg-white text-black py-3 rounded hover:bg-gray-300 transition">
-              Add to Cart
-            </button>
-          </div>
-
-          <div className="mt-10 border-b border-gray-700">
-            <nav className="flex gap-8 text-sm font-medium">
-              <button className="pb-2 border-b-2 border-white">
-                Description
-              </button>
-              <button className="pb-2 text-gray-400 hover:text-white">
-                Size & Fit
-              </button>
-              <button className="pb-2 text-gray-400 hover:text-white">
-                Contact & In-Store Availability
-              </button>
-            </nav>
-          </div>
-
-          <div className="mt-6 text-gray-300 leading-relaxed">
-            {product.description}
-          </div>
-
-          <div className="mt-8">
-            <h2 className="text-lg font-semibold mb-4">Size & Fit</h2>
-            <ul className="space-y-2">
-              {product.variants.edges.map(({ node }) => (
-                <li
-                  key={node.id}
-                  className="flex items-center justify-between border-b border-gray-700 pb-2"
-                >
-                  <span>{node.title}</span>
-                  <span
-                    className={
-                      node.availableForSale ? "text-green-400" : "text-red-500"
-                    }
-                  >
-                    {node.availableForSale ? "In stock" : "Out of stock"}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* ✅ YouMayAlsoLike */}
-      <YouMayAlsoLike products={relatedProducts} />
-    </main>
+    <ProductPageClient
+      product={product}
+      price={price}
+      relatedProducts={relatedProducts}
+      washCareInfo={washCareInfo}
+      shippingInfo={shippingInfo}
+      sizeGuideData={metafields.size_guide}
+    />
   );
 }
