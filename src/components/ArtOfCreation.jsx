@@ -1,19 +1,35 @@
 // components/ArtOfCreation.jsx
+"use client"; // if using Next.js App Router
+import { motion } from "framer-motion";
+import Link from "next/link";
+
 export default function ArtOfCreation() {
   return (
-    <section className="w-full bg-white text-black">
+    <section className="w-full bg-white p-8 text-black">
       <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
         {/* Left Side - Image */}
-        <div className="relative group overflow-hidden">
+        <motion.div
+          className="relative group overflow-hidden"
+          initial={{ scale: 1.1, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.4 }}
+        >
           <img
-            src="/images/art.avif"
+            src="https://images.unsplash.com/photo-1544361591-ad0cb51f54b3?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Craftsmanship"
             className="w-full h-full object-cover transform group-hover:scale-105 transition duration-[2000ms] ease-out"
           />
-        </div>
+        </motion.div>
 
         {/* Right Side - Text */}
-        <div className="flex flex-col justify-center items-start p-10 md:p-20">
+        <motion.div
+          className="flex flex-col justify-center items-start p-10 md:p-20"
+          initial={{ x: 100, opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.4 }}
+        >
           <h2 className="text-3xl md:text-5xl font-serif uppercase tracking-[0.15em] mb-6">
             The Art of Creation
           </h2>
@@ -23,13 +39,14 @@ export default function ArtOfCreation() {
             the final stitch, our collections are crafted to inspire, captivate,
             and endure.
           </p>
-          <a
-            href="#"
-            className="border border-black px-8 py-3 text-sm tracking-widest uppercase hover:bg-black hover:text-white transition duration-300"
-          >
-            Explore the Story
-          </a>
-        </div>
+          <Link href="/story">
+            <button className="relative text-black p-1 font-medium group">
+              <h2>Explore The Story</h2>
+              <span className="absolute left-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
+              <span className="absolute right-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
+            </button>
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

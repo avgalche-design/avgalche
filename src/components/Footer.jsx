@@ -13,17 +13,17 @@ import { FiPhone, FiMail } from "react-icons/fi";
 
 export default function Footer() {
   return (
-    <footer className="bg-[black] text-white  px-6 py-10">
+    <footer className="bg-white text-black px-6 py-10">
       {/* Premium Newsletter Section */}
-      <section className="border-t border-white/10 py-24 md:py-32 backdrop-blur-sm bg-black">
+      <section className="border-t border-black/10 py-24 md:py-32 backdrop-blur-sm bg-white">
         <div className="max-w-4xl mx-auto text-center px-6">
           <div className="space-y-8">
             <div className="space-y-6">
-              <h2 className="text-3xl md:text-4xl font-extralight tracking-[0.05em] text-white">
+              <h2 className="text-3xl md:text-4xl font-extralight tracking-[0.05em] text-black">
                 Stay Connected
               </h2>
-              <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto"></div>
-              <p className="text-neutral-400 text-base leading-[1.8] font-extralight tracking-[0.02em] max-w-2xl mx-auto">
+              <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-black/40 to-transparent mx-auto"></div>
+              <p className="text-neutral-600 text-base leading-[1.8] font-extralight tracking-[0.02em] max-w-2xl mx-auto">
                 Be the first to discover new collections, exclusive pieces, and
                 private events. Join our inner circle.
               </p>
@@ -34,9 +34,9 @@ export default function Footer() {
                 <input
                   type="email"
                   placeholder="Enter your email address"
-                  className="flex-1 px-6 py-4 bg-white/5 border border-white/20 text-white placeholder-white/40 text-sm font-extralight tracking-wide focus:outline-none focus:border-white/60 focus:bg-white/10 transition-all duration-300 backdrop-blur-sm"
+                  className="flex-1 px-6 py-4 bg-black/5 border border-black/20 text-black placeholder-black/40 text-sm font-extralight tracking-wide focus:outline-none focus:border-black/60 focus:bg-black/10 transition-all duration-300 backdrop-blur-sm"
                 />
-                <button className="relative bg-white text-black px-8 py-4 text-xs uppercase tracking-[0.2em] font-light hover:bg-neutral-100 transition-all duration-300 group overflow-hidden">
+                <button className="relative bg-black text-white px-8 py-4 text-xs uppercase tracking-[0.2em] font-light hover:bg-neutral-800 transition-all duration-300 group overflow-hidden">
                   <span className="relative z-10">Subscribe</span>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
                 </button>
@@ -45,19 +45,20 @@ export default function Footer() {
           </div>
         </div>
       </section>
+
       <div className="max-w-7xl mx-auto">
         {/* Links */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 text-sm">
           {/* support */}
           <div>
             <h3 className="font-serif text-lg mb-3">AV GaLche Support</h3>
-            <ul className="space-y-1 text-gray-300">
+            <ul className="space-y-1 text-gray-700">
               <li className="flex items-center gap-2">
-                <FiPhone className="text-gray-400" />
+                <FiPhone className="text-gray-500" />
                 +91 88517 60427
               </li>
               <li className="flex items-center gap-2">
-                <FiMail className="text-gray-400" />
+                <FiMail className="text-gray-500" />
                 support@avgalche.com
               </li>
             </ul>
@@ -66,7 +67,7 @@ export default function Footer() {
           {/* Client Services */}
           <div>
             <h3 className="font-serif text-lg mb-3">AV GaLche Concierge</h3>
-            <ul className="space-y-1 text-gray-300">
+            <ul className="space-y-1 text-gray-700">
               <li>Contact</li>
               <li>FAQ</li>
               <li>Return & Refund</li>
@@ -76,7 +77,7 @@ export default function Footer() {
           {/* House of AV GaLche */}
           <div>
             <h3 className="font-serif text-lg mb-3">The AV GaLche Atelier</h3>
-            <ul className="space-y-1 text-gray-300">
+            <ul className="space-y-1 text-gray-700">
               <li>About Us</li>
               <li>Discover More</li>
               <li>Careers</li>
@@ -86,7 +87,7 @@ export default function Footer() {
           {/* Legal */}
           <div>
             <h3 className="font-serif text-lg mb-3">Legal & Policies</h3>
-            <ul className="space-y-1 text-gray-300">
+            <ul className="space-y-1 text-gray-700">
               <li>Shipping Policy</li>
               <li>Privacy Notice</li>
               <li>Terms & Conditions</li>
@@ -95,28 +96,28 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-10 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-[#a4a4a7] pt-6">
+        <div className="mt-10 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-gray-300 pt-6">
           {/* Social Icons */}
-          <div className="flex gap-4 text-lg text-gray-400">
-            <FaInstagram className="hover:text-white cursor-pointer" />
-            <FaXTwitter className="hover:text-white cursor-pointer" />
-            <FaFacebookF className="hover:text-white cursor-pointer" />
-            <FaPinterestP className="hover:text-white cursor-pointer" />
-            <FaSnapchatGhost className="hover:text-white cursor-pointer" />
-            <FaLinkedinIn className="hover:text-white cursor-pointer" />
+          <div className="flex gap-4 text-lg text-gray-500">
+            <FaInstagram className="hover:text-black cursor-pointer" />
+            <FaXTwitter className="hover:text-black cursor-pointer" />
+            <FaFacebookF className="hover:text-black cursor-pointer" />
+            <FaPinterestP className="hover:text-black cursor-pointer" />
+            <FaSnapchatGhost className="hover:text-black cursor-pointer" />
+            <FaLinkedinIn className="hover:text-black cursor-pointer" />
           </div>
 
           {/* Logo */}
           <div>
-            <h1 className="text-[white] logo text-xl md:text-4xl font-serif pointer-events-auto">
+            <h1 className="text-[black] logo text-xl md:text-4xl font-serif pointer-events-auto">
               AV GaLche
             </h1>
           </div>
 
           {/* Country */}
-          <div className="text-sm text-gray-400">
+          <div className="text-sm text-gray-600">
             Country / Region{" "}
-            <span className="font-medium text-white">India (English)</span>
+            <span className="font-medium text-black">India (English)</span>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useEffect, useState } from "react";
-import { ArrowBigDown, Facebook, Instagram, Twitter } from "lucide-react";
+import { Facebook, Instagram, Twitter } from "lucide-react";
 import { IoIosArrowRoundDown } from "react-icons/io";
 
 const imagesSet1 = [

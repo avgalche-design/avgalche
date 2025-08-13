@@ -3,34 +3,35 @@ import Link from "next/link";
 
 export default function HeroSection() {
   return (
-    <section className="relative h-screen w-full overflow-hidden">
-      {/* Background Video */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-      >
-        <source src="/videos/car.mp4" type="video/mp4" />
-      </video>
+    <section className="relative w-full overflow-hidden">
+      {/* Wrapper that maintains 16:9 ratio */}
+      <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute top-0 left-0 w-full h-full object-cover"
+        >
+          <source src="/videos/car.mp4" type="video/mp4" />
+        </video>
 
-      {/* Dark Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/5" />
+        {/* Dark Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/10 to-black/5" />
 
-      {/* Content */}
-      <div className="relative flex flex-col items-center justify-center h-full z-10 text-white px-6">
-        <h1 className="text-2xl md:text-5xl logo  tracking-[0.2em] uppercase mb-6 animate-fadeIn">
-          AV GaLche
-        </h1>
-        {/* <p className="text-lg md:text-lg max-w-2xl text-center mb-10 font-light animate-fadeIn delay-200">
-          Unveil Your Elegance
-        </p> */}
-        <Link href="/products">
-          <button className="border rounded-sm border-white px-8 py-3 text-sm tracking-widest uppercase font-light hover:bg-white hover:text-black transition duration-300 animate-fadeIn delay-100">
-            Discover Collection
-          </button>
-        </Link>
+        {/* Content */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10 text-white px-6">
+          <h1 className="text-2xl md:text-5xl logo  mb-6 animate-fadeIn">
+            AV GaLche
+          </h1>
+          <Link href="/products">
+            <button className="relative text-white p-1 font-medium group">
+              <h2>Discover Collection</h2>
+              <span className="absolute left-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
+              <span className="absolute right-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
+            </button>
+          </Link>
+        </div>
       </div>
     </section>
   );
