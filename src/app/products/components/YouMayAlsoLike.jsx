@@ -6,9 +6,9 @@ export default function YouMayAlsoLike({ products }) {
   if (!products || products.length === 0) return null;
 
   return (
-    <section className="mt-16">
+    <section>
       <h2 className="text-center text-xl font-serif mb-8 text-white">
-        You may also like
+        Our curated picks for you
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
         {products.map((product) => (

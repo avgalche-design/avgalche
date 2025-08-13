@@ -289,7 +289,7 @@ export default function ProductPageClient({
       <main className="relative z-10 text-white min-h-screen">
         {/* Hero Section */}
         <div
-          className={`px-6 md:px-12 lg:px-20 py-24 max-w-8xl mx-auto transition-all duration-1000 ${
+          className={`px-6 md:px-12 lg:px-20 pt-24 pb-4 max-w-8xl mx-auto transition-all duration-1000 ${
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
         >
@@ -451,7 +451,7 @@ export default function ProductPageClient({
               </div>
 
               {/* Product Information Tabs */}
-              <div className="pt-10 border-t border-white/10">
+              <div className="pt-10  border-t border-white/10">
                 {/* Tab Navigation */}
                 <nav className="flex justify-center gap-8 mb-12">
                   {tabs.map((tab) => (
@@ -473,14 +473,14 @@ export default function ProductPageClient({
                 </nav>
 
                 {/* Tab Content */}
-                <div className="min-h-[300px]">{renderTabContent()}</div>
+                <div className="min-h-[300px] ">{renderTabContent()}</div>
               </div>
             </div>
           </div>
         </div>
 
         {/* You May Also Like Section */}
-        <div className="px-6 md:px-12 lg:px-20 py-20 border-t border-white/10 backdrop-blur-sm">
+        <div className="px-6 md:px-12 lg:px-20 py-4 border-t border-white/10 backdrop-blur-sm">
           <YouMayAlsoLike products={relatedProducts} />
         </div>
       </main>
