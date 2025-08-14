@@ -41,7 +41,7 @@ export default function NewDrops() {
   // Detect screen width
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 1000); // Tailwind 'md' breakpoint
+      setIsMobile(window.innerWidth < 1200); // Tailwind 'md' breakpoint
     };
     handleResize(); // check on mount
     window.addEventListener("resize", handleResize);
@@ -228,10 +228,10 @@ export default function NewDrops() {
           <div className="w-full lg:w-1/2 flex flex-col mb-12 lg:mb-0 lg:pr-12">
             <h2
               ref={textRef}
-              className="text-5xl lg:text-6xl xl:text-7xl font-light leading-tight"
+              className="text-5xl lg:text-5xl uppercase xl:text-6xl font-light leading-tight"
               style={{ letterSpacing: "-0.02em" }}
             >
-              Our New
+              Our Latest
               <br />
               Drops
             </h2>
@@ -275,7 +275,7 @@ export default function NewDrops() {
             <div className="relative mt-64 p-0">
               <img
                 ref={thirdImgRef}
-                src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=687&auto=format&fit=crop"
+                src={products[2]?.image}
                 alt="Third Drop"
                 className="object-cover"
                 style={{ width: 450, height: 500 }}

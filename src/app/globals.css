@@ -34,7 +34,7 @@ p {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #000000;
+    --background: #ffffff;
     --foreground: #ededed;
   }
 }

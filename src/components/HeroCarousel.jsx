@@ -22,55 +22,54 @@ export default function HeroSection() {
   const [slideWidth, setSlideWidth] = useState(1000);
 
   useEffect(() => {
-    // Simple GSAP-like animation using CSS transforms
-    let currentSet = 0; // 0 for set1, 1 for set2
+    let currentSet = 0;
+
+    const updateWidth = () => {
+      if (containerRef.current) {
+        const width = containerRef.current.offsetWidth;
+        setSlideWidth(width);
+        if (set1Ref.current && set2Ref.current) {
+          set1Ref.current.style.transform = `translateX(0px)`;
+          set2Ref.current.style.transform = `translateX(${width}px)`;
+          set1Ref.current.style.transition = "none";
+          set2Ref.current.style.transition = "none";
+        }
+      }
+    };
+
+    requestAnimationFrame(updateWidth);
+    window.addEventListener("resize", updateWidth);
 
     const animateCarousel = () => {
       if (!set1Ref.current || !set2Ref.current) return;
 
-      const width = set1Ref.current.offsetWidth;
-      setSlideWidth(width);
-
+      const width = slideWidth;
       if (currentSet === 0) {
-        // Show set1, hide set2 to the right
         set1Ref.current.style.transform = `translateX(0px)`;
         set2Ref.current.style.transform = `translateX(${width}px)`;
-        set1Ref.current.style.transition = "transform 1s ease-in-out";
-        set2Ref.current.style.transition = "transform 1s ease-in-out";
       } else {
-        // Show set2, hide set1 to the right
         set1Ref.current.style.transform = `translateX(${width}px)`;
         set2Ref.current.style.transform = `translateX(0px)`;
-        set1Ref.current.style.transition = "transform 1s ease-in-out";
-        set2Ref.current.style.transition = "transform 1s ease-in-out";
       }
+      set1Ref.current.style.transition = "transform 1s ease-in-out";
+      set2Ref.current.style.transition = "transform 1s ease-in-out";
 
-      currentSet = 1 - currentSet; // Toggle between 0 and 1
+      currentSet = 1 - currentSet;
     };
 
-    // Initial setup
-    if (set1Ref.current && set2Ref.current) {
-      const width = set1Ref.current.offsetWidth;
-      setSlideWidth(width);
+    const interval = setInterval(animateCarousel, 2000);
 
-      // Position set1 visible, set2 hidden to the right
-      set1Ref.current.style.transform = `translateX(0px)`;
-      set2Ref.current.style.transform = `translateX(${width}px)`;
-      set1Ref.current.style.transition = "none";
-      set2Ref.current.style.transition = "none";
-    }
-
-    // Start animation after 5 seconds, then repeat every 5 seconds
-    const interval = setInterval(animateCarousel, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("resize", updateWidth);
+    };
+  }, [slideWidth]);
 
   const renderImageSet = (images, ref) => (
     <div
       ref={ref}
-      className="absolute flex items-center gap-8 flex-shrink-0"
-      style={{ height: "500px" }}
+      className="absolute flex items-center justify-center gap-4 sm:gap-6 md:gap-8 flex-shrink-0 w-full"
+      style={{ height: "clamp(200px, 50vw, 500px)" }}
     >
       {images.map((src, i) => (
         <img
@@ -79,8 +78,8 @@ export default function HeroSection() {
           alt=""
           className={
             i === 1
-              ? "h-[500px] w-auto object-cover"
-              : "h-72 w-auto object-cover"
+              ? "object-cover h-[clamp(200px,50vw,500px)] w-auto"
+              : "object-cover h-[clamp(150px,35vw,288px)] w-auto"
           }
         />
       ))}
@@ -90,46 +89,46 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full overflow-hidden min-h-screen bg-white flex flex-col justify-center"
+      className="relative w-full overflow-hidden  h-[17rem] md:h-[37rem] xl:min-h-screen  flex flex-col justify-center"
     >
-      <div className="flex  justify-between  text-black items-end px-8">
+      <div className="flex justify-between text-black items-end px-4 sm:px-8">
         {/* Left Social Icons */}
-        <div className="flex flex-col gap-4  ml-24 items-center">
-          <a href="#" className="p-2 border rounded-full">
-            <Facebook size={18} />
+        <div className="hidden xl:flex flex-col gap-3 sm:gap-4 md:ml-24 items-center">
+          <a href="#" className="p-1 sm:p-2 border rounded-full">
+            <Facebook size={16} />
           </a>
-          <a href="#" className="p-2 border rounded-full">
-            <Instagram size={18} />
+          <a href="#" className="p-1 sm:p-2 border rounded-full">
+            <Instagram size={16} />
           </a>
-          <a href="#" className="p-2 border rounded-full">
-            <Twitter size={18} />
+          <a href="#" className="p-1 sm:p-2 border rounded-full">
+            <Twitter size={16} />
           </a>
         </div>
 
         {/* Horizontal Carousel */}
         <div
-          className="relative overflow-hidden   "
-          style={{ width: slideWidth, height: "500px" }}
+          className="relative overflow-hidden"
+          style={{ width: slideWidth, height: "clamp(200px, 50vw, 500px)" }}
         >
           {renderImageSet(imagesSet1, set1Ref)}
           {renderImageSet(imagesSet2, set2Ref)}
         </div>
 
         {/* Scroll Down */}
-        <div className="flex flex-col items-center mr-24 text-sm">
+        <div className="hidden xl:flex flex-col items-center sm:mr-12 md:mr-24 text-xs w-24">
           <span>Scroll Down</span>
           <span className="mt-2">
-            <IoIosArrowRoundDown className=" animate-bounce text-3xl" />
+            <IoIosArrowRoundDown className="animate-bounce text-2xl sm:text-3xl" />
           </span>
         </div>
       </div>
 
       {/* Brand Title */}
       <h1
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 text-[120px] font-light logo"
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 font-light logo text-3xl md:text-6xl xl:text-[120px]"
         style={{
-          color: "white", // set white for better contrast
-          mixBlendMode: "difference", // negative effect
+          color: "white",
+          mixBlendMode: "difference",
           WebkitMixBlendMode: "difference",
           zIndex: 30,
           position: "absolute",

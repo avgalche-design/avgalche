@@ -1,5 +1,8 @@
-// components/AnimatedHamburger.jsx
-export default function AnimatedHamburger({ isOpen, onClick }) {
+export default function AnimatedHamburger({
+  isOpen,
+  onClick,
+  color = "white",
+}) {
   return (
     <button
       aria-label="Toggle menu"
@@ -9,7 +12,8 @@ export default function AnimatedHamburger({ isOpen, onClick }) {
     >
       {/* Top Line */}
       <span
-        className={`block absolute left-1/2 w-8 h-0.5 rounded bg-white transition-all duration-300
+        className={`block absolute left-1/2 w-8 h-0.5 rounded transition-all duration-300
+          bg-${color}
           ${
             isOpen
               ? "rotate-45 top-1/2 -translate-x-1/2 -translate-y-1/2"
@@ -19,7 +23,8 @@ export default function AnimatedHamburger({ isOpen, onClick }) {
       />
       {/* Bottom Line */}
       <span
-        className={`block absolute left-1/2 w-8 h-0.5 rounded bg-white transition-all duration-300
+        className={`block absolute left-1/2 w-8 h-0.5 rounded transition-all duration-300
+          bg-${color}
           ${
             isOpen
               ? "-rotate-45 top-1/2 -translate-x-1/2 -translate-y-1/2"

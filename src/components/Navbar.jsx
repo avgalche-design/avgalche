@@ -54,6 +54,8 @@ export default function Navbar() {
 
   // Logic for showing cart icon
   const shouldShowCart = pathname !== "/" || cartCount > 0;
+  const iconColor = isScrolled && showNavbar ? "text-black" : "text-white";
+  const barColor = isScrolled && showNavbar ? "black" : "white";
 
   return (
     <>
@@ -64,17 +66,18 @@ export default function Navbar() {
           ${showNavbar ? "translate-y-0" : "-translate-y-full"} 
           ${
             isScrolled && showNavbar
-              ? "bg-black bg-opacity-95 backdrop-blur-md shadow-md"
+              ? "bg-white text-black bg-opacity-95 backdrop-blur-md "
               : "bg-transparent"
           }
         `}
         style={{ boxSizing: "border-box" }}
       >
         {/* Hamburger Icon */}
-        <div className="flex items-center">
+        <div className=" flex items-center">
           <AnimatedHamburger
             isOpen={menuOpen}
             onClick={() => setMenuOpen((prev) => !prev)}
+            color={barColor}
           />
         </div>
 
@@ -91,16 +94,16 @@ export default function Navbar() {
         {/* Right: Icons */}
         <div className="flex gap-5 items-center ml-auto">
           <button aria-label="Search">
-            <FiSearch className="text-white text-xl" />
+            <FiSearch className={`${iconColor} text-xl`} />
           </button>
           <button aria-label="Account">
-            <FaRegUser className="text-white font-bold text-xl" />
+            <FaRegUser className={`${iconColor} font-bold text-xl`} />
           </button>
 
           {/* Cart Icon */}
           {shouldShowCart && (
             <button aria-label="Cart">
-              <FaShoppingBag className="text-white text-xl" />
+              <FaShoppingBag className={`${iconColor} text-xl`} />
               {cartCount > 0 && (
                 <span className="ml-1 text-sm text-yellow-400">
                   {cartCount}

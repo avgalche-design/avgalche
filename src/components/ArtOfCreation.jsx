@@ -1,39 +1,26 @@
 // components/ArtOfCreation.jsx
 "use client"; // if using Next.js App Router
-import { motion } from "framer-motion";
 import Link from "next/link";
 
 export default function ArtOfCreation() {
   return (
-    <section className="w-full bg-white p-8 text-black">
-      <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
+    <section className="w-full bg-white px-4 xl:px-14 py-10  text-black">
+      <div className="grid grid-cols-1  md:grid-cols-2 h-auto">
         {/* Left Side - Image */}
-        <motion.div
-          className="relative group overflow-hidden"
-          initial={{ scale: 1.1, opacity: 0 }}
-          whileInView={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          viewport={{ once: true, amount: 0.4 }}
-        >
+        <div className="relative  flex items-center group overflow-hidden">
           <img
             src="https://images.unsplash.com/photo-1544361591-ad0cb51f54b3?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Craftsmanship"
-            className="w-full h-full object-cover transform group-hover:scale-105 transition duration-[2000ms] ease-out"
+            className="w-full h-[1/2] object-cover transform group-hover:scale-105 transition duration-[2000ms] ease-out"
           />
-        </motion.div>
+        </div>
 
         {/* Right Side - Text */}
-        <motion.div
-          className="flex flex-col justify-center items-start p-10 md:p-20"
-          initial={{ x: 100, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          viewport={{ once: true, amount: 0.4 }}
-        >
-          <h2 className="text-3xl md:text-5xl font-serif uppercase tracking-[0.15em] mb-6">
+        <div className="flex flex-col justify-center items-start  p-4 md:p-10">
+          <h2 className="text-xl md:text-3xl font-serif uppercase tracking-[0.15em] mb-6">
             The Art of Creation
           </h2>
-          <p className="text-lg md:text-xl leading-relaxed text-gray-700 mb-8 max-w-xl">
+          <p className="text-sm md:text-md leading-relaxed text-gray-700 mb-8 max-w-xl">
             Every piece at AV GaLche is more than fashion — it’s a story of
             artistry, precision, and timeless elegance. From the first sketch to
             the final stitch, our collections are crafted to inspire, captivate,
@@ -46,7 +33,7 @@ export default function ArtOfCreation() {
               <span className="absolute right-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
             </button>
           </Link>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
