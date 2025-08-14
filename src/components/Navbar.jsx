@@ -84,7 +84,7 @@ export default function Navbar() {
         {/* Center: Logo */}
         <div className="absolute left-0 right-0 mx-auto flex items-center justify-center gap-4 pointer-events-none">
           <img
-            src="/logos/GoldPh.png"
+            src="/logos/black.png"
             alt="AV GaLche Logo"
             className="h-10 md:h-22 pointer-events-auto"
             style={{ objectFit: "contain" }}

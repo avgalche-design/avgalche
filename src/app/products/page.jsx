@@ -127,27 +127,12 @@ const PRODUCTS_QUERY = `
 }
 `;
 
-// Atmospheric Background Component
-function AtmosphericBackground() {
-  return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none">
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-neutral-950 to-black">
-        {/* Floating orbs */}
-        <div className="absolute top-1/6 left-1/5 w-96 h-96 bg-gradient-radial from-white/[0.015] to-transparent rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-radial from-neutral-200/[0.008] to-transparent rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-gradient-radial from-white/[0.005] to-transparent rounded-full blur-3xl animate-pulse delay-2000"></div>
-      </div>
-    </div>
-  );
-}
-
 export default async function ProductsPage() {
   const data = await shopifyFetch(
     { query: PRODUCTS_QUERY },
     { next: { revalidate: 30 } } // Refresh every 30 seconds
   );
 
-  // Defensive mapping: build a simple, serializable product shape
   const products =
     data?.products?.edges?.map((edge) => {
       const node = edge?.node ?? {};
@@ -177,12 +162,10 @@ export default async function ProductsPage() {
 
   return (
     <>
-      {/* <AtmosphericBackground /> */}
-
-      <main className="relative  bg-black text-white min-h-screen">
+      <main className="relative bg-white text-black min-h-screen">
         {/* Premium Banner */}
-        {/* <div className="relative border-b border-white/5 backdrop-blur-sm bg-black/40">
-          <div className="text-center py-3 text-xs tracking-[0.2em] font-extralight text-white/80 uppercase">
+        {/* <div className="relative border-b border-black/5 backdrop-blur-sm bg-white/40">
+          <div className="text-center py-3 text-xs tracking-[0.2em] font-extralight text-black/80 uppercase">
             Complimentary shipping on orders over $200
           </div>
         </div> */}
@@ -193,18 +176,18 @@ export default async function ProductsPage() {
             <div className="space-y-8">
               {/* Collection Title */}
               <div className="space-y-6">
-                <h1 className="text-5xl md:text-6xl logo lg:text-7xl font-extralight tracking-[0.05em] text-white leading-tight">
+                <h1 className="text-5xl md:text-6xl logo lg:text-7xl font-extralight tracking-[0.05em] text-black leading-tight">
                   AV GALCHE
                 </h1>
-                <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto"></div>
-                <h2 className="text-lg md:text-xl font-extralight tracking-[0.15em] text-neutral-300 uppercase">
+                <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-black/40 to-transparent mx-auto"></div>
+                <h2 className="text-lg md:text-xl font-extralight tracking-[0.15em] text-neutral-700 uppercase">
                   Collection
                 </h2>
               </div>
 
               {/* Collection Description */}
               <div className="max-w-3xl mx-auto space-y-6">
-                <p className="text-neutral-400 text-base md:text-lg leading-[1.8] font-extralight tracking-[0.02em]">
+                <p className="text-neutral-600 text-base md:text-lg leading-[1.8] font-extralight tracking-[0.02em]">
                   Winter 2025-2026 | Between heritage and modernity, the AV
                   Galche capsule collection reveals an iconic signature inspired
                   by timeless artistry.
@@ -215,7 +198,7 @@ export default async function ProductsPage() {
         </section>
 
         {/* Products Grid Section */}
-        <section className="px-6 md:px-12 lg:px-20 mb-10 ">
+        <section className="px-6 md:px-12 lg:px-20 mb-10">
           <div className="max-w-9xl mx-auto">
             <ProductGridClient products={products} />
           </div>

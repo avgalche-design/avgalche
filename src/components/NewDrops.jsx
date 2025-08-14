@@ -28,6 +28,8 @@ export default function NewDrops() {
           return {
             image: node.images.edges[0]?.node.url || "/images/placeholder.png",
             alt: node.images.edges[0]?.node.altText || node.title || "Product",
+            handle: node.handle,
+            title: node.title || "Product",
           };
         });
         setProducts(prods);
@@ -179,7 +181,7 @@ export default function NewDrops() {
   return (
     <section
       ref={sectionRef}
-      className={`bg-white px-8 py-12 ${
+      className={` px-8 pb-12 bg-white ${
         isMobile
           ? "grid grid-cols-2 gap-4 h-auto"
           : "flex flex-col lg:flex-row justify-between h-auto"
@@ -187,35 +189,40 @@ export default function NewDrops() {
     >
       {isMobile ? (
         <>
+          {/* Mobile Grid Heading */}
+          <h2 className="col-span-2 text-2xl font-light uppercase text-black tracking-wide mb-4">
+            Our Latest Drops
+          </h2>
+
           {/* Mobile Grid - only images, no animation */}
-          <img
-            src="https://images.unsplash.com/photo-1586072068429-f8d46f1e9a47?q=80&w=687&auto=format&fit=crop"
-            alt="First Drop"
-            className="object-cover w-full h-48"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1586072068429-f8d46f1e9a47?q=80&w=687&auto=format&fit=crop"
-            alt="Second Drop"
-            className="object-cover w-full h-48"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=687&auto=format&fit=crop"
-            alt="Third Drop"
-            className="object-cover w-full h-48"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1586072068429-f8d46f1e9a47?q=80&w=687&auto=format&fit=crop"
-            alt="Fourth Drop"
-            className="object-cover w-full h-48"
-          />
+          {products.map((prod, index) => (
+            <Link
+              href={`/products/${prod.handle || ""}`}
+              key={prod.handle || index}
+            >
+              <div className="relative w-full h-48 md:h-[30rem]">
+                <img
+                  src={prod.image}
+                  alt={prod.title}
+                  className="object-cover w-full h-full"
+                />
+                <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 via-black/30 to-transparent px-2 py-1">
+                  <p className="text-white font-serif text-sm tracking-wide">
+                    {prod.title}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))}
+
           {/* Paragraph */}
-          <div className="mt-2  w-[300px]">
-            <p className="text-gray-600 text-sm mb-4">
-              Odio fermentum blandit aliquam varius amet id vel augue. Amet
-              vulputate duis pulvinar pellentesque sed suspendisse sagittis.
+          <div className="mt-2 w-[300px] md:w-[600px] ">
+            <p className="text-gray-600 text-sm md:text-2xl mb-4">
+              Discover timeless silhouettes, refined textures, and statement
+              pieces curated for the modern luxury wardrobe.
             </p>
             <button className="relative text-black p-1 font-medium group">
-              <h2>Discover Collection</h2>
+              <h2 className=" text-sm md:text-2xl">Discover Collection</h2>
               <span className="absolute left-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
               <span className="absolute right-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
             </button>
@@ -238,51 +245,94 @@ export default function NewDrops() {
 
             {/* Second image */}
             <div className="ml-22 mt-44 flex justify-end">
-              <img
-                ref={secondImgRef}
-                src="https://images.unsplash.com/photo-1586072068429-f8d46f1e9a47?q=80&w=687&auto=format&fit=crop"
-                alt="Second Drop"
-                className="object-cover mt-8"
-                style={{ width: 450, height: 500 }}
-              />
+              <Link href={`/products/${products[1]?.handle || ""}`}>
+                <div
+                  ref={secondImgRef}
+                  className="relative overflow-hidden"
+                  style={{ width: 450, height: 500 }}
+                >
+                  <img
+                    src={products[1]?.image}
+                    alt="Third Drop"
+                    className="object-cover"
+                  />
+                  <div className="absolute bottom-0 left-0 w-full  px-4 py-3">
+                    <p className="text-black font-serif text-lg tracking-wide">
+                      {products[1]?.title}
+                    </p>
+                  </div>
+                </div>
+              </Link>
             </div>
 
             {/* Fourth image */}
-            <div className="ml-22 mt-44 flex justify-end">
-              <img
-                ref={fourthImgRef}
-                src="https://images.unsplash.com/photo-1586072068429-f8d46f1e9a47?q=80&w=687&auto=format&fit=crop"
-                alt="Fourth Drop"
-                className="object-cover mt-8"
-                style={{ width: 450, height: 500 }}
-              />
+            <div className="ml-22 mt-48 flex justify-end">
+              <Link href={`/products/${products[3]?.handle || ""}`}>
+                <div
+                  ref={fourthImgRef}
+                  className="relative overflow-hidden"
+                  style={{ width: 450, height: 500 }}
+                >
+                  <img
+                    src={products[3]?.image}
+                    alt="Third Drop"
+                    className="object-cover"
+                  />
+                  <div className="absolute bottom-0 left-0 w-full  px-4 py-3">
+                    <p className="text-white font-serif text-lg tracking-wide">
+                      {products[3]?.title}
+                    </p>
+                  </div>
+                </div>
+              </Link>
             </div>
           </div>
 
           {/* Right column */}
+
           <div className="w-full lg:w-1/2 flex flex-col justify-start">
-            <div className="relative p-0">
-              <img
+            <Link href={`/products/${products[0]?.handle || ""}`}>
+              <div
                 ref={imgRef}
-                src={products[0]?.image}
-                alt="First Drop"
-                className="object-cover"
+                className="relative overflow-hidden"
                 style={{ width: 450, height: 500 }}
-              />
-            </div>
+              >
+                <img
+                  src={products[0]?.image}
+                  alt={products[0]?.alt}
+                  className="object-cover w-full h-full"
+                />
+                <div className="absolute bottom-0 left-0 w-full  px-4 py-3">
+                  <p className="text-white font-serif text-lg tracking-wide">
+                    {products[0]?.title}
+                  </p>
+                </div>
+              </div>
+            </Link>
 
             {/* Third image */}
             <div className="relative mt-64 p-0">
-              <img
-                ref={thirdImgRef}
-                src={products[2]?.image}
-                alt="Third Drop"
-                className="object-cover"
-                style={{ width: 450, height: 500 }}
-              />
+              <Link href={`/products/${products[2]?.handle || ""}`}>
+                <div
+                  ref={thirdImgRef}
+                  className="relative overflow-hidden"
+                  style={{ width: 450, height: 500 }}
+                >
+                  <img
+                    src={products[2]?.image}
+                    alt="Third Drop"
+                    className="object-cover"
+                  />
+                  <div className="absolute bottom-0 left-0 w-full  px-4 py-3">
+                    <p className="text-white font-serif text-lg tracking-wide">
+                      {products[2]?.title}
+                    </p>
+                  </div>
+                </div>
+              </Link>
 
               {/* Paragraph */}
-              <div ref={paraRef} className="mt-60 ml-24 w-[350px]">
+              <div ref={paraRef} className="mt-40 ml-24 w-[350px]">
                 <p className="text-gray-600 text-sm mb-4">
                   Discover timeless silhouettes, refined textures, and statement
                   pieces curated for the modern luxury wardrobe.

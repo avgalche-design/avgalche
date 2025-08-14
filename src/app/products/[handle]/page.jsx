@@ -107,7 +107,7 @@ export default async function ProductPage({ params }) {
   const product = data?.productByHandle;
   if (!product) {
     return (
-      <main className="min-h-screen bg-black flex items-center justify-center">
+      <main className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-light tracking-wide text-neutral-400 mb-2">
             Product Not Found

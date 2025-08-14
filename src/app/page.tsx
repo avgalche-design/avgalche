@@ -10,9 +10,8 @@ export default function Home() {
     <main className="relative min-h-screen">
       <HeroSection />
       <HeroCarousel />
-      <NewDrops />
       <ArtOfCreation />
-
+      <NewDrops />
       <Collections />
       {/* <Products /> */}
     </main>

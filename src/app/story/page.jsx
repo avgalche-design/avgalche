@@ -11,7 +11,10 @@ import {
   Lock,
   Play,
 } from "lucide-react";
+import { IoIosArrowRoundDown } from "react-icons/io";
 import { motion } from "framer-motion";
+import StoryHero from "../../components/StoryHero";
+import Link from "next/link";
 
 const AVGalcheVault = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -69,8 +72,8 @@ const AVGalcheVault = () => {
         "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
     },
     {
-      name: "Vault Prestige",
-      threshold: "₹50,000",
+      name: "Argent Privé",
+      threshold: "₹63,000",
       icon: <Crown className="w-12 h-12" />,
       subtitle: "Elevated Beyond Ordinary",
       description:
@@ -85,8 +88,8 @@ const AVGalcheVault = () => {
         "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
     },
     {
-      name: "Vault Elite",
-      threshold: "₹1,00,000",
+      name: "Apex Privé",
+      threshold: "₹1,61,000",
       icon: <Gem className="w-12 h-12" />,
       subtitle: "Bespoke Luxury Redefined",
       description:
@@ -101,8 +104,8 @@ const AVGalcheVault = () => {
         "https://images.unsplash.com/photo-1469334031218-e382a71b716b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
     },
     {
-      name: "Vault Apex",
-      threshold: "₹2,50,000",
+      name: "Aurum Privé",
+      threshold: "₹3,33,333",
       icon: <Sparkles className="w-12 h-12" />,
       subtitle: "The Pinnacle of Prestige",
       description:
@@ -176,8 +179,12 @@ const AVGalcheVault = () => {
         </div>
       </div>
 
+      <div className="hidden xl:block">
+        <StoryHero />
+      </div>
+
       {/* Philosophy Section */}
-      <section className="py-20 sm:py-24 md:py-32 px-4 sm:px-8 bg-white text-black">
+      <section className="py-6 sm:py-6 md:py-12 xl:py-32 px-4 sm:px-8  text-black">
         <motion.div
           className="max-w-4xl mx-auto text-center"
           initial="hidden"
@@ -211,31 +218,34 @@ const AVGalcheVault = () => {
       </section>
 
       {/* Become a member - Left Image, Right Text */}
-      <section className="min-h-screen flex items-center">
+      <section className="min-h-screen  flex items-center">
         <div className="w-full grid grid-cols-1 lg:grid-cols-2 min-h-screen">
-          <div className="relative overflow-hidden">
-            <div
-              className="absolute inset-0 bg-cover bg-center transform hover:scale-105 transition-transform duration-[3000ms]"
-              style={{
-                backgroundImage: `url('https://images.unsplash.com/photo-1566708579566-03f9f6b02fdc?q=80&w=778&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`,
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
+          {/* Left: Image */}
+          <div className="flex items-center justify-center  p-6 sm:p-10">
+            <div className="relative w-[90%] sm:w-[80%] lg:w-[70%] h-[80%] overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1566708579566-03f9f6b02fdc?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.1.0"
+                alt="Membership"
+                className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-[3000ms]"
+              />
+              <div className="absolute inset-0 bg-black/20" />
+            </div>
           </div>
 
-          <div className="flex items-center justify-center p-16 lg:p-24 bg-white">
+          {/* Right: Text */}
+          <div className="flex items-center justify-start p-6 sm:p-12 lg:py-24">
             <div className="max-w-lg">
               <div className="mb-8">
-                <div className="text-sm font-light tracking-[0.2em] text-gray-500 mb-4">
+                <div className="text-xs sm:text-sm font-light tracking-[0.25em] text-gray-500 mb-4">
                   BEGIN YOUR JOURNEY
                 </div>
-                <h3 className="text-5xl md:text-6xl font-thin mb-6 leading-tight">
-                  Become a <span className=" text-[#f5ba90]">Member</span>
+                <h3 className="text-4xl sm:text-5xl md:text-6xl font-thin mb-6 leading-tight">
+                  Become a <span className="text-[#f5ba90]">Member</span>
                 </h3>
-                <div className="w-16 h-px bg-[#f5ba90] mb-8"></div>
+                <div className="w-16 sm:w-20 h-px bg-[#f5ba90] mb-8"></div>
               </div>
 
-              <p className="text-xl font-light mb-8 leading-relaxed text-gray-700">
+              <p className="text-base sm:text-lg md:text-xl font-light leading-relaxed text-gray-700 mb-8">
                 At AV GaLche, we believe in celebrating our most cherished
                 patrons. Introducing GaLche&apos;s Vault, an exclusive tiered
                 membership crafted for our inner circle. This is more than a
@@ -243,9 +253,15 @@ const AVGalcheVault = () => {
                 experiences and bespoke benefits.
               </p>
 
-              <button className="border rounded-md border-black text-black px-8 py-4 text-sm font-light tracking-wider hover:bg-black hover:text-white transition-all duration-500">
-                Become a Member
-              </button>
+              <Link href="#">
+                <button className="relative text-black p-1 font-medium group">
+                  <h2 className="text-sm sm:text-base md:text-lg">
+                    Become a Member
+                  </h2>
+                  <span className="absolute left-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
+                  <span className="absolute right-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
+                </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -253,58 +269,57 @@ const AVGalcheVault = () => {
 
       {/* Four Vaults Statement - Right Image, Left Text */}
       <section className="min-h-screen flex items-center bg-black text-white">
-        <div className="w-full grid grid-cols-1 lg:grid-cols-2 min-h-screen">
-          <div className="flex items-center justify-center p-16 lg:p-24">
-            <div className="max-w-lg">
-              <div className="mb-8">
-                <div className="text-sm font-light tracking-[0.2em] text-amber-300 mb-4">
-                  THE COLLECTION
-                </div>
-                <h3 className="text-6xl md:text-7xl font-thin mb-6 leading-tight">
-                  Four Vaults.
-                  <br />
-                  <span className="italic text-amber-300">Infinite</span>
-                  <br />
-                  Privileges.
-                </h3>
-                <div className="w-16 h-px bg-amber-300 mb-8"></div>
-              </div>
-
-              <p className="text-xl font-light mb-12 leading-relaxed opacity-90">
-                As you ascend through the Vaults, each tier unveils a new layer
-                of luxury, offering curated rewards, early access to
-                collections, personalized styling, and more.
-              </p>
-
-              <div className="grid grid-cols-2 gap-6 mb-12">
-                {["Elan Privé", "Prestige", "Elite", "Apex"].map(
-                  (tier, idx) => (
-                    <div
-                      key={idx}
-                      className="text-center p-4 border border-gray-700 hover:border-amber-300 transition-colors duration-500 cursor-pointer"
-                    >
-                      <div className="text-sm font-light text-amber-300">
-                        {tier}
-                      </div>
-                    </div>
-                  )
-                )}
-              </div>
-
-              <button className="bg-amber-300 text-black px-8 py-4 text-sm font-medium tracking-wider hover:bg-amber-400 transition-colors duration-300">
-                EXPLORE ALL TIERS
-              </button>
-            </div>
+        <div className="w-full flex flex-col items-center px-6 sm:px-12 lg:px-24 py-20 text-center">
+          {/* Top subtitle */}
+          <div className="text-xs sm:text-sm font-light tracking-[0.3em] text-amber-300 mb-6">
+            THE COLLECTION
           </div>
 
-          <div className="relative overflow-hidden">
-            <div
-              className="absolute inset-0 bg-cover bg-center transform hover:scale-105 transition-transform duration-[3000ms]"
-              style={{
-                backgroundImage: `url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-l from-black/30 to-transparent"></div>
+          {/* Main headline */}
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-thin leading-tight mb-6 max-w-4xl">
+            Four Vaults. Infinite Privileges.
+          </h2>
+
+          {/* Decorative divider */}
+          <div className="w-20 h-px bg-amber-300 mb-8"></div>
+
+          {/* Description */}
+          <p className="text-base sm:text-lg md:text-xl font-light mb-16 leading-relaxed opacity-90 max-w-3xl">
+            As you ascend through the Vaults, each tier unveils a new layer of
+            luxury — offering curated rewards, early access to collections,
+            personalized styling, and exclusive experiences tailored just for
+            you.
+          </p>
+
+          {/* Vault tiers grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-16 w-full max-w-4xl">
+            {["Elan Privé", "Argent Privé", "Apex Privé", "Aurum Privé"].map(
+              (tier, idx) => (
+                <div
+                  key={tier}
+                  className="group relative border border-gray-700 hover:border-amber-300 transition-all duration-500 cursor-pointer p-6 flex flex-col items-center justify-center overflow-hidden"
+                >
+                  {/* subtle hover glow */}
+                  <div className="absolute inset-0 bg-amber-300 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
+
+                  {/* Tier number / icon */}
+                  <div className="text-3xl font-light text-amber-300 mb-3">
+                    {idx + 1}
+                  </div>
+                  <div className="text-sm sm:text-base font-light tracking-wide">
+                    {tier}
+                  </div>
+                </div>
+              )
+            )}
+          </div>
+
+          {/* CTA Button */}
+          <div className="flex flex-col items-center sm:mr-12 md:mr-24 text-xs w-24">
+            <span className=" text-white">Scroll Down</span>
+            <span className="mt-2">
+              <IoIosArrowRoundDown className="animate-bounce text-white text-2xl sm:text-3xl" />
+            </span>
           </div>
         </div>
       </section>
@@ -320,34 +335,36 @@ const AVGalcheVault = () => {
               index % 2 === 1 ? "lg:grid-flow-col-dense" : ""
             }`}
           >
+            {/* IMAGE COLUMN */}
             <div
-              className={`relative overflow-hidden ${
+              className={`relative flex items-center justify-center overflow-hidden ${
                 index % 2 === 1 ? "lg:col-start-2" : ""
               }`}
             >
               <div
-                className="absolute inset-0 bg-cover bg-center transform hover:scale-105 transition-transform duration-[3000ms]"
+                className="relative bg-cover bg-center transform hover:scale-105 w-[80%] lg:w-[65%] h-[60%] overflow-hidden transition-transform duration-[3000ms]"
                 style={{ backgroundImage: `url('${tier.image}')` }}
               />
-              <div
-                className={`absolute inset-0 ${
+              {/* <div
+                className={`absolute inset-0 pointer-events-none ${
                   index % 2 === 0
                     ? "bg-gradient-to-r from-black/20 to-transparent"
                     : "bg-gradient-to-l from-black/20 to-transparent"
                 }`}
-              ></div>
+              ></div> */}
 
               {/* Floating tier indicator */}
-              <div className="absolute top-8 left-8 bg-white bg-opacity-90 backdrop-blur-sm p-4 rounded">
+              <div className="absolute top-8 left-8 p-4 ">
                 <div className="text-amber-600 mb-2">{tier.icon}</div>
                 <div className="text-sm font-light text-black">{tier.name}</div>
               </div>
             </div>
 
+            {/* TEXT COLUMN */}
             <div
               className={`flex items-center justify-center p-16 lg:p-24 ${
                 index % 2 === 1 ? "lg:col-start-1" : ""
-              } ${index % 2 === 0 ? "bg-gray-50" : "bg-gray-100"}`}
+              } ${index % 2 === 0 ? "bg-white" : "bg-white"}`}
             >
               <div className="max-w-lg">
                 <div className="mb-8">
@@ -355,10 +372,7 @@ const AVGalcheVault = () => {
                     {tier.subtitle.toUpperCase()}
                   </div>
                   <h3 className="text-5xl md:text-6xl font-thin mb-6 leading-tight text-black">
-                    {tier.name.split(" ")[1]}{" "}
-                    <span className="italic text-amber-600">
-                      {tier.name.split(" ")[2] || tier.name.split(" ")[1]}
-                    </span>
+                    {tier.name}
                   </h3>
                   <div className="flex items-center mb-8">
                     <div className="w-16 h-px bg-amber-600 mr-4"></div>
@@ -446,24 +460,6 @@ const AVGalcheVault = () => {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="py-16 px-8 bg-white border-t border-gray-200">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="mb-8">
-            <div className="text-3xl font-thin tracking-[0.3em] text-black mb-2">
-              AV GALCHE
-            </div>
-            <div className="text-sm font-light text-gray-500 tracking-wider">
-              EST. LUXURY REDEFINED
-            </div>
-          </div>
-          <p className="text-gray-600 font-light max-w-2xl mx-auto">
-            Where luxury meets exclusivity. Your journey to sophisticated style
-            begins here.
-          </p>
-        </div>
-      </footer>
     </div>
   );
 };

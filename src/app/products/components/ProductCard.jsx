@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 import Link from "next/link";
 
 export default function LuxuryProductCard({ product, index }) {
   const [isHovered, setIsHovered] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [loaded, setLoaded] = useState({}); // track loaded state per image
 
   const images =
     product.images?.map((img) => (typeof img === "string" ? img : img.url)) ??
@@ -15,9 +15,6 @@ export default function LuxuryProductCard({ product, index }) {
 
   const price = parseFloat(product.variants?.[0]?.price?.amount ?? 0);
   const currency = product.variants?.[0]?.price?.currencyCode ?? "";
-
-  // Show first image by default, second image on hover
-  const currentImage = isHovered && images.length > 1 ? images[1] : images[0];
 
   return (
     <motion.div
@@ -37,24 +34,43 @@ export default function LuxuryProductCard({ product, index }) {
         {/* IMAGE WRAPPER */}
         <div className="relative aspect-[3/4] mb-5 overflow-hidden border border-neutral-200/20">
           {/* Fade Overlay */}
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-700" />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-700 z-10" />
 
           {images.length > 0 ? (
-            <AnimatePresence mode="wait">
+            <>
+              {/* Base Image */}
               <motion.img
-                key={currentImage} // triggers animation on change
-                src={currentImage}
+                src={images[0]}
                 alt={product.title}
-                className={`w-full h-full object-cover transition-transform duration-1000 ease-out ${
-                  imageLoaded ? "scale-100 opacity-100" : "scale-105 opacity-0"
-                } group-hover:scale-105`}
-                onLoad={() => setImageLoaded(true)}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                style={{
+                  opacity: isHovered && images[1] ? 0 : 1,
+                }}
+                onLoad={() => setLoaded((prev) => ({ ...prev, 0: true }))}
                 initial={{ opacity: 0, scale: 1.05 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.02 }}
-                transition={{ duration: 0.3 }}
+                animate={{ opacity: loaded[0] ? 1 : 0, scale: 1 }}
+                transition={{ duration: 0.4 }}
               />
-            </AnimatePresence>
+
+              {/* Hover Image */}
+              {images[1] && (
+                <motion.img
+                  src={images[1]}
+                  alt={`${product.title} hover`}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                  style={{
+                    opacity: isHovered ? 1 : 0,
+                  }}
+                  onLoad={() => setLoaded((prev) => ({ ...prev, 1: true }))}
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{
+                    opacity: loaded[1] ? (isHovered ? 1 : 0) : 0,
+                    scale: 1,
+                  }}
+                  transition={{ duration: 0.4 }}
+                />
+              )}
+            </>
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-neutral-100">
               <span className="text-neutral-500 tracking-[0.2em] text-xs uppercase">
@@ -71,10 +87,10 @@ export default function LuxuryProductCard({ product, index }) {
               {product.category}
             </p>
           )}
-          <h3 className="text-[12px] tracking-[0.08em] uppercase font-extralight text-[#A1A1A1] group-hover:text-white transition-colors duration-300">
+          <h3 className="text-[12px] tracking-[0.08em] uppercase font-extralight text-[#525252] group-hover:text-black transition-colors duration-300">
             {product.title}
           </h3>
-          <p className="text-[11px] font-light tracking-wider text-white">
+          <p className="text-[11px] font-light tracking-wider text-black">
             {currency} {price.toFixed(2)}
           </p>
         </div>

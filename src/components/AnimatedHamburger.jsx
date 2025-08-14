@@ -12,7 +12,7 @@ export default function AnimatedHamburger({
     >
       {/* Top Line */}
       <span
-        className={`block absolute left-1/2 w-8 h-0.5 rounded transition-all duration-300
+        className={`block absolute left-1/2  rounded transition-all duration-300 w-5 h-0.5 sm:w-8  
           bg-${color}
           ${
             isOpen
@@ -23,7 +23,7 @@ export default function AnimatedHamburger({
       />
       {/* Bottom Line */}
       <span
-        className={`block absolute left-1/2 w-8 h-0.5 rounded transition-all duration-300
+        className={`block absolute left-1/2 w-5 h-0.5 sm:w-8 rounded transition-all duration-300
           bg-${color}
           ${
             isOpen

@@ -15,10 +15,10 @@ export default function Footer() {
   return (
     <footer className="bg-white text-black px-6 py-10">
       {/* Premium Newsletter Section */}
-      <section className="border-t border-black/10 py-24 md:py-32 backdrop-blur-sm bg-white">
-        <div className="max-w-4xl mx-auto text-center px-6">
-          <div className="space-y-8">
-            <div className="space-y-6">
+      <section className="border-t border-black/10 py-12 md:pt-8 md:pb-16 bg-white backdrop-blur-sm ">
+        <div className="max-w-4xl mx-auto text-center  px-6">
+          <div className="  space-y-8">
+            <div className="  space-y-6">
               <h2 className="text-3xl md:text-4xl font-extralight tracking-[0.05em] text-black">
                 Stay Connected
               </h2>
