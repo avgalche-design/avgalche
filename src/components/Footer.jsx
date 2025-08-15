@@ -58,8 +58,14 @@ export default function Footer() {
                 +91 88517 60427
               </li>
               <li className="flex items-center gap-2">
-                <FiMail className="text-gray-500" />
-                support@avgalche.com
+                <FiMail className="text-gray-500 flex-shrink-0" />
+                <a
+                  href="mailto:support@avgalche.com"
+                  className="text-gray-700 hover:underline"
+                >
+                  <span className="hidden md:inline">support@avgalche.com</span>
+                  <span className="md:hidden">support</span>
+                </a>
               </li>
             </ul>
           </div>

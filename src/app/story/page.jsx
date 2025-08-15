@@ -56,17 +56,19 @@ const AVGalcheVault = () => {
 
   const tiers = [
     {
-      name: "Vault Elan Privé",
+      name: "Elan Privé",
       threshold: "₹17,000",
       icon: <Star className="w-12 h-12" />,
       subtitle: "The Beginning of Elegance",
       description:
         "Step into a world where every purchase is an investment in your style legacy.",
       benefits: [
-        "Priority customer service",
-        "Exclusive member-only previews",
-        "Birthday special offers",
-        "Complimentary gift wrapping",
+        "Enjoy 5% exclusive savings on every order.",
+        "Receive a complimentary surprise gift as a token of appreciation for joining.",
+        "Celebrate your birthday with a personalized luxury gift.",
+        "Get early access to our Members-Only Journal, curated with style and stories.",
+        "Be among the select few to receive one Vault-exclusive design released each year created only for our inner circle.",
+        "Galche's Vault isn't just a Vault it's a statement.",
       ],
       image:
         "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
@@ -79,10 +81,12 @@ const AVGalcheVault = () => {
       description:
         "Where discerning taste meets unparalleled service in the realm of haute couture.",
       benefits: [
-        "Early access to new collections",
-        "Personal styling consultation",
-        "Exclusive seasonal lookbooks",
-        "VIP event invitations",
+        "Enjoy 7% exclusive savings on every order",
+        "Celebrate your birthday with a personalized luxury gift, crafted just for you",
+        "Unlock early access to our Members-Only Journal featuring curated style edits, behind-the-design stories, and exclusive styling videos",
+        "Seamless 30-day returns in our signature luxury mailers",
+        "Annual Vault Editions: Receive access to three exclusive designs released only for Vault members each year",
+        "Step inside. Stay ahead. Belong to the Vault.",
       ],
       image:
         "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
@@ -95,10 +99,16 @@ const AVGalcheVault = () => {
       description:
         "An exclusive sanctuary where fashion transcends into art, crafted uniquely for you.",
       benefits: [
-        "Bespoke tailoring services",
-        "Private shopping appointments",
-        "Limited edition access",
-        "Complimentary alterations",
+        "7% Privileged Savings Enjoy exclusive members-only pricing on every order, tailored for our inner circle.",
+        "Birthday Privilege Receive a personalized luxury gift, thoughtfully crafted to mark your special day.",
+        "Effortless Returns, Elevated Enjoy a 45-day no-questions-asked return window, with complimentary return shipping in our signature luxury mailers.",
+        "Annual Vault Editions Unlock access to five limited-edition designs each year created solely for Vault members, never reissued.",
+        "Members Premium Journal Receive our private newsletter, featuring trend forecasts, behind-the-scenes stories, and spotlight moments from our Vault community.",
+        "Anniversary Fabric Curation Each year, handpick your own fabric from a curated swatch library a personal expression of your style, designed by you.",
+        "Philanthropy Match When you choose to give back, AV Galche amplifies your generosity by matching 50% of your contribution through curated charitable collaborations.",
+        "Passion Show Invitations Enjoy two complimentary invitations each season to our intimate Passion Shows where emotion meets design in a curated experience.",
+        "Style Time-Out Concierge Book your one-hour annual consultation with our Head Stylist for bespoke guidance, seasonal advice, and trend insights.",
+        "Ephemeral Flash-Drops Access ultra-limited 48-hour capsules five-piece design drops available exclusively to Vault members, never repeated.",
       ],
       image:
         "https://images.unsplash.com/photo-1469334031218-e382a71b716b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
@@ -111,10 +121,18 @@ const AVGalcheVault = () => {
       description:
         "Reserved for the connoisseurs who understand that true luxury knows no bounds.",
       benefits: [
-        "Personal concierge service",
-        "Custom design consultations",
-        "Exclusive global collections",
-        "Lifetime premium support",
+        "10% Privileged Savings Exclusive members-only pricing on every order a gesture of appreciation for our inner circle.",
+        "Bespoke Birthday Gift Choose between a custom-crafted birthday garment or a curated luxury gift box designed to celebrate you.",
+        "60-Day Return Window Enjoy peace of mind with an extended, no-questions-asked return policy, enclosed in our signature premium packaging.",
+        "Early-Bird Restock Alerts Be first in line receive early access notifications for Vault-favorite restocks and high-demand pieces.",
+        "Members-Only Journal (Premium Access) Step inside our world through exclusive showroom tours, behind-the-scenes editorials, and trend briefings, curated only for Vault members.",
+        "Vault-Only Designs Gain first access to 7-10 exclusive designs each year never released to the public.",
+        "Anniversary Fabric Choice Select your own fabric from our curated swatch library once a year a personal touchpoint in your style journey.",
+        "Philanthropy Match (100%) AV Galche matches 100% of your charitable contributions, with an annual impact report showing how your gift helped create change.",
+        "Passion Show Invitations Enjoy four complimentary passes per season to our Passion Shows, including post-show designer Q&A sessions.",
+        "Style Time-Out Concierge Access a one-hour annual session with our head stylist your personal guide to the season's expressions and silhouettes.",
+        "Legacy Garment Registry Once a year, register one of your AV Galche pieces with a unique registry number and receive a leather-bound care booklet, creating a timeless heirloom.",
+        "Ephemeral Flash-Drops Unlock access to exclusive 48-hour capsule drops of five ultra-limited designs never restocked, never replicated.",
       ],
       image:
         "https://images.unsplash.com/photo-1509631179647-0177331693ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=2088&q=80",
@@ -179,7 +197,7 @@ const AVGalcheVault = () => {
         </div>
       </div>
 
-      <div className="hidden md:block">
+      <div className="hidden xl:block">
         <StoryHero />
       </div>
 
@@ -268,7 +286,7 @@ const AVGalcheVault = () => {
       </section>
 
       {/* Four Vaults Statement - Right Image, Left Text */}
-      <section className="min-h-screen flex items-center bg-black text-white">
+      <section className="min-h-screen flex items-center bg-[#EBEBEB] text-black">
         <div className="w-full flex flex-col items-center px-6 sm:px-12 lg:px-24 py-20 text-center">
           {/* Top subtitle */}
           <div className="text-xs sm:text-sm font-light tracking-[0.3em] text-amber-300 mb-6">
@@ -284,7 +302,7 @@ const AVGalcheVault = () => {
           <div className="w-20 h-px bg-amber-300 mb-8"></div>
 
           {/* Description */}
-          <p className="text-base sm:text-lg md:text-xl font-light mb-16 leading-relaxed opacity-90 max-w-3xl">
+          <p className="text-base sm:text-lg text-black/70 md:text-xl font-light mb-16 leading-relaxed opacity-90 max-w-3xl">
             As you ascend through the Vaults, each tier unveils a new layer of
             luxury — offering curated rewards, early access to collections,
             personalized styling, and exclusive experiences tailored just for
@@ -316,9 +334,9 @@ const AVGalcheVault = () => {
 
           {/* CTA Button */}
           <div className="flex flex-col items-center sm:mr-12 md:mr-24 text-xs w-24">
-            <span className=" text-white">Scroll Down</span>
+            <span className=" text-black/70">Scroll Down</span>
             <span className="mt-2">
-              <IoIosArrowRoundDown className="animate-bounce text-white text-2xl sm:text-3xl" />
+              <IoIosArrowRoundDown className="animate-bounce text-black/70 text-2xl sm:text-3xl" />
             </span>
           </div>
         </div>
@@ -331,7 +349,7 @@ const AVGalcheVault = () => {
           className="min-h-screen flex items-center bg-white"
         >
           <div
-            className={`w-full grid grid-cols-1 lg:grid-cols-2 min-h-screen ${
+            className={`w-full grid grid-cols-1 lg:grid-cols-2 min-h-screen lg:gap-x-4 ${
               index % 2 === 1 ? "lg:grid-flow-col-dense" : ""
             }`}
           >
@@ -345,26 +363,18 @@ const AVGalcheVault = () => {
                 className="relative bg-cover bg-center transform hover:scale-105 w-[80%] lg:w-[65%] h-[60%] overflow-hidden transition-transform duration-[3000ms]"
                 style={{ backgroundImage: `url('${tier.image}')` }}
               />
-              {/* <div
-                className={`absolute inset-0 pointer-events-none ${
-                  index % 2 === 0
-                    ? "bg-gradient-to-r from-black/20 to-transparent"
-                    : "bg-gradient-to-l from-black/20 to-transparent"
-                }`}
-              ></div> */}
-
               {/* Floating tier indicator */}
-              <div className="absolute top-8 left-8 p-4 ">
-                <div className="text-amber-600 mb-2">{tier.icon}</div>
+              <div className="absolute top-8 left-8 p-4">
+                <div className="text-black/70 mb-2">{tier.icon}</div>
                 <div className="text-sm font-light text-black">{tier.name}</div>
               </div>
             </div>
 
             {/* TEXT COLUMN */}
             <div
-              className={`flex items-center justify-center p-16 lg:p-24 ${
+              className={`flex items-center justify-center p-12 lg:p-12 ${
                 index % 2 === 1 ? "lg:col-start-1" : ""
-              } ${index % 2 === 0 ? "bg-white" : "bg-white"}`}
+              } bg-white`}
             >
               <div className="max-w-lg">
                 <div className="mb-8">
@@ -375,32 +385,32 @@ const AVGalcheVault = () => {
                     {tier.name}
                   </h3>
                   <div className="flex items-center mb-8">
-                    <div className="w-16 h-px bg-amber-600 mr-4"></div>
-                    <span className="text-2xl font-light text-amber-600">
+                    <div className="w-16 h-px bg-black mr-4"></div>
+                    <span className="text-2xl font-light text-black">
                       {tier.threshold}
                     </span>
                   </div>
                 </div>
-
                 <p className="text-xl font-light mb-8 leading-relaxed text-gray-700">
                   {tier.description}
                 </p>
-
                 <div className="space-y-4 mb-12">
                   {tier.benefits.map((benefit, idx) => (
                     <div key={idx} className="flex items-center">
-                      <div className="w-2 h-2 bg-amber-600 rounded-full mr-4"></div>
-                      <span className="text-gray-600 font-light">
+                      <div className="w-2 h-2 bg-black rounded-full mr-4"></div>
+                      <span className="text-black/70 font-light">
                         {benefit}
                       </span>
                     </div>
                   ))}
                 </div>
-
-                <button className="group border border-amber-600 text-amber-600 px-8 py-4 text-sm font-light tracking-wider hover:bg-amber-600 hover:text-white transition-all duration-500 flex items-center">
-                  UNLOCK THIS TIER
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                </button>
+                <Link href="/products">
+                  <button className="relative uppercase text-black p-1 font-medium group">
+                    <h2>unlock this tier</h2>
+                    <span className="absolute left-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
+                    <span className="absolute right-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -408,55 +418,43 @@ const AVGalcheVault = () => {
       ))}
 
       {/* Membership CTA - Left Image, Right Text */}
-      <section className="min-h-screen flex items-center bg-black text-white">
-        <div className="w-full grid grid-cols-1 lg:grid-cols-2 min-h-screen">
-          <div className="relative overflow-hidden">
-            <div
-              className="absolute inset-0 bg-cover bg-center transform hover:scale-105 transition-transform duration-[3000ms]"
-              style={{
-                backgroundImage: `url('https://images.unsplash.com/photo-1509631179647-0177331693ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=2088&q=80')`,
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent"></div>
+      <section className="w-full min-h-screen bg-[#EBEBEB] text-black flex items-center justify-center px-6">
+        <div className="max-w-2xl text-center">
+          {/* Small tag */}
+          <div className="text-sm font-light tracking-[0.3em] uppercase  mb-6">
+            Join the Elite
           </div>
 
-          <div className="flex items-center justify-center p-16 lg:p-24">
-            <div className="max-w-lg">
-              <div className="mb-8">
-                <div className="text-sm font-light tracking-[0.2em] text-amber-300 mb-4">
-                  JOIN THE ELITE
-                </div>
-                <h3 className="text-6xl md:text-7xl font-thin mb-6 leading-tight">
-                  Not a Member Yet?
-                  <br />
-                  <span className="italic text-amber-300">
-                    Let's Change That.
-                  </span>
-                </h3>
-                <div className="w-16 h-px bg-amber-300 mb-8"></div>
-              </div>
+          {/* Main heading */}
+          <h1 className="text-2xl md:text-4xl font-light mb-8 leading-tight">
+            Not a Member Yet?
+            <br />
+            <span>Let’s Change That.</span>
+          </h1>
 
-              <p className="text-xl font-light mb-12 leading-relaxed opacity-90">
-                Review your past orders, calculate your lifetime spend, and see
-                how close you are to unlocking the Vault. You're likely just a
-                few steps away from entering a world where fashion meets
-                privilege.
-              </p>
+          {/* Divider */}
+          <div className="md:w-20 w-14 h-px bg-black mx-auto mb-10"></div>
 
-              <div className="space-y-6">
-                <button className="w-full bg-amber-300 text-black px-8 py-6 text-lg font-medium tracking-wider hover:bg-amber-400 transition-all duration-300 flex items-center justify-center group">
-                  <User className="w-5 h-5 mr-3" />
-                  SIGN IN TO YOUR ACCOUNT
-                  <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
-                </button>
+          {/* Paragraph */}
+          <p className="text-sm md:text-xl font-light mb-12 text-black/70 leading-relaxed opacity-90">
+            Review your past orders, calculate your lifetime spend, and see how
+            close you are to unlocking The Vault. You’re just steps away from
+            entering a world where fashion meets privilege.
+          </p>
 
-                <button className="w-full border border-amber-300 text-amber-300 px-8 py-6 text-lg font-light tracking-wider hover:bg-amber-300 hover:text-black transition-all duration-500 flex items-center justify-center group">
-                  <Lock className="w-5 h-5 mr-3" />
-                  CALCULATE MY TIER
-                  <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
-                </button>
-              </div>
-            </div>
+          {/* Buttons */}
+          <div className="space-y-5">
+            <button className="w-full text-sm  text-black border border-black/70 rounded-md md:px-8 md:py-5 p-4 md:text-lg font-medium tracking-wide hover:bg-black hover:text-white transition-all duration-300 flex items-center justify-center group ">
+              <User className="md:w-5 md:h-5 h-3 w-3 mr-3" />
+              Sign In to Your Account
+              <ArrowRight className="w-3 md:w-5 h-3 md:h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
+            </button>
+
+            <button className="w-full border border-black/70 text-sm rounded-md text-black md:px-8 md:py-5 p-4 md:text-lg font-light tracking-wide hover:bg-black hover:text-white  transition-all duration-500 flex items-center justify-center group">
+              <Lock className="md:w-5 md:h-5 h-3 w-3 mr-3" />
+              Calculate My Tier
+              <ArrowRight className="w-3 md:w-5 h-3 md:h-5 group-hover:translate-x-1 transition-transform duration-300" />
+            </button>
           </div>
         </div>
       </section>

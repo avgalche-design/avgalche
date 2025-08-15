@@ -3,6 +3,7 @@ import { Raleway, Montserrat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CookieBanner from "@/components/CookieBanner";
 
 const raleway = Raleway({
   variable: "--font-raleway",
@@ -32,7 +33,10 @@ export default function RootLayout({
         className={`${raleway.variable} ${montserrat.variable} antialiased`}
       >
         <Navbar />
-        <main>{children}</main>
+        <main>
+          {children}
+          <CookieBanner />
+        </main>
         <Footer />
       </body>
     </html>

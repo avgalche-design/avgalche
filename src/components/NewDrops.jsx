@@ -178,6 +178,13 @@ export default function NewDrops() {
     return () => ctx.revert();
   }, [isMobile]);
 
+  const images = [
+    "https://plus.unsplash.com/premium_photo-1675186049409-f9f8f60ebb5e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "https://plus.unsplash.com/premium_photo-1681223965612-8948231413b6?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "https://plus.unsplash.com/premium_photo-1681980021035-5db5823c974b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "https://plus.unsplash.com/premium_photo-1675186049406-3fabe5f387eb?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  ];
+
   return (
     <section
       ref={sectionRef}
@@ -195,7 +202,7 @@ export default function NewDrops() {
           </h2>
 
           {/* Mobile Grid - only images, no animation */}
-          {products.map((prod, index) => (
+          {/* {products.map((prod, index) => (
             <Link
               href={`/products/${prod.handle || ""}`}
               key={prod.handle || index}
@@ -213,6 +220,15 @@ export default function NewDrops() {
                 </div>
               </div>
             </Link>
+          ))} */}
+          {images.map((url, index) => (
+            <div className="relative w-full h-48 md:h-[30rem]">
+              <img
+                src={url}
+                alt={`Product ${index + 1}`}
+                className="object-cover w-full h-full"
+              />
+            </div>
           ))}
 
           {/* Paragraph */}
@@ -221,11 +237,13 @@ export default function NewDrops() {
               Discover timeless silhouettes, refined textures, and statement
               pieces curated for the modern luxury wardrobe.
             </p>
-            <button className="relative text-black p-1 font-medium group">
-              <h2 className=" text-sm md:text-2xl">Discover Collection</h2>
-              <span className="absolute left-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
-              <span className="absolute right-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
-            </button>
+            <Link href="/products">
+              <button className="relative text-black p-1 font-medium group">
+                <h2 className=" text-sm md:text-2xl">Discover Collection</h2>
+                <span className="absolute left-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
+                <span className="absolute right-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
+              </button>
+            </Link>
           </div>
         </>
       ) : (
@@ -252,12 +270,15 @@ export default function NewDrops() {
                   style={{ width: 450, height: 500 }}
                 >
                   <img
-                    src={products[1]?.image}
+                    src={
+                      products[7]?.image ||
+                      "https://plus.unsplash.com/premium_photo-1681223965612-8948231413b6?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    }
                     alt="Third Drop"
-                    className="object-cover"
+                    className=" h-full  w-full object-cover"
                   />
                   <div className="absolute bottom-0 left-0 w-full  px-4 py-3">
-                    <p className="text-black font-serif text-lg tracking-wide">
+                    <p className="text-white font-serif text-lg tracking-wide">
                       {products[1]?.title}
                     </p>
                   </div>
@@ -274,9 +295,12 @@ export default function NewDrops() {
                   style={{ width: 450, height: 500 }}
                 >
                   <img
-                    src={products[3]?.image}
+                    src={
+                      products[9]?.image ||
+                      "https://plus.unsplash.com/premium_photo-1681980021035-5db5823c974b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    }
                     alt="Third Drop"
-                    className="object-cover"
+                    className="object-contain"
                   />
                   <div className="absolute bottom-0 left-0 w-full  px-4 py-3">
                     <p className="text-white font-serif text-lg tracking-wide">
@@ -298,9 +322,13 @@ export default function NewDrops() {
                 style={{ width: 450, height: 500 }}
               >
                 <img
-                  src={products[0]?.image}
+                  // src={products[0]?.image}
+                  src={
+                    products[8]?.image ||
+                    "https://plus.unsplash.com/premium_photo-1675186049406-3fabe5f387eb?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  }
                   alt={products[0]?.alt}
-                  className="object-cover w-full h-full"
+                  className=" h-full w-full "
                 />
                 <div className="absolute bottom-0 left-0 w-full  px-4 py-3">
                   <p className="text-white font-serif text-lg tracking-wide">
@@ -319,7 +347,10 @@ export default function NewDrops() {
                   style={{ width: 450, height: 500 }}
                 >
                   <img
-                    src={products[2]?.image}
+                    src={
+                      products[6]?.image ||
+                      "https://plus.unsplash.com/premium_photo-1675186049409-f9f8f60ebb5e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    }
                     alt="Third Drop"
                     className="object-cover"
                   />

@@ -89,7 +89,7 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full overflow-hidden  h-[17rem] md:h-[37rem] xl:min-h-screen  flex flex-col justify-center"
+      className="relative w-full overflow-hidden  h-[17rem] md:h-[37rem] xl:min-h-screen  flex flex-col justify-center "
     >
       <div className="flex justify-between text-black items-end px-4 sm:px-8">
         {/* Left Social Icons */}
@@ -133,6 +133,8 @@ export default function HeroSection() {
           zIndex: 30,
           position: "absolute",
           userSelect: "none",
+          isolation: "isolate", // <-- add this
+          transform: "translateZ(0)", // <-- optional GPU fix
         }}
       >
         AV GaLche

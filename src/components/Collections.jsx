@@ -1,13 +1,13 @@
 // components/Collections.jsx
 export default function Collections() {
   return (
-    <section className="w-full min-h-screen bg-black flex flex-col items-center justify-center p-0 m-0">
+    <section className="w-full min-h-screen bg-[#EBEBEB] flex flex-col items-center justify-center p-0 m-0">
       {/* Luxury Intro Text */}
-      <div className="text-center mt-16  mb-12 px-6">
-        <h2 className="text-white text-2xl md:text-3xl font-serif uppercase tracking-[0.25em] mb-4">
+      <div className="text-center mt-10 md:mt-16  md:mb-12 px-6">
+        <h2 className="text-black text-lg md:text-3xl font-serif uppercase tracking-[0.25em] mb-4">
           A Season for Every Soul
         </h2>
-        <p className="text-white/70  text-sm md:text-base font-light tracking-widest max-w-2xl mx-auto">
+        <p className="text-black/70  text-sm md:text-base font-light tracking-widest max-w-2xl mx-auto">
           From the frost-kissed silhouettes of winter to the radiant ease of
           summer — discover creations crafted for timeless elegance.
         </p>
