@@ -179,7 +179,7 @@ const AVGalcheVault = () => {
         </div>
       </div>
 
-      <div className="hidden xl:block">
+      <div className="hidden md:block">
         <StoryHero />
       </div>
 
