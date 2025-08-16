@@ -518,7 +518,7 @@ export default function ProductPageClient({
               {/* Product Header */}
               <div className="text-center space-y-6 pb-10 border-b border-gray-200">
                 <div className="space-y-4">
-                  <h1 className="text-4xl lg:text-5xl font-extralight tracking-[0.1em] text-black leading-tight">
+                  <h1 className="text-xl lg:text-5xl font-extralight tracking-[0.1em] text-black leading-tight">
                     {product.title}
                   </h1>
                   <p className="text-xs text-gray-500 uppercase tracking-[0.3em] font-extralight">

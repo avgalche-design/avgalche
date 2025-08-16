@@ -201,7 +201,7 @@ export default function CartModal() {
                         {/* Remove Button */}
                         <button
                           onClick={() => removeFromCart(node.id)}
-                          className="p-2 hover:bg-red-100 rounded-full transition-colors text-red-500"
+                          className="p-2 hover:text-black rounded-full transition-colors text-gray-600"
                         >
                           <FaTrash className="text-sm" />
                         </button>
@@ -217,7 +217,7 @@ export default function CartModal() {
                       Subtotal
                     </span>
                     <span className="text-xl sm:text-2xl font-bold text-black">
-                      ${subtotal.toFixed(2)}
+                      ₹{subtotal.toFixed(2)}
                     </span>
                   </div>
                   <div className="space-y-3">

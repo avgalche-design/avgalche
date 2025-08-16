@@ -40,13 +40,24 @@ export default function Navbar() {
 
   const shouldShowCart = pathname !== "/" || cartCount > 0;
   const shouldShowWishlist = wishlistCount > 0;
-  const iconColor = isScrolled && showNavbar ? "text-black" : "text-white";
+  const isHome = pathname === "/";
+  const iconColor = isHome
+    ? isScrolled && showNavbar
+      ? "text-black"
+      : "text-white"
+    : "text-black";
+
   const barColor = isScrolled && showNavbar ? "black" : "white";
+  const hamburgerColor = isHome
+    ? isScrolled && showNavbar
+      ? "black"
+      : "white"
+    : "black";
 
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 w-full z-50 px-8 py-6 flex items-center justify-between transition-all duration-300
+        className={`fixed top-0 left-0 w-full z-50 px-4 py-2 md:px-8 md:py-6 flex items-center justify-between transition-all duration-300
         ${showNavbar ? "translate-y-0" : "-translate-y-full"}
         ${
           isScrolled && showNavbar
@@ -58,7 +69,7 @@ export default function Navbar() {
           <AnimatedHamburger
             isOpen={menuOpen}
             onClick={() => setMenuOpen((p) => !p)}
-            color={barColor}
+            color={hamburgerColor}
           />
         </div>
         <div className="absolute left-0 right-0 mx-auto flex items-center justify-center gap-4 pointer-events-none">
@@ -70,13 +81,15 @@ export default function Navbar() {
         </div>
         <div className="flex gap-5 items-center ml-auto">
           <button aria-label="Search" onClick={() => setIsSearchOpen(true)}>
-            <FiSearch className={`${iconColor} text-xl`} />
+            <FiSearch className={`${iconColor} text-sm md:text-xl`} />
           </button>
           <button
             aria-label="Account"
             onClick={() => (window.location.href = loginUrl)}
           >
-            <FaRegUser className={`${iconColor} font-bold text-xl`} />
+            <FaRegUser
+              className={`${iconColor} font-bold text-sm md:text-xl`}
+            />
           </button>
           {shouldShowWishlist && (
             <button
@@ -84,8 +97,8 @@ export default function Navbar() {
               onClick={() => setIsWishlistOpen(true)}
               className="relative"
             >
-              <FaHeart className={`${iconColor} text-xl`} />
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs px-1">
+              <FaHeart className={`${iconColor} text-sm md:text-xl`} />
+              <span className="absolute -top-2 -right-2 bg-black/70 text-white rounded-full text-xs px-1">
                 {wishlistCount}
               </span>
             </button>
@@ -96,9 +109,9 @@ export default function Navbar() {
               onClick={() => setIsCartOpen(true)}
               className="relative"
             >
-              <FaShoppingBag className={`${iconColor} text-xl`} />
+              <FaShoppingBag className={`${iconColor} text-sm md:text-xl`} />
               {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-yellow-400 text-black rounded-full text-xs px-1">
+                <span className="absolute -top-2 -right-2 bg-black/70 text-white rounded-full text-xs px-1">
                   {cartCount}
                 </span>
               )}
