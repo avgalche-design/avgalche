@@ -124,8 +124,8 @@ export default function CartModal() {
               </div>
             ) : (
               <>
-                {/* Cart Items */}
-                <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3 sm:space-y-4">
+                {/* Cart Items - Scrollable area */}
+                <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3 sm:space-y-4 max-h-[50vh] sm:max-h-[60vh]">
                   {lines.map(({ node }) => (
                     <div
                       key={node.id}

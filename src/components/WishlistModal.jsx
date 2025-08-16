@@ -1,8 +1,15 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import { useWishlist } from "../app/context/WishlistContext";
 import { useCart } from "../app/context/CartContext";
-import { FaTimes, FaTrash, FaHeart, FaShoppingBag } from "react-icons/fa";
+import {
+  FaTimes,
+  FaTrash,
+  FaHeart,
+  FaShoppingBag,
+  FaCheck,
+} from "react-icons/fa";
 import Link from "next/link";
 
 export default function WishlistModal() {
@@ -10,13 +17,37 @@ export default function WishlistModal() {
     useWishlist();
 
   const { addToCart } = useCart();
+  const [loadingItems, setLoadingItems] = useState(new Set());
+  const [addedItems, setAddedItems] = useState(new Set());
 
   if (!isWishlistOpen) return null;
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = async (product) => {
     // Add the first variant to cart
     if (product.variants && product.variants.length > 0) {
-      addToCart(product.variants[0].id, 1);
+      setLoadingItems((prev) => new Set(prev).add(product.id));
+
+      try {
+        await addToCart(product.variants[0].id, 1);
+
+        // Show success animation
+        setAddedItems((prev) => new Set(prev).add(product.id));
+        setTimeout(() => {
+          setAddedItems((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(product.id);
+            return newSet;
+          });
+        }, 2000);
+      } catch (error) {
+        console.error("Failed to add to cart:", error);
+      } finally {
+        setLoadingItems((prev) => {
+          const newSet = new Set(prev);
+          newSet.delete(product.id);
+          return newSet;
+        });
+      }
     }
   };
 
@@ -70,8 +101,8 @@ export default function WishlistModal() {
               </div>
             ) : (
               <>
-                {/* Wishlist Items */}
-                <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3 sm:space-y-4">
+                {/* Wishlist Items - Scrollable area */}
+                <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3 sm:space-y-4 max-h-[50vh] sm:max-h-[60vh]">
                   {wishlist.map((product) => (
                     <div
                       key={product.id}
@@ -81,6 +112,7 @@ export default function WishlistModal() {
                       <div className="flex-shrink-0">
                         <img
                           src={
+                            product.images?.[0]?.node?.url ||
                             product.images?.[0]?.url ||
                             "/images/placeholder.jpg"
                           }
@@ -119,10 +151,27 @@ export default function WishlistModal() {
                         {/* Add to Cart Button */}
                         <button
                           onClick={() => handleAddToCart(product)}
-                          className="p-2 hover:bg-green-100 rounded-full transition-colors text-green-600"
-                          title="Add to Cart"
+                          disabled={loadingItems.has(product.id)}
+                          className={`p-2 rounded-full transition-all duration-300 ${
+                            loadingItems.has(product.id)
+                              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                              : addedItems.has(product.id)
+                              ? "bg-green-100 text-green-600"
+                              : "hover:bg-green-100 text-green-600"
+                          }`}
+                          title={
+                            addedItems.has(product.id)
+                              ? "Added to Cart!"
+                              : "Add to Cart"
+                          }
                         >
-                          <FaShoppingBag className="text-sm" />
+                          {loadingItems.has(product.id) ? (
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-600"></div>
+                          ) : addedItems.has(product.id) ? (
+                            <FaCheck className="text-sm" />
+                          ) : (
+                            <FaShoppingBag className="text-sm" />
+                          )}
                         </button>
 
                         {/* Remove from Wishlist Button */}

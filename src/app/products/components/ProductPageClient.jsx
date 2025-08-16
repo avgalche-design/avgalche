@@ -268,45 +268,92 @@ function SizeGuide({ sizeGuideData }) {
       </div>
 
       <div className="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden shadow-lg">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-gray-200 bg-gray-100">
-              <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-gray-600 text-xs uppercase">
-                Size
-              </th>
-              <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-gray-600 text-xs uppercase">
-                Chest
-              </th>
-              <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-gray-600 text-xs uppercase">
-                Waist
-              </th>
-              <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-gray-600 text-xs uppercase">
-                Length
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {sizeData.measurements.map((measurement, index) => (
-              <tr
-                key={index}
-                className="border-b border-gray-100 hover:bg-gray-50 transition-all duration-300 group"
-              >
-                <td className="py-4 px-6 font-light text-black group-hover:text-gray-800 transition-colors">
-                  {measurement.size}
-                </td>
-                <td className="py-4 px-6 text-gray-600 group-hover:text-gray-700 transition-colors font-light">
-                  {measurement.chest}
-                </td>
-                <td className="py-4 px-6 text-gray-600 group-hover:text-gray-700 transition-colors font-light">
-                  {measurement.waist}
-                </td>
-                <td className="py-4 px-6 text-gray-600 group-hover:text-gray-700 transition-colors font-light">
-                  {measurement.length}
-                </td>
+        {/* Desktop Table */}
+        <div className="hidden sm:block">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-200 bg-gray-100">
+                <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-gray-600 text-xs uppercase">
+                  Size
+                </th>
+                <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-gray-600 text-xs uppercase">
+                  Chest
+                </th>
+                <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-gray-600 text-xs uppercase">
+                  Waist
+                </th>
+                <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-gray-600 text-xs uppercase">
+                  Length
+                </th>
               </tr>
+            </thead>
+            <tbody>
+              {sizeData.measurements.map((measurement, index) => (
+                <tr
+                  key={index}
+                  className="border-b border-gray-100 hover:bg-gray-50 transition-all duration-300 group"
+                >
+                  <td className="py-4 px-6 font-light text-black group-hover:text-gray-800 transition-colors">
+                    {measurement.size}
+                  </td>
+                  <td className="py-4 px-6 text-gray-600 group-hover:text-gray-700 transition-colors font-light">
+                    {measurement.chest}
+                  </td>
+                  <td className="py-4 px-6 text-gray-600 group-hover:text-gray-700 transition-colors font-light">
+                    {measurement.waist}
+                  </td>
+                  <td className="py-4 px-6 text-gray-600 group-hover:text-gray-700 transition-colors font-light">
+                    {measurement.length}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile Cards */}
+        <div className="sm:hidden">
+          <div className="p-4 space-y-3">
+            {sizeData.measurements.map((measurement, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm"
+              >
+                <div className="flex justify-between items-center mb-3">
+                  <h4 className="font-semibold text-black text-sm">
+                    Size {measurement.size}
+                  </h4>
+                </div>
+                <div className="grid grid-cols-3 gap-3 text-xs">
+                  <div>
+                    <p className="text-gray-500 font-extralight tracking-[0.1em] uppercase mb-1">
+                      Chest
+                    </p>
+                    <p className="text-gray-700 font-light">
+                      {measurement.chest}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 font-extralight tracking-[0.1em] uppercase mb-1">
+                      Waist
+                    </p>
+                    <p className="text-gray-700 font-light">
+                      {measurement.waist}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500 font-extralight tracking-[0.1em] uppercase mb-1">
+                      Length
+                    </p>
+                    <p className="text-gray-700 font-light">
+                      {measurement.length}
+                    </p>
+                  </div>
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
+          </div>
+        </div>
       </div>
 
       <p className="text-xs text-gray-500 tracking-[0.1em] text-center font-light">
@@ -328,7 +375,7 @@ export default function ProductPageClient({
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
+
   const [isImageZoomOpen, setIsImageZoomOpen] = useState(false);
   const { addToCart, setIsCartOpen } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
@@ -357,10 +404,6 @@ export default function ProductPageClient({
       addToWishlist(productData);
     }
   };
-
-  useEffect(() => {
-    setImageLoaded(false); // reset loader when selected image changes
-  }, [selectedImageIndex]);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -470,12 +513,7 @@ export default function ProductPageClient({
                         }
                         fill
                         sizes="(max-width:768px) 100vw, 50vw"
-                        className={`object-cover transition-transform duration-1000 ${
-                          imageLoaded
-                            ? "scale-100 opacity-100"
-                            : "scale-105 opacity-0"
-                        } group-hover:scale-110`}
-                        onLoadingComplete={() => setImageLoaded(true)}
+                        className="object-cover transition-transform duration-300 group-hover:scale-110"
                         onClick={() => setIsImageZoomOpen(true)}
                       />
                     </>
