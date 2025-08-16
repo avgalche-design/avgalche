@@ -5,37 +5,115 @@ const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  // Automatically create cart on mount
+  // Initialize cart on mount
   useEffect(() => {
-    if (!cart && !loading) {
-      (async () => {
-        setLoading(true);
-        try {
-          const response = await fetch("/api/cart", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ action: "create" }),
-          });
+    const initializeCart = async () => {
+      try {
+        const savedCartId = localStorage.getItem("cartId");
+        const savedCart = localStorage.getItem("cart");
 
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        if (savedCartId && savedCart) {
+          try {
+            const parsedCart = JSON.parse(savedCart);
+            console.log("Found saved cart:", savedCartId);
+
+            // Try to restore the saved cart from Shopify
+            const response = await fetch("/api/cart", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ action: "get", cartId: savedCartId }),
+            });
+
+            if (response.ok) {
+              const cartData = await response.json();
+              console.log("Restored cart data:", cartData);
+
+              // Set cart regardless of items (empty carts are valid)
+              if (cartData && cartData.id) {
+                setCart(cartData);
+              } else {
+                console.log("Cart data invalid, creating new cart");
+                await createNewCart();
+              }
+            } else {
+              console.log("Cart not found on Shopify, creating new cart");
+              await createNewCart();
+            }
+          } catch (error) {
+            console.error("Failed to parse saved cart:", error);
+            localStorage.removeItem("cartId");
+            localStorage.removeItem("cart");
+            await createNewCart();
           }
+        } else {
+          // No saved cart, create a new one
+          await createNewCart();
+        }
+      } catch (error) {
+        console.error("Failed to initialize cart:", error);
+        await createNewCart();
+      } finally {
+        setLoading(false);
+        setIsInitialized(true);
+      }
+    };
 
+    const createNewCart = async () => {
+      try {
+        const response = await fetch("/api/cart", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ action: "create" }),
+        });
+
+        if (response.ok) {
           const data = await response.json();
           setCart(data);
-        } catch (err) {
-          console.error("Failed to create cart:", err);
-        } finally {
-          setLoading(false);
+        } else {
+          console.error("Failed to create new cart");
         }
-      })();
+      } catch (error) {
+        console.error("Failed to create new cart:", error);
+      }
+    };
+
+    initializeCart();
+  }, []);
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    if (isInitialized && cart) {
+      localStorage.setItem("cartId", cart.id);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      console.log("Saved cart to localStorage:", cart.id);
     }
-  }, [cart, loading]);
+  }, [cart, isInitialized]);
+
+  // Fallback: If no cart after initialization, try to restore from localStorage
+  useEffect(() => {
+    if (isInitialized && !cart && !loading) {
+      const savedCartId = localStorage.getItem("cartId");
+      const savedCart = localStorage.getItem("cart");
+
+      if (savedCartId && savedCart) {
+        try {
+          const parsedCart = JSON.parse(savedCart);
+          console.log("Fallback: Restoring cart from localStorage");
+          setCart(parsedCart);
+        } catch (error) {
+          console.error("Fallback: Failed to parse saved cart:", error);
+        }
+      }
+    }
+  }, [isInitialized, cart, loading]);
 
   const addToCart = async (variantId, quantity = 1) => {
     try {
@@ -83,9 +161,79 @@ export function CartProvider({ children }) {
     }
   };
 
+  const removeFromCart = async (lineId) => {
+    try {
+      if (!cart?.id) return;
+
+      const response = await fetch("/api/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: "remove",
+          cartId: cart.id,
+          lineId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setCart(data);
+    } catch (err) {
+      console.error("Failed to remove from cart:", err);
+    }
+  };
+
+  const updateCartItemQuantity = async (lineId, quantity) => {
+    try {
+      if (!cart?.id) return;
+
+      const response = await fetch("/api/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: "update",
+          cartId: cart.id,
+          lineId,
+          quantity,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setCart(data);
+    } catch (err) {
+      console.error("Failed to update cart item:", err);
+    }
+  };
+
+  const clearCart = () => {
+    setCart(null);
+    localStorage.removeItem("cartId");
+    localStorage.removeItem("cart");
+  };
+
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, loading, isCartOpen, setIsCartOpen }}
+      value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        updateCartItemQuantity,
+        clearCart,
+        loading,
+        isCartOpen,
+        setIsCartOpen,
+      }}
     >
       {children}
     </CartContext.Provider>

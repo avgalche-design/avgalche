@@ -1,47 +1,40 @@
 import type { Metadata } from "next";
-import { Raleway, Montserrat } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import CookieBanner from "@/components/CookieBanner";
-import CartModal from "@/components/CartModal";
-import { CartProvider } from "@/app/context/CartContext";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import { CartProvider } from "./context/CartContext";
+import { WishlistProvider } from "./context/WishlistContext";
+import CartModal from "../components/CartModal";
+import WishlistModal from "../components/WishlistModal";
+import SearchModal from "../components/SearchModal";
 
-const raleway = Raleway({
-  variable: "--font-raleway",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
-
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AV GaLche",
-  description: "Luxury Clothing brand",
+  title: "AV GaLche - Luxury Fashion",
+  description:
+    "Discover timeless elegance and contemporary sophistication with AV GaLche's curated collection of premium fashion.",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body
-        className={`${raleway.variable} ${montserrat.variable} antialiased`}
-      >
+      <body className={inter.className}>
         <CartProvider>
-          <Navbar />
-          <main>
-            {children}
-            <CookieBanner />
-          </main>
-          <Footer />
-          <CartModal />
+          <WishlistProvider>
+            <div className="min-h-screen flex flex-col">
+              <Navbar />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+            <CartModal />
+            <WishlistModal />
+          </WishlistProvider>
         </CartProvider>
       </body>
     </html>

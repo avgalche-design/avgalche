@@ -1,22 +1,27 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { FaShoppingBag, FaRegUser } from "react-icons/fa";
+import { FaShoppingBag, FaRegUser, FaHeart } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 import AnimatedHamburger from "./AnimatedHamburger";
 import Dropdown from "./Dropdown";
 import { usePathname } from "next/navigation";
 import { useCart } from "../app/context/CartContext";
+import { useWishlist } from "../app/context/WishlistContext";
+import SearchModal from "./SearchModal";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const lastScrollY = useRef(0);
   const shopId = "93829235007";
   const returnUrl = encodeURIComponent("https://yourdomain.com/account");
   const loginUrl = `https://shopify.com/${shopId}/account/login?return_url=${returnUrl}`;
   const { cart, setIsCartOpen } = useCart();
+  const { wishlist, setIsWishlistOpen } = useWishlist();
   const cartCount = cart?.lines?.edges?.length || 0;
+  const wishlistCount = wishlist.length;
   const pathname = usePathname();
 
   // Scroll hide/show
@@ -34,6 +39,7 @@ export default function Navbar() {
   }, []);
 
   const shouldShowCart = pathname !== "/" || cartCount > 0;
+  const shouldShowWishlist = wishlistCount > 0;
   const iconColor = isScrolled && showNavbar ? "text-black" : "text-white";
   const barColor = isScrolled && showNavbar ? "black" : "white";
 
@@ -63,7 +69,7 @@ export default function Navbar() {
           />
         </div>
         <div className="flex gap-5 items-center ml-auto">
-          <button aria-label="Search">
+          <button aria-label="Search" onClick={() => setIsSearchOpen(true)}>
             <FiSearch className={`${iconColor} text-xl`} />
           </button>
           <button
@@ -72,6 +78,18 @@ export default function Navbar() {
           >
             <FaRegUser className={`${iconColor} font-bold text-xl`} />
           </button>
+          {shouldShowWishlist && (
+            <button
+              aria-label="Wishlist"
+              onClick={() => setIsWishlistOpen(true)}
+              className="relative"
+            >
+              <FaHeart className={`${iconColor} text-xl`} />
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs px-1">
+                {wishlistCount}
+              </span>
+            </button>
+          )}
           {shouldShowCart && (
             <button
               aria-label="Cart"
@@ -89,6 +107,10 @@ export default function Navbar() {
         </div>
       </nav>
       <Dropdown open={menuOpen} onClose={() => setMenuOpen(false)} />
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
     </>
   );
 }

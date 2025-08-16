@@ -114,7 +114,7 @@ const PRODUCTS_QUERY = `
         variants(first: 1) {
           edges {
             node {
-              priceV2 {
+              price {
                 amount
                 currencyCode
               }
@@ -150,10 +150,10 @@ export default async function ProductsPage() {
         variants:
           node.variants?.edges?.map((ve) => ({
             price:
-              ve?.node?.priceV2?.amount != null
+              ve?.node?.price?.amount != null
                 ? {
-                    amount: ve.node.priceV2.amount,
-                    currencyCode: ve.node.priceV2.currencyCode,
+                    amount: ve.node.price.amount,
+                    currencyCode: ve.node.price.currencyCode,
                   }
                 : null,
           })) ?? [],

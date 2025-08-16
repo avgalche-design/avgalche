@@ -4,7 +4,134 @@ import { useState, useEffect } from "react";
 import YouMayAlsoLike from "../components/YouMayAlsoLike";
 import Image from "next/image";
 import { useCart } from "@/app/context/CartContext";
+import { useWishlist } from "@/app/context/WishlistContext";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  FaTimes,
+  FaChevronLeft,
+  FaChevronRight,
+  FaHeart,
+} from "react-icons/fa";
+
+// Image Zoom Modal Component
+function ImageZoomModal({ images, selectedIndex, onClose, onImageChange }) {
+  const [currentIndex, setCurrentIndex] = useState(selectedIndex);
+
+  useEffect(() => {
+    setCurrentIndex(selectedIndex);
+  }, [selectedIndex]);
+
+  const handlePrevious = () => {
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    onImageChange(currentIndex === 0 ? images.length - 1 : currentIndex - 1);
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    onImageChange(currentIndex === images.length - 1 ? 0 : currentIndex + 1);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Escape") onClose();
+    if (e.key === "ArrowLeft") handlePrevious();
+    if (e.key === "ArrowRight") handleNext();
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [currentIndex]);
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-[9999] p-4"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ type: "spring", damping: 25, stiffness: 300 }}
+          className="relative max-w-7xl max-h-[90vh] w-full h-full flex items-center justify-center"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Close Button */}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 z-10 p-3 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors"
+          >
+            <FaTimes className="text-xl" />
+          </button>
+
+          {/* Navigation Buttons */}
+          {images.length > 1 && (
+            <>
+              <button
+                onClick={handlePrevious}
+                className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-3 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors"
+              >
+                <FaChevronLeft className="text-xl" />
+              </button>
+              <button
+                onClick={handleNext}
+                className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-3 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors"
+              >
+                <FaChevronRight className="text-xl" />
+              </button>
+            </>
+          )}
+
+          {/* Main Image */}
+          <div className="relative w-full h-full flex items-center justify-center">
+            <img
+              src={images[currentIndex]?.node.url}
+              alt={images[currentIndex]?.node.altText || "Product image"}
+              className="max-w-full max-h-full object-contain"
+            />
+          </div>
+
+          {/* Image Counter */}
+          {images.length > 1 && (
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-black/50 text-white px-4 py-2 rounded-full text-sm">
+              {currentIndex + 1} / {images.length}
+            </div>
+          )}
+
+          {/* Thumbnail Navigation */}
+          {images.length > 1 && (
+            <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+              {images.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    setCurrentIndex(index);
+                    onImageChange(index);
+                  }}
+                  className={`w-16 h-16 border-2 rounded-lg overflow-hidden transition-all ${
+                    currentIndex === index
+                      ? "border-white scale-110"
+                      : "border-white/30 hover:border-white/60"
+                  }`}
+                >
+                  <img
+                    src={image.node.url}
+                    alt={image.node.altText || "Thumbnail"}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
 
 function RenderShopifyRichText({ richTextJson }) {
   if (!richTextJson) return null;
@@ -202,12 +329,33 @@ export default function ProductPageClient({
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [isImageZoomOpen, setIsImageZoomOpen] = useState(false);
   const { addToCart, setIsCartOpen } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   const handleAddToCart = async () => {
     if (!selectedVariant) return;
     await addToCart(selectedVariant.id, 1);
     setIsCartOpen(true); // 👈 open modal instead of redirect
+  };
+
+  const handleWishlistToggle = () => {
+    const productData = {
+      id: product.id,
+      title: product.title,
+      handle: product.handle,
+      images: product.images.edges,
+      variants: product.variants.edges.map((edge) => ({
+        id: edge.node.id,
+        price: edge.node.price,
+      })),
+    };
+
+    if (isInWishlist(product.id)) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(productData);
+    }
   };
 
   useEffect(() => {
@@ -307,7 +455,7 @@ export default function ProductPageClient({
             <div className="space-y-8">
               {/* Main Image */}
               <div className="relative group">
-                <div className="aspect-[4/5] bg-gray-100 border border-gray-200 overflow-hidden rounded-sm shadow-lg">
+                <div className="aspect-[4/5] bg-gray-100 border border-gray-200 overflow-hidden rounded-sm shadow-lg cursor-pointer">
                   {product.images.edges.length > 0 ? (
                     <>
                       <Image
@@ -328,8 +476,8 @@ export default function ProductPageClient({
                             : "scale-105 opacity-0"
                         } group-hover:scale-110`}
                         onLoadingComplete={() => setImageLoaded(true)}
+                        onClick={() => setIsImageZoomOpen(true)}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                     </>
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
@@ -339,9 +487,6 @@ export default function ProductPageClient({
                     </div>
                   )}
                 </div>
-
-                {/* Image overlay effect */}
-                <div className="absolute -inset-4 bg-gradient-to-r from-gray-100 via-transparent to-gray-100 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
               </div>
 
               {/* Thumbnail Images */}
@@ -362,9 +507,6 @@ export default function ProductPageClient({
                         alt={node.altText || product.title}
                         className="w-full h-full object-cover"
                       />
-                      {selectedImageIndex === index && (
-                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/10 to-transparent"></div>
-                      )}
                     </button>
                   ))}
                 </div>
@@ -454,8 +596,26 @@ export default function ProductPageClient({
                   )}
                 </button>
 
-                <button className="relative w-full border border-gray-300 py-4 text-sm uppercase tracking-[0.2em] font-extralight hover:border-black hover:bg-gray-50 transition-all duration-500 rounded-sm group overflow-hidden">
-                  <span className="relative z-10">Add to Wishlist</span>
+                <button
+                  onClick={handleWishlistToggle}
+                  className={`relative w-full border py-4 text-sm uppercase tracking-[0.2em] font-extralight transition-all duration-500 rounded-sm group overflow-hidden flex items-center justify-center gap-2 ${
+                    isInWishlist(product.id)
+                      ? "border-red-300 bg-red-50 text-red-600 hover:border-red-400 hover:bg-red-100"
+                      : "border-gray-300 hover:border-black hover:bg-gray-50"
+                  }`}
+                >
+                  <FaHeart
+                    className={`text-sm ${
+                      isInWishlist(product.id)
+                        ? "text-red-500"
+                        : "text-gray-400"
+                    }`}
+                  />
+                  <span className="relative z-10">
+                    {isInWishlist(product.id)
+                      ? "Remove from Wishlist"
+                      : "Add to Wishlist"}
+                  </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-100 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
                 </button>
               </div>
@@ -494,6 +654,16 @@ export default function ProductPageClient({
           <YouMayAlsoLike products={relatedProducts} />
         </div>
       </main>
+
+      {/* Image Zoom Modal */}
+      {isImageZoomOpen && (
+        <ImageZoomModal
+          images={product.images.edges}
+          selectedIndex={selectedImageIndex}
+          onClose={() => setIsImageZoomOpen(false)}
+          onImageChange={setSelectedImageIndex}
+        />
+      )}
     </>
   );
 }

@@ -27,7 +27,49 @@ const shopifyFetch = async ({ query, variables = {} }) => {
 
 export async function POST(request) {
   try {
-    const { action, cartId, variantId, quantity } = await request.json();
+    const { action, cartId, variantId, quantity, lineId } =
+      await request.json();
+
+    if (action === "get" && cartId) {
+      const query = `
+        query getCart($cartId: ID!) {
+          cart(id: $cartId) {
+            id
+            checkoutUrl
+            lines(first: 10) {
+              edges {
+                node {
+                  id
+                  quantity
+                  merchandise {
+                    ... on ProductVariant {
+                      id
+                      title
+                      price {
+                        amount
+                        currencyCode
+                      }
+                      product { 
+                        title 
+                        images(first:1){
+                          edges{
+                            node{
+                              url
+                            }
+                          }
+                        } 
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      `;
+      const data = await shopifyFetch({ query, variables: { cartId } });
+      return NextResponse.json(data.cart);
+    }
 
     if (action === "create") {
       const query = `
@@ -120,6 +162,106 @@ export async function POST(request) {
         },
       });
       return NextResponse.json(data.cartLinesAdd.cart);
+    }
+
+    if (action === "remove") {
+      const removeQuery = `
+        mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
+          cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+            cart {
+              id
+              checkoutUrl
+              lines(first: 10) {
+                edges {
+                  node {
+                    id
+                    quantity
+                    merchandise {
+                      ... on ProductVariant {
+                        id
+                        title
+                        price {
+                          amount
+                          currencyCode
+                        }
+                        product { 
+                          title 
+                          images(first:1){
+                            edges{
+                              node{
+                                url
+                              }
+                            }
+                          } 
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      `;
+
+      const data = await shopifyFetch({
+        query: removeQuery,
+        variables: {
+          cartId,
+          lineIds: [lineId],
+        },
+      });
+      return NextResponse.json(data.cartLinesRemove.cart);
+    }
+
+    if (action === "update") {
+      const updateQuery = `
+        mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+          cartLinesUpdate(cartId: $cartId, lines: $lines) {
+            cart {
+              id
+              checkoutUrl
+              lines(first: 10) {
+                edges {
+                  node {
+                    id
+                    quantity
+                    merchandise {
+                      ... on ProductVariant {
+                        id
+                        title
+                        price {
+                          amount
+                          currencyCode
+                        }
+                        product { 
+                          title 
+                          images(first:1){
+                            edges{
+                              node{
+                                url
+                              }
+                            }
+                          } 
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      `;
+
+      const data = await shopifyFetch({
+        query: updateQuery,
+        variables: {
+          cartId,
+          lines: [{ id: lineId, quantity }],
+        },
+      });
+      return NextResponse.json(data.cartLinesUpdate.cart);
     }
 
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });

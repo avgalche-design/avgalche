@@ -1,0 +1,164 @@
+"use client";
+import { motion, AnimatePresence } from "framer-motion";
+import { useWishlist } from "../app/context/WishlistContext";
+import { useCart } from "../app/context/CartContext";
+import { FaTimes, FaTrash, FaHeart, FaShoppingBag } from "react-icons/fa";
+import Link from "next/link";
+
+export default function WishlistModal() {
+  const { wishlist, isWishlistOpen, setIsWishlistOpen, removeFromWishlist } =
+    useWishlist();
+
+  const { addToCart } = useCart();
+
+  if (!isWishlistOpen) return null;
+
+  const handleAddToCart = (product) => {
+    // Add the first variant to cart
+    if (product.variants && product.variants.length > 0) {
+      addToCart(product.variants[0].id, 1);
+    }
+  };
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/60 backdrop-blur-md flex justify-center items-center z-[9999] p-2 sm:p-4"
+        onClick={() => setIsWishlistOpen(false)}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.9, y: 20 }}
+          transition={{ type: "spring", damping: 25, stiffness: 300 }}
+          className="bg-white text-black rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-sm sm:max-w-md lg:max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="flex justify-between items-center p-4 sm:p-6 border-b border-gray-200">
+            <h2 className="text-xl sm:text-2xl font-bold">Wishlist</h2>
+            <button
+              onClick={() => setIsWishlistOpen(false)}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <FaTimes className="text-lg sm:text-xl" />
+            </button>
+          </div>
+
+          {/* Wishlist Content */}
+          <div className="flex flex-col h-full">
+            {wishlist.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-12 sm:py-16 px-4 sm:px-6">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                  <FaHeart className="text-2xl sm:text-3xl text-gray-400" />
+                </div>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 text-center">
+                  Your wishlist is empty
+                </h3>
+                <p className="text-gray-600 text-center text-sm sm:text-base">
+                  Start adding items to your wishlist to save them for later.
+                </p>
+                <button
+                  onClick={() => setIsWishlistOpen(false)}
+                  className="mt-6 bg-black text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors text-sm sm:text-base"
+                >
+                  Start Shopping
+                </button>
+              </div>
+            ) : (
+              <>
+                {/* Wishlist Items */}
+                <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3 sm:space-y-4">
+                  {wishlist.map((product) => (
+                    <div
+                      key={product.id}
+                      className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-xl"
+                    >
+                      {/* Product Image */}
+                      <div className="flex-shrink-0">
+                        <img
+                          src={
+                            product.images?.[0]?.url ||
+                            "/images/placeholder.jpg"
+                          }
+                          alt={product.title}
+                          className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg"
+                        />
+                      </div>
+
+                      {/* Product Details */}
+                      <div className="flex-1 min-w-0">
+                        <Link
+                          href={`/products/${product.handle}`}
+                          className="block"
+                          onClick={() => setIsWishlistOpen(false)}
+                        >
+                          <h3 className="font-semibold text-sm sm:text-lg text-black truncate hover:text-gray-600 transition-colors">
+                            {product.title}
+                          </h3>
+                        </Link>
+
+                        {/* Price */}
+                        <div className="mt-1 sm:mt-2">
+                          {product.variants?.[0]?.price && (
+                            <p className="font-semibold text-sm sm:text-base text-black">
+                              $
+                              {parseFloat(
+                                product.variants[0].price.amount
+                              ).toFixed(2)}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        {/* Add to Cart Button */}
+                        <button
+                          onClick={() => handleAddToCart(product)}
+                          className="p-2 hover:bg-green-100 rounded-full transition-colors text-green-600"
+                          title="Add to Cart"
+                        >
+                          <FaShoppingBag className="text-sm" />
+                        </button>
+
+                        {/* Remove from Wishlist Button */}
+                        <button
+                          onClick={() => removeFromWishlist(product.id)}
+                          className="p-2 hover:bg-red-100 rounded-full transition-colors text-red-500"
+                          title="Remove from Wishlist"
+                        >
+                          <FaTrash className="text-sm" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Footer */}
+                <div className="border-t border-gray-200 p-4 sm:p-6 bg-gray-50">
+                  <div className="flex justify-between items-center mb-4">
+                    <span className="text-base sm:text-lg font-semibold text-black">
+                      {wishlist.length} Item{wishlist.length !== 1 ? "s" : ""}
+                    </span>
+                  </div>
+                  <div className="space-y-3">
+                    <button
+                      onClick={() => setIsWishlistOpen(false)}
+                      className="block w-full bg-black text-white text-center py-3 sm:py-4 rounded-xl font-semibold text-base sm:text-lg hover:bg-gray-800 transition-colors"
+                    >
+                      Continue Shopping
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
