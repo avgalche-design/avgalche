@@ -7,7 +7,7 @@ export default function YouMayAlsoLike({ products }) {
 
   return (
     <section>
-      <h2 className="text-center text-xl font-serif mb-8 text-white">
+      <h2 className="text-center text-xl font-serif mb-8 text-black">
         Our curated picks for you
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
@@ -25,10 +25,10 @@ export default function YouMayAlsoLike({ products }) {
                 className=" object-contain"
               />
             </div>
-            <p className="text-[13px] font-light group-hover:underline text-center">
+            <p className="text-[13px] font-light group-hover:underline text-center text-black">
               {product.title}
             </p>
-            <p className="text-gray-300 text-sm mt-1">
+            <p className="text-gray-600 text-sm mt-1">
               {product.variants?.[0]?.price?.amount}{" "}
               {product.variants?.[0]?.price?.currencyCode}
             </p>

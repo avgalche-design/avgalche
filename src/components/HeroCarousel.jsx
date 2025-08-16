@@ -2,6 +2,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Facebook, Instagram, Twitter } from "lucide-react";
 import { IoIosArrowRoundDown } from "react-icons/io";
+import "./H1.css";
 
 const imagesSet1 = [
   "https://images.unsplash.com/photo-1743024599050-391c63c52d32?q=80&w=687&auto=format&fit=crop",
@@ -125,16 +126,12 @@ export default function HeroSection() {
 
       {/* Brand Title */}
       <h1
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 font-light logo text-3xl md:text-6xl xl:text-[120px]"
+        className="logo absolute bottom-4 left-1/2 -translate-x-1/2 font-light text-3xl md:text-6xl xl:text-[120px]"
         style={{
-          color: "white",
-          mixBlendMode: "difference",
-          WebkitMixBlendMode: "difference",
           zIndex: 30,
-          position: "absolute",
           userSelect: "none",
-          isolation: "isolate", // <-- add this
-          transform: "translateZ(0)", // <-- optional GPU fix
+          mixBlendMode: "difference",
+          isolation: "isolate",
         }}
       >
         AV GaLche

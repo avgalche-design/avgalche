@@ -4,17 +4,19 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
+import CartModal from "@/components/CartModal";
+import { CartProvider } from "@/app/context/CartContext";
 
 const raleway = Raleway({
   variable: "--font-raleway",
   subsets: ["latin"],
-  weight: ["400", "700"], // Add weights you need
+  weight: ["400", "700"],
 });
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
-  weight: ["400", "700"], // Add weights you need
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -32,12 +34,15 @@ export default function RootLayout({
       <body
         className={`${raleway.variable} ${montserrat.variable} antialiased`}
       >
-        <Navbar />
-        <main>
-          {children}
-          <CookieBanner />
-        </main>
-        <Footer />
+        <CartProvider>
+          <Navbar />
+          <main>
+            {children}
+            <CookieBanner />
+          </main>
+          <Footer />
+          <CartModal />
+        </CartProvider>
       </body>
     </html>
   );

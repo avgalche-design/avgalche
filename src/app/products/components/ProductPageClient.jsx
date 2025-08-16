@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import YouMayAlsoLike from "../components/YouMayAlsoLike";
 import Image from "next/image";
+import { useCart } from "@/app/context/CartContext";
+import { useRouter } from "next/navigation";
 
 function RenderShopifyRichText({ richTextJson }) {
   if (!richTextJson) return null;
@@ -80,7 +82,7 @@ function RenderShopifyRichText({ richTextJson }) {
               href={node.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-400 underline"
+              className="text-blue-600 underline"
             >
               {renderNodes(node.children)}
             </a>
@@ -102,12 +104,12 @@ function RenderShopifyRichText({ richTextJson }) {
 // Animated Background Component
 function AnimatedBackground() {
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10 ">
-      {/* Base solid black background */}
-      <div className="absolute inset-0 bg-black">
-        {/* Gradients: overlays only, not changing the base background */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-radial from-white/[0.02] to-transparent rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/3 right-1/3 w-80 h-80 bg-gradient-radial from-neutral-300/[0.01] to-transparent rounded-full blur-3xl animate-pulse delay-1000"></div>
+    <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+      {/* Base solid white background */}
+      <div className="absolute inset-0 bg-white">
+        {/* Subtle gradients for depth */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-radial from-gray-100 to-transparent rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/3 right-1/3 w-80 h-80 bg-gradient-radial from-gray-50 to-transparent rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
     </div>
   );
@@ -132,26 +134,26 @@ function SizeGuide({ sizeGuideData }) {
   return (
     <div className="space-y-8">
       <div className="text-center">
-        <h3 className="text-xl font-extralight tracking-[0.3em] text-white mb-2 uppercase">
+        <h3 className="text-xl font-extralight tracking-[0.3em] text-black mb-2 uppercase">
           {sizeData.title}
         </h3>
-        <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-white to-transparent mx-auto opacity-30"></div>
+        <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-gray-400 to-transparent mx-auto opacity-60"></div>
       </div>
 
-      <div className="backdrop-blur-sm bg-white/[0.02] border border-white/10 rounded-lg overflow-hidden shadow-2xl">
+      <div className="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden shadow-lg">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-white/10 bg-gradient-to-r from-white/[0.02] to-transparent">
-              <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-neutral-300 text-xs uppercase">
+            <tr className="border-b border-gray-200 bg-gray-100">
+              <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-gray-600 text-xs uppercase">
                 Size
               </th>
-              <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-neutral-300 text-xs uppercase">
+              <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-gray-600 text-xs uppercase">
                 Chest
               </th>
-              <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-neutral-300 text-xs uppercase">
+              <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-gray-600 text-xs uppercase">
                 Waist
               </th>
-              <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-neutral-300 text-xs uppercase">
+              <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-gray-600 text-xs uppercase">
                 Length
               </th>
             </tr>
@@ -160,18 +162,18 @@ function SizeGuide({ sizeGuideData }) {
             {sizeData.measurements.map((measurement, index) => (
               <tr
                 key={index}
-                className="border-b border-white/5 hover:bg-white/[0.01] transition-all duration-500 group"
+                className="border-b border-gray-100 hover:bg-gray-50 transition-all duration-300 group"
               >
-                <td className="py-4 px-6 font-light text-white group-hover:text-neutral-100 transition-colors">
+                <td className="py-4 px-6 font-light text-black group-hover:text-gray-800 transition-colors">
                   {measurement.size}
                 </td>
-                <td className="py-4 px-6 text-neutral-400 group-hover:text-neutral-300 transition-colors font-light">
+                <td className="py-4 px-6 text-gray-600 group-hover:text-gray-700 transition-colors font-light">
                   {measurement.chest}
                 </td>
-                <td className="py-4 px-6 text-neutral-400 group-hover:text-neutral-300 transition-colors font-light">
+                <td className="py-4 px-6 text-gray-600 group-hover:text-gray-700 transition-colors font-light">
                   {measurement.waist}
                 </td>
-                <td className="py-4 px-6 text-neutral-400 group-hover:text-neutral-300 transition-colors font-light">
+                <td className="py-4 px-6 text-gray-600 group-hover:text-gray-700 transition-colors font-light">
                   {measurement.length}
                 </td>
               </tr>
@@ -180,7 +182,7 @@ function SizeGuide({ sizeGuideData }) {
         </table>
       </div>
 
-      <p className="text-xs text-neutral-500 tracking-[0.1em] text-center font-light">
+      <p className="text-xs text-gray-500 tracking-[0.1em] text-center font-light">
         All measurements are approximate and may vary between styles
       </p>
     </div>
@@ -200,6 +202,13 @@ export default function ProductPageClient({
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const { addToCart, setIsCartOpen } = useCart();
+
+  const handleAddToCart = async () => {
+    if (!selectedVariant) return;
+    await addToCart(selectedVariant.id, 1);
+    setIsCartOpen(true); // 👈 open modal instead of redirect
+  };
 
   useEffect(() => {
     setImageLoaded(false); // reset loader when selected image changes
@@ -222,9 +231,9 @@ export default function ProductPageClient({
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
-              <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-white to-transparent mx-auto opacity-40"></div>
+              <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-gray-400 to-transparent mx-auto opacity-60"></div>
             </div>
-            <p className="text-neutral-300 leading-[1.8] font-extralight tracking-[0.02em] text-base text-center max-w-2xl mx-auto">
+            <p className="text-gray-700 leading-[1.8] font-extralight tracking-[0.02em] text-base text-center max-w-2xl mx-auto">
               {product.description ||
                 "Embodying the essence of contemporary luxury, this piece transcends ordinary fashion. Meticulously crafted from premium materials with uncompromising attention to detail, it represents the perfect harmony between avant-garde design and timeless sophistication."}
             </p>
@@ -236,12 +245,12 @@ export default function ProductPageClient({
         return (
           <div className="space-y-6">
             <div className="text-center">
-              <h3 className="text-xl font-extralight tracking-[0.3em] text-white mb-2 uppercase">
+              <h3 className="text-xl font-extralight tracking-[0.3em] text-black mb-2 uppercase">
                 Care Instructions
               </h3>
-              <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-white to-transparent mx-auto opacity-30"></div>
+              <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-gray-400 to-transparent mx-auto opacity-60"></div>
             </div>
-            <div className="backdrop-blur-sm bg-white/[0.02] border border-white/10 rounded-lg p-8">
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-8">
               <div className="space-y-3">
                 <RenderShopifyRichText richTextJson={washCareInfo} />
               </div>
@@ -252,12 +261,12 @@ export default function ProductPageClient({
         return (
           <div className="space-y-6">
             <div className="text-center">
-              <h3 className="text-xl font-extralight tracking-[0.3em] text-white mb-2 uppercase">
+              <h3 className="text-xl font-extralight tracking-[0.3em] text-black mb-2 uppercase">
                 Shipping Information
               </h3>
-              <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-white to-transparent mx-auto opacity-30"></div>
+              <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-gray-400 to-transparent mx-auto opacity-60"></div>
             </div>
-            <div className="backdrop-blur-sm bg-white/[0.02] border border-white/10 rounded-lg p-8">
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-8">
               <div className="space-y-3">
                 {shippingInfo.split("\n").map(
                   (line, index) =>
@@ -266,8 +275,8 @@ export default function ProductPageClient({
                         key={index}
                         className="flex items-center space-x-3 group"
                       >
-                        <div className="w-1 h-1 bg-white/40 rounded-full group-hover:bg-white/60 transition-colors"></div>
-                        <p className="text-sm font-extralight tracking-[0.05em] text-neutral-300 group-hover:text-white transition-colors">
+                        <div className="w-1 h-1 bg-gray-400 rounded-full group-hover:bg-gray-600 transition-colors"></div>
+                        <p className="text-sm font-extralight tracking-[0.05em] text-gray-600 group-hover:text-gray-800 transition-colors">
                           {line.trim().replace("•", "").trim()}
                         </p>
                       </div>
@@ -286,7 +295,7 @@ export default function ProductPageClient({
     <>
       <AnimatedBackground />
 
-      <main className="relative z-10 text-white min-h-screen">
+      <main className="relative z-10 text-black min-h-screen">
         {/* Hero Section */}
         <div
           className={`px-6 md:px-12 lg:px-20 pt-24 pb-4 max-w-8xl mx-auto transition-all duration-1000 ${
@@ -298,7 +307,7 @@ export default function ProductPageClient({
             <div className="space-y-8">
               {/* Main Image */}
               <div className="relative group">
-                <div className="aspect-[4/5] bg-gradient-to-br from-neutral-900/50 to-black/50 backdrop-blur-sm border border-white/5 overflow-hidden rounded-sm shadow-2xl">
+                <div className="aspect-[4/5] bg-gray-100 border border-gray-200 overflow-hidden rounded-sm shadow-lg">
                   {product.images.edges.length > 0 ? (
                     <>
                       <Image
@@ -320,11 +329,11 @@ export default function ProductPageClient({
                         } group-hover:scale-110`}
                         onLoadingComplete={() => setImageLoaded(true)}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                     </>
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-neutral-500 font-extralight tracking-[0.2em] text-sm uppercase">
+                      <span className="text-gray-500 font-extralight tracking-[0.2em] text-sm uppercase">
                         No Image Available
                       </span>
                     </div>
@@ -332,7 +341,7 @@ export default function ProductPageClient({
                 </div>
 
                 {/* Image overlay effect */}
-                <div className="absolute -inset-4 bg-gradient-to-r from-white/[0.01] via-transparent to-white/[0.01] rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="absolute -inset-4 bg-gradient-to-r from-gray-100 via-transparent to-gray-100 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
               </div>
 
               {/* Thumbnail Images */}
@@ -342,10 +351,10 @@ export default function ProductPageClient({
                     <button
                       key={index}
                       onClick={() => setSelectedImageIndex(index)}
-                      className={`relative aspect-[4/5] w-16 bg-gradient-to-br from-neutral-900/50 to-black/50 backdrop-blur-sm border overflow-hidden rounded-sm transition-all duration-500 ${
+                      className={`relative aspect-[4/5] w-16 bg-gray-100 border overflow-hidden rounded-sm transition-all duration-500 ${
                         selectedImageIndex === index
-                          ? "border-white/40 scale-110 shadow-lg"
-                          : "border-white/10 opacity-60 hover:opacity-100 hover:scale-105"
+                          ? "border-gray-400 scale-110 shadow-lg"
+                          : "border-gray-200 opacity-60 hover:opacity-100 hover:scale-105"
                       }`}
                     >
                       <img
@@ -354,7 +363,7 @@ export default function ProductPageClient({
                         className="w-full h-full object-cover"
                       />
                       {selectedImageIndex === index && (
-                        <div className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/10 to-transparent"></div>
                       )}
                     </button>
                   ))}
@@ -365,12 +374,12 @@ export default function ProductPageClient({
             {/* RIGHT - Product Details */}
             <div className="lg:sticky lg:top-8 space-y-10">
               {/* Product Header */}
-              <div className="text-center space-y-6 pb-10 border-b border-white/10">
+              <div className="text-center space-y-6 pb-10 border-b border-gray-200">
                 <div className="space-y-4">
-                  <h1 className="text-4xl lg:text-5xl font-extralight tracking-[0.1em] text-white leading-tight">
+                  <h1 className="text-4xl lg:text-5xl font-extralight tracking-[0.1em] text-black leading-tight">
                     {product.title}
                   </h1>
-                  <p className="text-xs text-neutral-400 uppercase tracking-[0.3em] font-extralight">
+                  <p className="text-xs text-gray-500 uppercase tracking-[0.3em] font-extralight">
                     {product.productType}
                   </p>
                 </div>
@@ -378,11 +387,11 @@ export default function ProductPageClient({
                 {price && (
                   <div className="pt-6">
                     <div className="inline-block">
-                      <p className="text-3xl font-extralight tracking-[0.05em] text-white">
+                      <p className="text-3xl font-extralight tracking-[0.05em] text-black">
                         {price.currencyCode}{" "}
                         {parseFloat(price.amount).toFixed(2)}
                       </p>
-                      <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent mt-2"></div>
+                      <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-gray-400 to-transparent mt-2"></div>
                     </div>
                   </div>
                 )}
@@ -391,10 +400,10 @@ export default function ProductPageClient({
               {/* Size Selection */}
               <div className="space-y-6">
                 <div className="text-center">
-                  <h3 className="text-sm uppercase tracking-[0.3em] text-neutral-400 font-extralight mb-4">
+                  <h3 className="text-sm uppercase tracking-[0.3em] text-gray-500 font-extralight mb-4">
                     Select Size
                   </h3>
-                  <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent mx-auto"></div>
+                  <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-auto"></div>
                 </div>
 
                 <div className="flex flex-wrap gap-3 justify-center">
@@ -404,19 +413,19 @@ export default function ProductPageClient({
                       disabled={!node.availableForSale}
                       onClick={() => setSelectedVariant(node)}
                       className={`
-                        relative w-14 h-14 border transition-all duration-500 text-xs font-extralight tracking-wider rounded-sm backdrop-blur-sm
+                        relative w-14 h-14 border transition-all duration-500 text-xs font-extralight tracking-wider rounded-sm
                         ${
                           selectedVariant?.id === node.id
-                            ? "border-white bg-white/10 text-white shadow-lg scale-110"
+                            ? "border-black bg-black text-white shadow-lg scale-110"
                             : node.availableForSale
-                            ? "border-white/20 hover:border-white/60 hover:bg-white/5 hover:scale-105 text-neutral-300 hover:text-white"
-                            : "border-white/5 text-white cursor-not-allowed opacity-30"
+                            ? "border-gray-300 hover:border-black hover:bg-gray-50 hover:scale-105 text-gray-700 hover:text-black"
+                            : "border-gray-200 text-gray-400 cursor-not-allowed opacity-50"
                         }
                       `}
                     >
                       {node.title}
                       {selectedVariant?.id === node.id && (
-                        <div className="absolute -inset-1 bg-gradient-to-r from-white/10 via-transparent to-white/10 rounded-sm blur-sm"></div>
+                        <div className="absolute -inset-1 bg-gradient-to-r from-gray-200 via-transparent to-gray-200 rounded-sm blur-sm"></div>
                       )}
                     </button>
                   ))}
@@ -426,14 +435,15 @@ export default function ProductPageClient({
               {/* Action Buttons */}
               <div className="space-y-4 pt-6">
                 <button
+                  onClick={handleAddToCart}
                   className={`
-                    relative w-full py-4 text-sm uppercase tracking-[0.2em] font-light transition-all duration-500 rounded-sm backdrop-blur-sm overflow-hidden group
-                    ${
-                      selectedVariant
-                        ? "bg-white text-black hover:bg-neutral-100 hover:scale-[1.02] shadow-lg"
-                        : "bg-white/10 text-neutral-400 cursor-not-allowed border border-white/10"
-                    }
-                  `}
+          relative w-full py-4 text-sm uppercase tracking-[0.2em] font-light transition-all duration-500 rounded-sm overflow-hidden group
+          ${
+            selectedVariant
+              ? "bg-black text-white hover:bg-gray-800 hover:scale-[1.02] shadow-lg"
+              : "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
+          }
+        `}
                   disabled={!selectedVariant}
                 >
                   <span className="relative z-10">
@@ -444,14 +454,14 @@ export default function ProductPageClient({
                   )}
                 </button>
 
-                <button className="relative w-full border border-white/20 py-4 text-sm uppercase tracking-[0.2em] font-extralight hover:border-white/60 hover:bg-white/5 transition-all duration-500 rounded-sm backdrop-blur-sm group overflow-hidden">
+                <button className="relative w-full border border-gray-300 py-4 text-sm uppercase tracking-[0.2em] font-extralight hover:border-black hover:bg-gray-50 transition-all duration-500 rounded-sm group overflow-hidden">
                   <span className="relative z-10">Add to Wishlist</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-100 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
                 </button>
               </div>
 
               {/* Product Information Tabs */}
-              <div className="pt-10  border-t border-white/10">
+              <div className="pt-10 border-t border-gray-200">
                 {/* Tab Navigation */}
                 <nav className="flex justify-center gap-8 mb-12">
                   {tabs.map((tab) => (
@@ -460,27 +470,27 @@ export default function ProductPageClient({
                       onClick={() => setActiveTab(tab.id)}
                       className={`relative pb-3 text-xs font-extralight tracking-[0.15em] uppercase transition-all duration-500 ${
                         activeTab === tab.id
-                          ? "text-white"
-                          : "text-neutral-400 hover:text-white"
+                          ? "text-black"
+                          : "text-gray-500 hover:text-black"
                       }`}
                     >
                       {tab.label}
                       {activeTab === tab.id && (
-                        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white to-transparent"></div>
+                        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gray-400 to-transparent"></div>
                       )}
                     </button>
                   ))}
                 </nav>
 
                 {/* Tab Content */}
-                <div className="min-h-[300px] ">{renderTabContent()}</div>
+                <div className="min-h-[300px]">{renderTabContent()}</div>
               </div>
             </div>
           </div>
         </div>
 
         {/* You May Also Like Section */}
-        <div className="px-6 md:px-12 lg:px-20 py-4 border-t border-white/10 backdrop-blur-sm">
+        <div className="px-6 md:px-12 lg:px-20 py-4 border-t border-gray-200 bg-gray-50">
           <YouMayAlsoLike products={relatedProducts} />
         </div>
       </main>

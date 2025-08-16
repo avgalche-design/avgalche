@@ -142,14 +142,22 @@ export default function NewDrops() {
       // === FOURTH IMAGE ===
       gsap.fromTo(
         fourthImgRef.current,
-        { scale: 0.1, opacity: 0 },
+        {
+          scale: 0.1,
+          opacity: 0,
+          x: 200,
+          y: -80,
+          transformOrigin: "top right",
+        },
         {
           scale: 1,
           opacity: 1,
+          x: 0,
+          y: 0,
           ease: "power2.out",
           scrollTrigger: {
             trigger: fourthImgRef.current,
-            start: "top 95%",
+            start: "top 40%",
             end: "top 10%",
             scrub: 1,
           },
