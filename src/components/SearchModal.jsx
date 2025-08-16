@@ -9,12 +9,16 @@ export default function SearchModal({ isOpen, onClose }) {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
+  const [error, setError] = useState(null);
   const inputRef = useRef(null);
 
   // Fetch all products on mount
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setLoading(true);
+        setError(null);
+
         const response = await fetch("/api/shopify-products", {
           method: "GET",
           headers: {
@@ -24,13 +28,36 @@ export default function SearchModal({ isOpen, onClose }) {
 
         if (response.ok) {
           const data = await response.json();
-          const products = data.products || [];
-          setAllProducts(products);
+          console.log("API Response:", data); // Debug log
+
+          // Check if there's an error in the response
+          if (data.error) {
+            console.error("API Error:", data.error);
+            setError(data.error);
+            setAllProducts([]);
+            return;
+          }
+
+          // Check if data.products exists and is an array
+          if (data && data.products && Array.isArray(data.products)) {
+            setAllProducts(data.products);
+            console.log("Products loaded:", data.products.length); // Debug log
+          } else {
+            console.error("Invalid products data structure:", data);
+            setError("Failed to load products - invalid data structure");
+            setAllProducts([]);
+          }
         } else {
-          console.error("Failed to fetch products");
+          console.error("API request failed:", response.status);
+          setError("Failed to fetch products");
+          setAllProducts([]);
         }
       } catch (error) {
         console.error("Failed to fetch products:", error);
+        setError("Failed to fetch products");
+        setAllProducts([]);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -44,19 +71,37 @@ export default function SearchModal({ isOpen, onClose }) {
       return;
     }
 
+    if (!Array.isArray(allProducts) || allProducts.length === 0) {
+      console.error("allProducts is not an array or is empty:", allProducts);
+      setResults([]);
+      return;
+    }
+
     setLoading(true);
 
     // Debounce search
     const timeoutId = setTimeout(() => {
       const searchTerm = query.toLowerCase();
       const filtered = allProducts.filter((product) => {
-        const titleMatch = product.title.toLowerCase().includes(searchTerm);
-        const typeMatch = product.productType
-          ?.toLowerCase()
-          .includes(searchTerm);
-        const tagMatch = product.tags.some((tag) =>
-          tag.toLowerCase().includes(searchTerm)
-        );
+        // Safety check for product object
+        if (!product || typeof product !== "object") {
+          console.warn("Invalid product object:", product);
+          return false;
+        }
+
+        const titleMatch =
+          product.title?.toLowerCase().includes(searchTerm) || false;
+        const typeMatch =
+          product.productType?.toLowerCase().includes(searchTerm) || false;
+        const tagMatch =
+          (Array.isArray(product.tags) &&
+            product.tags.some(
+              (tag) =>
+                tag &&
+                typeof tag === "string" &&
+                tag.toLowerCase().includes(searchTerm)
+            )) ||
+          false;
 
         return titleMatch || typeMatch || tagMatch;
       });
@@ -131,7 +176,17 @@ export default function SearchModal({ isOpen, onClose }) {
 
           {/* Search Results */}
           <div className="flex-1 overflow-y-auto max-h-[60vh]">
-            {loading ? (
+            {error ? (
+              <div className="flex flex-col items-center justify-center py-12 px-4">
+                <FaSearch className="text-4xl text-red-300 mb-4" />
+                <h3 className="text-lg font-semibold text-red-600 mb-2">
+                  Error loading products
+                </h3>
+                <p className="text-gray-500 text-center">
+                  {error}. Please try refreshing the page.
+                </p>
+              </div>
+            ) : loading ? (
               <div className="flex items-center justify-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black"></div>
               </div>
