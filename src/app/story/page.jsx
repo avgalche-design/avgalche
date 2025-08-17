@@ -14,11 +14,13 @@ import {
 import { IoIosArrowRoundDown } from "react-icons/io";
 import { motion } from "framer-motion";
 import StoryHero from "../../components/StoryHero";
+import TierModal from "../../components/TierModal";
 import Link from "next/link";
 
 const AVGalcheVault = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
+  const [isTierModalOpen, setIsTierModalOpen] = useState(false);
 
   // Animation Variants
   const containerVariants = {
@@ -169,7 +171,7 @@ const AVGalcheVault = () => {
                 The <span className="font-extralight logo">GaLche's</span>
                 <br />
                 <span className="bg-gradient-to-r logo from-[#F5BA90] via-[#f3b385] to-[#d89a6e] bg-clip-text text-transparent">
-                  VAULT
+                  Vault
                 </span>
               </h1>
             </div>
@@ -189,7 +191,10 @@ const AVGalcheVault = () => {
             </div>
 
             {/* Button */}
-            <button className="group bg-opacity-10 backdrop-blur-md border border-white border-opacity-30 text-white px-6 sm:px-12 py-3 sm:py-4 text-sm sm:text-lg font-light tracking-wider hover:bg-white hover:text-black transition-all duration-700 flex items-center mx-auto">
+            <button 
+              onClick={() => setIsTierModalOpen(true)}
+              className="group bg-opacity-10 backdrop-blur-md border border-white border-opacity-30 text-white px-6 sm:px-12 py-3 sm:py-4 text-sm sm:text-lg font-light tracking-wider hover:bg-white hover:text-black transition-all duration-700 flex items-center mx-auto"
+            >
               <span>DISCOVER YOUR TIER</span>
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2 sm:ml-4 group-hover:translate-x-2 transition-transform duration-500" />
             </button>
@@ -450,7 +455,10 @@ const AVGalcheVault = () => {
               <ArrowRight className="w-3 md:w-5 h-3 md:h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
             </button>
 
-            <button className="w-full border border-black/70 text-sm rounded-md text-black md:px-8 md:py-5 p-4 md:text-lg font-light tracking-wide hover:bg-black hover:text-white  transition-all duration-500 flex items-center justify-center group">
+            <button 
+              onClick={() => setIsTierModalOpen(true)}
+              className="w-full border border-black/70 text-sm rounded-md text-black md:px-8 md:py-5 p-4 md:text-lg font-light tracking-wide hover:bg-black hover:text-white  transition-all duration-500 flex items-center justify-center group"
+            >
               <Lock className="md:w-5 md:h-5 h-3 w-3 mr-3" />
               Calculate My Tier
               <ArrowRight className="w-3 md:w-5 h-3 md:h-5 group-hover:translate-x-1 transition-transform duration-300" />
@@ -458,6 +466,13 @@ const AVGalcheVault = () => {
           </div>
         </div>
       </section>
+
+      {/* Tier Modal */}
+      <TierModal 
+        isOpen={isTierModalOpen}
+        onClose={() => setIsTierModalOpen(false)}
+        tiers={tiers}
+      />
     </div>
   );
 };

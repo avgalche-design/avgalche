@@ -497,7 +497,7 @@ export default function ProductPageClient({
             {/* LEFT - Product Images */}
             <div className="space-y-8">
               {/* Main Image */}
-              <div className="relative group">
+              <div className="relative">
                 <div className="aspect-[4/5] bg-gray-100 border border-gray-200 overflow-hidden rounded-sm shadow-lg cursor-pointer">
                   {product.images.edges.length > 0 ? (
                     <>
@@ -513,7 +513,7 @@ export default function ProductPageClient({
                         }
                         fill
                         sizes="(max-width:768px) 100vw, 50vw"
-                        className="object-cover transition-transform duration-300 group-hover:scale-110"
+                        className="object-cover"
                         onClick={() => setIsImageZoomOpen(true)}
                       />
                     </>
@@ -527,17 +527,17 @@ export default function ProductPageClient({
                 </div>
               </div>
 
-              {/* Thumbnail Images */}
+              {/* Product Images Grid */}
               {product.images.edges.length > 1 && (
-                <div className="flex gap-4 justify-center">
+                <div className="grid grid-cols-4 gap-4">
                   {product.images.edges.map(({ node }, index) => (
                     <button
                       key={index}
                       onClick={() => setSelectedImageIndex(index)}
-                      className={`relative aspect-[4/5] w-16 bg-gray-100 border overflow-hidden rounded-sm transition-all duration-500 ${
+                      className={`relative aspect-[4/5] bg-gray-100 border overflow-hidden rounded-sm transition-all duration-300 ${
                         selectedImageIndex === index
-                          ? "border-gray-400 scale-110 shadow-lg"
-                          : "border-gray-200 opacity-60 hover:opacity-100 hover:scale-105"
+                          ? "border-gray-400 shadow-lg"
+                          : "border-gray-200 hover:border-gray-300"
                       }`}
                     >
                       <img

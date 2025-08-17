@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
+import { SearchProvider } from "./context/SearchContext";
 import CartModal from "../components/CartModal";
 import WishlistModal from "../components/WishlistModal";
 import SearchModal from "../components/SearchModal";
@@ -27,13 +28,16 @@ export default function RootLayout({
       <body className={inter.className}>
         <CartProvider>
           <WishlistProvider>
-            <div className="min-h-screen flex flex-col">
-              <Navbar />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
-            <CartModal />
-            <WishlistModal />
+            <SearchProvider>
+              <div className="min-h-screen flex flex-col">
+                <Navbar />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </div>
+              <CartModal />
+              <WishlistModal />
+              <SearchModal />
+            </SearchProvider>
           </WishlistProvider>
         </CartProvider>
       </body>

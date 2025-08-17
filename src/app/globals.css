@@ -50,11 +50,26 @@ body {
     opacity: 0;
     transform: translate(-50%, 20px);
   }
+
   to {
     opacity: 1;
     transform: translate(-50%, 0);
   }
 }
+
 .animate-fade-in {
   animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Hide scrollbar for mobile image gallery */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+  /* Safari and Chrome */
 }

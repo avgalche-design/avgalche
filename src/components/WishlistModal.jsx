@@ -19,36 +19,55 @@ export default function WishlistModal() {
   const { addToCart } = useCart();
   const [loadingItems, setLoadingItems] = useState(new Set());
   const [addedItems, setAddedItems] = useState(new Set());
+  const [selectedVariants, setSelectedVariants] = useState({});
+  const [showSizeSelector, setShowSizeSelector] = useState(null);
 
   if (!isWishlistOpen) return null;
 
   const handleAddToCart = async (product) => {
-    // Add the first variant to cart
-    if (product.variants && product.variants.length > 0) {
-      setLoadingItems((prev) => new Set(prev).add(product.id));
+    const selectedVariant = selectedVariants[product.id];
+    
+    if (!selectedVariant) {
+      // Show size selector for this product
+      setShowSizeSelector(product.id);
+      return;
+    }
 
-      try {
-        await addToCart(product.variants[0].id, 1);
+    setLoadingItems((prev) => new Set(prev).add(product.id));
 
-        // Show success animation
-        setAddedItems((prev) => new Set(prev).add(product.id));
-        setTimeout(() => {
-          setAddedItems((prev) => {
-            const newSet = new Set(prev);
-            newSet.delete(product.id);
-            return newSet;
-          });
-        }, 2000);
-      } catch (error) {
-        console.error("Failed to add to cart:", error);
-      } finally {
-        setLoadingItems((prev) => {
+    try {
+      await addToCart(selectedVariant.id, 1);
+
+      // Show success animation
+      setAddedItems((prev) => new Set(prev).add(product.id));
+      setTimeout(() => {
+        setAddedItems((prev) => {
           const newSet = new Set(prev);
           newSet.delete(product.id);
           return newSet;
         });
-      }
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to add to cart:", error);
+    } finally {
+      setLoadingItems((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(product.id);
+        return newSet;
+      });
     }
+  };
+
+  const handleSizeSelect = (productId, variant) => {
+    setSelectedVariants(prev => ({
+      ...prev,
+      [productId]: variant
+    }));
+    setShowSizeSelector(null);
+  };
+
+  const handleCloseSizeSelector = () => {
+    setShowSizeSelector(null);
   };
 
   return (
@@ -144,6 +163,15 @@ export default function WishlistModal() {
                             </p>
                           )}
                         </div>
+
+                        {/* Selected Size Display */}
+                        {selectedVariants[product.id] && (
+                          <div className="mt-2">
+                            <p className="text-xs text-gray-600">
+                              Size: <span className="font-medium text-black">{selectedVariants[product.id].title}</span>
+                            </p>
+                          </div>
+                        )}
                       </div>
 
                       {/* Actions */}
@@ -157,12 +185,16 @@ export default function WishlistModal() {
                               ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                               : addedItems.has(product.id)
                               ? "bg-green-100 text-green-600"
-                              : "hover:bg-green-100 text-green-600"
+                              : selectedVariants[product.id]
+                              ? "hover:bg-green-100 text-green-600"
+                              : "hover:bg-blue-100 text-blue-600"
                           }`}
                           title={
                             addedItems.has(product.id)
                               ? "Added to Cart!"
-                              : "Add to Cart"
+                              : selectedVariants[product.id]
+                              ? "Add to Cart"
+                              : "Select Size"
                           }
                         >
                           {loadingItems.has(product.id) ? (
@@ -208,6 +240,69 @@ export default function WishlistModal() {
           </div>
         </motion.div>
       </motion.div>
+
+      {/* Size Selector Modal */}
+      {showSizeSelector && (
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-md flex justify-center items-center z-[10000] p-4"
+            onClick={handleCloseSizeSelector}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="bg-white text-black rounded-2xl shadow-2xl w-full max-w-md p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold">Select Size</h3>
+                <button
+                  onClick={handleCloseSizeSelector}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <FaTimes className="text-lg" />
+                </button>
+              </div>
+
+              {(() => {
+                const product = wishlist.find(p => p.id === showSizeSelector);
+                if (!product || !product.variants) return null;
+
+                return (
+                  <div className="space-y-4">
+                    <div className="text-center mb-4">
+                      <h4 className="font-semibold text-lg">{product.title}</h4>
+                      <p className="text-gray-600 text-sm">Choose your size</p>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-3">
+                      {product.variants.map((variant) => (
+                        <button
+                          key={variant.id}
+                          onClick={() => handleSizeSelect(product.id, variant)}
+                          className="p-4 border border-gray-300 rounded-lg hover:border-black hover:bg-gray-50 transition-all duration-200 text-center"
+                        >
+                          <div className="font-medium text-black">{variant.title}</div>
+                          {variant.price && (
+                            <div className="text-sm text-gray-600 mt-1">
+                              ${parseFloat(variant.price.amount).toFixed(2)}
+                            </div>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>
+      )}
     </AnimatePresence>
   );
 }

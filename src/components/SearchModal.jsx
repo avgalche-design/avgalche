@@ -3,14 +3,18 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaTimes, FaSearch } from "react-icons/fa";
 import Link from "next/link";
+import { useSearch } from "../app/context/SearchContext";
 
-export default function SearchModal({ isOpen, onClose }) {
+export default function SearchModal() {
+  const { isOpen, closeSearch } = useSearch();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
   const [error, setError] = useState(null);
   const inputRef = useRef(null);
+
+  const onClose = closeSearch;
 
   // Fetch all products on mount
   useEffect(() => {
