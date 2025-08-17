@@ -1,4 +1,5 @@
 // components/Footer.tsx
+import Link from "next/link";
 import {
   FaTiktok,
   FaInstagram,
@@ -95,8 +96,16 @@ export default function Footer() {
             <h3 className="font-serif text-lg mb-3">Legal & Policies</h3>
             <ul className="space-y-1 text-gray-700">
               <li>Shipping Policy</li>
-              <li>Privacy Notice</li>
-              <li>Terms & Conditions</li>
+              <li>
+                <Link href="/privacy-policy" className="hover:underline">
+                  Privacy Notice
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms-conditions" className="hover:underline">
+                  Terms & Conditions
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

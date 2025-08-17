@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Instagram, Facebook, Twitter } from "lucide-react";
 import Link from "next/link";
+import { useWishlist } from "../app/context/WishlistContext";
 
 const menuData = [
   {
@@ -59,6 +60,7 @@ const menuData = [
 
 export default function DiorStyleTopDropdown({ open, onClose }) {
   const [expanded, setExpanded] = useState(null);
+  const { setIsWishlistOpen } = useWishlist();
 
   useEffect(() => {
     function handleKey(e) {
@@ -92,7 +94,17 @@ export default function DiorStyleTopDropdown({ open, onClose }) {
   };
 
   const handleItemClick = (item) => {
-    if (item.href && !item.subItems) {
+    if (item.key === "vault") {
+      // Navigate to /story page for "GaLche's Vault of Exclusives"
+      window.location.href = "/story";
+      onClose();
+    } else if (item.key === "wishlist") {
+      // Open wishlist modal for "Curated Wishlist"
+      setIsWishlistOpen(true);
+      onClose();
+    } else if (item.href && !item.subItems) {
+      // Navigate to the href for regular items
+      window.location.href = item.href;
       onClose();
     }
   };
@@ -153,13 +165,12 @@ export default function DiorStyleTopDropdown({ open, onClose }) {
                       </span>
                     </button>
                   ) : (
-                    <Link
-                      href={item.href}
+                    <button
                       className="block w-full text-left uppercase tracking-widest text-sm font-light hover:opacity-70"
                       onClick={() => handleItemClick(item)}
                     >
                       {item.label}
-                    </Link>
+                    </button>
                   )}
 
                   {/* Expandable subItems */}

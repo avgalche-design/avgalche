@@ -1,4 +1,6 @@
 // components/Collections.jsx
+import Link from "next/link";
+
 export default function Collections() {
   return (
     <section className="w-full min-h-screen bg-[#EBEBEB] flex flex-col items-center justify-center p-0 m-0">
@@ -16,15 +18,15 @@ export default function Collections() {
       {/* Side-by-side full-height cards */}
       <div className="flex flex-col mt-16 md:flex-row w-full h-screen gap-[2px]">
         {/* Winter Collection */}
-        <a
-          href="#winter"
+        <Link
+          href="/season-collection/winter"
           className="relative flex-1 h-full group overflow-hidden cursor-pointer"
         >
           <div
             className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-out group-hover:scale-105"
             style={{
               backgroundImage:
-                "url('https://plus.unsplash.com/premium_photo-1682095661711-f5d67d0e75a9?q=80&w=774&auto=format&fit=crop')",
+                "url('https://plus.unsplash.com/premium_photo-1664302018699-6ac9c92ee80a?q=80&w=687&auto=format&fit=crop')",
             }}
           />
           {/* Darker gradient for text legibility */}
@@ -36,19 +38,24 @@ export default function Collections() {
             <span className="text-white/80 text-lg md:text-sm font-light tracking-wide">
               Explore luxurious styles for the season
             </span>
+            <button className="relative text-white/80 text-sm p-1 font-medium group">
+                    <h2>Discover Collection</h2>
+                    <span className="absolute left-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
+                    <span className="absolute right-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
+                  </button>
           </div>
-        </a>
+        </Link>
 
         {/* Summer Collection */}
-        <a
-          href="#summer"
+        <Link
+          href="/season-collection/summer"
           className="relative flex-1 h-full group overflow-hidden cursor-pointer"
         >
           <div
             className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-out group-hover:scale-105"
             style={{
               backgroundImage:
-                "url('https://plus.unsplash.com/premium_photo-1714226830926-1af8bf7b06c3?q=80&w=774&auto=format&fit=crop')",
+                "url('https://images.unsplash.com/photo-1628535890509-2a8b79b9b034?q=80&w=687&auto=format&fit=crop')",
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/10 transition-opacity duration-500 group-hover:from-black/80" />
@@ -59,8 +66,13 @@ export default function Collections() {
             <span className="text-white/80 text-lg md:text-sm font-light tracking-wide">
               Light, bright, and bold essentials
             </span>
+            <button className="relative text-white/80 text-sm p-1 font-medium group">
+                    <h2>Discover Collection</h2>
+                    <span className="absolute left-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
+                    <span className="absolute right-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
+                  </button>
           </div>
-        </a>
+        </Link>
       </div>
     </section>
   );
