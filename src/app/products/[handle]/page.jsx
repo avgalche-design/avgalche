@@ -89,7 +89,10 @@ export async function generateStaticParams() {
       }
     }
   `;
-  const { products } = await shopifyFetch({ query: PRODUCTS_HANDLE_QUERY });
+  const { products } = await shopifyFetch(
+    { query: PRODUCTS_HANDLE_QUERY },
+    { cache: "force-cache" }
+  );
   return products.edges.map(({ node }) => ({ handle: node.handle }));
 }
 
@@ -101,7 +104,7 @@ export default async function ProductPage({ params }) {
       query: PRODUCT_QUERY,
       variables: { handle },
     },
-    { next: { revalidate: 30 } } // regenerate every 30 seconds
+    { cache: "force-cache" } // Use static caching for build time
   );
 
   const product = data?.productByHandle;
@@ -158,7 +161,10 @@ Refund & Return Policy: Returns and refunds are accepted within 14 days of deliv
   `;
 
   // Fetch related products
-  const relatedData = await shopifyFetch({ query: RELATED_PRODUCTS_QUERY });
+  const relatedData = await shopifyFetch(
+    { query: RELATED_PRODUCTS_QUERY },
+    { cache: "force-cache" }
+  );
   const relatedProducts = relatedData.products.edges
     .map((edge) => ({
       ...edge.node,

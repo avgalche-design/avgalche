@@ -18,7 +18,7 @@ export function CartProvider({ children }) {
 
         if (savedCartId && savedCart) {
           try {
-            const parsedCart = JSON.parse(savedCart);
+            JSON.parse(savedCart); // Validate JSON format
             console.log("Found saved cart:", savedCartId);
 
             // Try to restore the saved cart from Shopify

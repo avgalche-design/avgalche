@@ -37,7 +37,10 @@ const ALL_PRODUCTS_QUERY = `
 
 export async function GET() {
   try {
-    const data = await shopifyFetch({ query: ALL_PRODUCTS_QUERY });
+    const data = await shopifyFetch(
+      { query: ALL_PRODUCTS_QUERY },
+      { cache: "force-cache" }
+    );
 
     // Transform the data to match the expected format
     const products =

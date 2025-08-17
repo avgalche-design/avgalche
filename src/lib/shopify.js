@@ -29,8 +29,8 @@ export async function shopifyFetch(
   } else if (fetchOptions.next) {
     fetchSettings.next = fetchOptions.next;
   } else {
-    // Default to no-store if none provided
-    fetchSettings.cache = "no-store";
+    // Default to force-cache for static generation
+    fetchSettings.cache = "force-cache";
   }
 
   try {
