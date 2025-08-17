@@ -56,9 +56,24 @@ export async function GET() {
 
     return NextResponse.json({ products });
   } catch (error) {
+    console.error("Shopify products API error:", error);
+    
+    // Return appropriate error status based on error type
+    let status = 500;
+    if (error.message.includes("Unauthorized")) {
+      status = 401;
+    } else if (error.message.includes("Not Found")) {
+      status = 404;
+    } else if (error.message.includes("environment variables")) {
+      status = 500;
+    }
+    
     return NextResponse.json(
-      { error: `Shopify fetch failed: ${error.message}` },
-      { status: 500 }
+      { 
+        error: error.message,
+        details: "Please check your Shopify configuration and environment variables"
+      },
+      { status }
     );
   }
 }

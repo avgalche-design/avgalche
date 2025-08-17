@@ -7,19 +7,19 @@ import Dropdown from "./Dropdown";
 import { usePathname } from "next/navigation";
 import { useCart } from "../app/context/CartContext";
 import { useWishlist } from "../app/context/WishlistContext";
-import SearchModal from "./SearchModal";
+import { useSearch } from "../app/context/SearchContext";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const lastScrollY = useRef(0);
   const shopId = "93829235007";
   const returnUrl = encodeURIComponent("https://yourdomain.com/account");
   const loginUrl = `https://shopify.com/${shopId}/account/login?return_url=${returnUrl}`;
   const { cart, setIsCartOpen } = useCart();
   const { wishlist, setIsWishlistOpen } = useWishlist();
+  const { openSearch } = useSearch();
   const cartCount = cart?.lines?.edges?.length || 0;
   const wishlistCount = wishlist.length;
   const pathname = usePathname();
@@ -80,7 +80,10 @@ export default function Navbar() {
           />
         </div>
         <div className="flex gap-5 items-center ml-auto">
-          <button aria-label="Search" onClick={() => setIsSearchOpen(true)}>
+          <button 
+            aria-label="Search" 
+            onClick={openSearch}
+          >
             <FiSearch className={`${iconColor} text-sm md:text-xl`} />
           </button>
           <button
@@ -120,10 +123,6 @@ export default function Navbar() {
         </div>
       </nav>
       <Dropdown open={menuOpen} onClose={() => setMenuOpen(false)} />
-      <SearchModal
-        isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
-      />
     </>
   );
 }

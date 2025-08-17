@@ -6,7 +6,10 @@ import Link from "next/link";
 import { useSearch } from "../app/context/SearchContext";
 
 export default function SearchModal() {
-  const { isOpen, closeSearch } = useSearch();
+  const searchContext = useSearch();
+  const isOpen = searchContext?.isSearchOpen || false;
+  const closeSearch = searchContext?.closeSearch;
+  
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -15,6 +18,10 @@ export default function SearchModal() {
   const inputRef = useRef(null);
 
   const onClose = closeSearch;
+
+
+
+
 
   // Fetch all products on mount
   useEffect(() => {
@@ -138,8 +145,7 @@ export default function SearchModal() {
     }
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
-
+    if (!isOpen) return null;
   return (
     <AnimatePresence>
       <motion.div
