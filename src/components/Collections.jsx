@@ -26,23 +26,23 @@ export default function Collections() {
             className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-out group-hover:scale-105"
             style={{
               backgroundImage:
-                "url('https://plus.unsplash.com/premium_photo-1664302018699-6ac9c92ee80a?q=80&w=687&auto=format&fit=crop')",
+                "url('https://images.unsplash.com/photo-1704989969259-39f5189359bf?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
             }}
           />
           {/* Darker gradient for text legibility */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/10 transition-opacity duration-500 group-hover:from-black/80" />
           <div className="relative z-10 flex flex-col h-full justify-center items-center text-center px-6">
-            <h3 className="text-4xl md:text-3xl text-white font-serif font-bold mb-4 uppercase tracking-[0.15em] drop-shadow-lg">
+            <h3 className="text-md md:text-xl text-white font-serif  mb-4 uppercase tracking-[0.15em] drop-shadow-lg">
               Winter Collection
             </h3>
-            <span className="text-white/80 text-lg md:text-sm font-light tracking-wide">
+            <span className="text-white/80 text-sm  font-light tracking-wide">
               Explore luxurious styles for the season
             </span>
             <button className="relative text-white/80 text-sm p-1 font-medium group">
-                    <h2>Discover Collection</h2>
-                    <span className="absolute left-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
-                    <span className="absolute right-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
-                  </button>
+              <h2>Discover Collection</h2>
+              <span className="absolute left-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
+              <span className="absolute right-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
+            </button>
           </div>
         </Link>
 
@@ -54,23 +54,22 @@ export default function Collections() {
           <div
             className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-out group-hover:scale-105"
             style={{
-              backgroundImage:
-                "url('https://images.unsplash.com/photo-1628535890509-2a8b79b9b034?q=80&w=687&auto=format&fit=crop')",
+              backgroundImage: "url('/images/summer.jpg')",
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/10 transition-opacity duration-500 group-hover:from-black/80" />
           <div className="relative z-10 flex flex-col h-full justify-center items-center text-center px-6">
-            <h3 className="text-4xl md:text-3xl text-white font-serif font-bold mb-4 uppercase tracking-[0.15em] drop-shadow-lg">
+            <h3 className="text-md md:text-xl text-white font-serif  mb-4 uppercase tracking-[0.15em] drop-shadow-lg">
               Summer Collection
             </h3>
-            <span className="text-white/80 text-lg md:text-sm font-light tracking-wide">
+            <span className="text-white/80 text-sm font-light tracking-wide">
               Light, bright, and bold essentials
             </span>
             <button className="relative text-white/80 text-sm p-1 font-medium group">
-                    <h2>Discover Collection</h2>
-                    <span className="absolute left-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
-                    <span className="absolute right-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
-                  </button>
+              <h2>Discover Collection</h2>
+              <span className="absolute left-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
+              <span className="absolute right-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
+            </button>
           </div>
         </Link>
       </div>

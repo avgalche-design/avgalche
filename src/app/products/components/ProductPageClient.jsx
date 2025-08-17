@@ -688,7 +688,7 @@ export default function ProductPageClient({
         </div>
 
         {/* You May Also Like Section */}
-        <div className="px-6 md:px-12 lg:px-20 py-4 border-t border-gray-200 bg-gray-50">
+        <div className="px-6 md:px-12 lg:px-20 py-4">
           <YouMayAlsoLike products={relatedProducts} />
         </div>
       </main>

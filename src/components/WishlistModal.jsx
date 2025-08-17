@@ -11,6 +11,7 @@ import {
   FaCheck,
 } from "react-icons/fa";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function WishlistModal() {
   const { wishlist, isWishlistOpen, setIsWishlistOpen, removeFromWishlist } =
@@ -26,7 +27,7 @@ export default function WishlistModal() {
 
   const handleAddToCart = async (product) => {
     const selectedVariant = selectedVariants[product.id];
-    
+
     if (!selectedVariant) {
       // Show size selector for this product
       setShowSizeSelector(product.id);
@@ -59,9 +60,9 @@ export default function WishlistModal() {
   };
 
   const handleSizeSelect = (productId, variant) => {
-    setSelectedVariants(prev => ({
+    setSelectedVariants((prev) => ({
       ...prev,
-      [productId]: variant
+      [productId]: variant,
     }));
     setShowSizeSelector(null);
   };
@@ -89,7 +90,7 @@ export default function WishlistModal() {
         >
           {/* Header */}
           <div className="flex justify-between items-center p-4 sm:p-6 border-b border-gray-200">
-            <h2 className="text-xl sm:text-2xl font-bold">Wishlist</h2>
+            <h2 className="text-xl sm:text-2xl mx-auto font-bold">Wishlist</h2>
             <button
               onClick={() => setIsWishlistOpen(false)}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -102,8 +103,13 @@ export default function WishlistModal() {
           <div className="flex flex-col h-full">
             {wishlist.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 sm:py-16 px-4 sm:px-6">
-                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                  <FaHeart className="text-2xl sm:text-3xl text-gray-400" />
+                <div className="w-24 h-24 sm:w-44 sm:h-44  rounded-full flex items-center justify-center mb-4">
+                  <Image
+                    src="/images/sadwishlist.png" // Path inside the public folder
+                    alt="Profile picture"
+                    width={300} // Required: sets intrinsic width
+                    height={300} // Required: sets intrinsic height
+                  />
                 </div>
                 <h3 className="text-lg sm:text-xl font-semibold mb-2 text-center">
                   Your wishlist is empty
@@ -156,7 +162,7 @@ export default function WishlistModal() {
                         <div className="mt-1 sm:mt-2">
                           {product.variants?.[0]?.price && (
                             <p className="font-semibold text-sm sm:text-base text-black">
-                              $
+                              ₹
                               {parseFloat(
                                 product.variants[0].price.amount
                               ).toFixed(2)}
@@ -168,7 +174,10 @@ export default function WishlistModal() {
                         {selectedVariants[product.id] && (
                           <div className="mt-2">
                             <p className="text-xs text-gray-600">
-                              Size: <span className="font-medium text-black">{selectedVariants[product.id].title}</span>
+                              Size:{" "}
+                              <span className="font-medium text-black">
+                                {selectedVariants[product.id].title}
+                              </span>
                             </p>
                           </div>
                         )}
@@ -270,7 +279,7 @@ export default function WishlistModal() {
               </div>
 
               {(() => {
-                const product = wishlist.find(p => p.id === showSizeSelector);
+                const product = wishlist.find((p) => p.id === showSizeSelector);
                 if (!product || !product.variants) return null;
 
                 return (
@@ -287,10 +296,12 @@ export default function WishlistModal() {
                           onClick={() => handleSizeSelect(product.id, variant)}
                           className="p-4 border border-gray-300 rounded-lg hover:border-black hover:bg-gray-50 transition-all duration-200 text-center"
                         >
-                          <div className="font-medium text-black">{variant.title}</div>
+                          <div className="font-medium text-black">
+                            {variant.title}
+                          </div>
                           {variant.price && (
                             <div className="text-sm text-gray-600 mt-1">
-                              ${parseFloat(variant.price.amount).toFixed(2)}
+                              ₹{parseFloat(variant.price.amount).toFixed(2)}
                             </div>
                           )}
                         </button>
