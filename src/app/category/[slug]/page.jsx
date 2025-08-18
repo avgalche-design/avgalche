@@ -90,7 +90,7 @@ const categoryMapping = {
     title: "AV GaLche's Co-ord",
     description:
       "Perfectly coordinated sets that elevate your style effortlessly.",
-    collectionNames: ["AV GaLche's Co-ord"],
+    collectionNames: ["Co-ord"],
     productTypes: ["Co-ord"],
     tags: ["co-ord", "ensemble", "set"],
   },
@@ -102,6 +102,22 @@ const categoryMapping = {
     productTypes: ["Shirt", "Women's Shirt"],
     tags: ["couture", "womens", "ladies"],
   },
+  "summer-collection": {
+    title: "Summer Collection",
+    description:
+      "Embrace the warmth with our curated summer essentials. Light, breathable fabrics meet timeless elegance in every piece.",
+    collectionNames: ["Summer Collection", "summer", "summer-collection"],
+    productTypes: ["T-Shirt", "Shirt", "Polo", "Co-ord"],
+    tags: ["summer", "summer-collection"],
+  },
+  "winter-collection": {
+    title: "Winter Collection",
+    description:
+      "Sophisticated winter wear that combines warmth with style. Premium fabrics and elegant designs for the modern connoisseur.",
+    collectionNames: ["Winter Collection", "winter", "winter-collection"],
+    productTypes: ["T-Shirt", "Shirt", "Polo", "Co-ord"],
+    tags: ["winter", "winter-collection"],
+  },
 };
 
 export async function generateStaticParams() {
@@ -111,7 +127,7 @@ export async function generateStaticParams() {
 }
 
 export default async function CategoryPage({ params }) {
-  const { slug } = params;
+  const { slug } = await params;
   const category = categoryMapping[slug];
 
   if (!category) {
@@ -163,7 +179,8 @@ export default async function CategoryPage({ params }) {
         (collectionName) =>
           product.collections.some(
             (collection) =>
-              collection.title.toLowerCase() === collectionName.toLowerCase()
+              collection.title.toLowerCase() === collectionName.toLowerCase() ||
+              collection.handle.toLowerCase() === collectionName.toLowerCase()
           )
       );
 

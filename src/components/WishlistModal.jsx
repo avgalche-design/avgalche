@@ -25,14 +25,28 @@ export default function WishlistModal() {
 
   if (!isWishlistOpen) return null;
 
+  const getPreselectedVariant = (product) => {
+    if (!product) return undefined;
+    if (product.selectedVariantId) {
+      const found = product.variants?.find((v) => v.id === product.selectedVariantId);
+      if (found) return found;
+    }
+    if (product.selectedVariantTitle) {
+      const found = product.variants?.find((v) => v.title === product.selectedVariantTitle);
+      if (found) return found;
+    }
+    return undefined;
+  };
+
   const handleAddToCart = async (product) => {
-    const selectedVariant = selectedVariants[product.id];
+    const selectedVariant = selectedVariants[product.id] || getPreselectedVariant(product);
 
     if (!selectedVariant) {
       // Show size selector for this product
       setShowSizeSelector(product.id);
       return;
     }
+    if (selectedVariant.availableForSale === false) return;
 
     setLoadingItems((prev) => new Set(prev).add(product.id));
 
@@ -158,14 +172,19 @@ export default function WishlistModal() {
                           </h3>
                         </Link>
 
-                        {/* Price */}
+                        {/* Selected Size & Price */}
                         <div className="mt-1 sm:mt-2">
-                          {product.variants?.[0]?.price && (
-                            <p className="font-semibold text-sm sm:text-base text-black">
-                              ₹
-                              {parseFloat(
-                                product.variants[0].price.amount
-                              ).toFixed(2)}
+                          {(selectedVariants[product.id]?.title || product.selectedVariantTitle) && (
+                            <p className="text-xs text-gray-600">
+                              Size: <span className="font-medium text-black">{selectedVariants[product.id]?.title || product.selectedVariantTitle}</span>
+                              {(selectedVariants[product.id]?.availableForSale === false || product.selectedVariantAvailableForSale === false) && (
+                                <span className="ml-2 text-red-500">(Unavailable)</span>
+                              )}
+                            </p>
+                          )}
+                          {(selectedVariants[product.id]?.price?.amount || product.selectedVariantPrice?.amount) && (
+                            <p className="font-semibold text-sm sm:text-base text-black mt-1">
+                              ₹{parseFloat((selectedVariants[product.id]?.price?.amount) || product.selectedVariantPrice.amount).toFixed(2)}
                             </p>
                           )}
                         </div>
@@ -185,25 +204,37 @@ export default function WishlistModal() {
 
                       {/* Actions */}
                       <div className="flex items-center gap-2 sm:gap-3">
-                        {/* Add to Cart Button */}
+                        {/* Add to Cart Button (guard against unavailable) */}
                         <button
                           onClick={() => handleAddToCart(product)}
-                          disabled={loadingItems.has(product.id)}
+                          disabled={(() => {
+                            if (loadingItems.has(product.id)) return true;
+                            const v = selectedVariants[product.id] || getPreselectedVariant(product);
+                            if (!v) return false;
+                            return v.availableForSale === false;
+                          })()}
                           className={`p-2 rounded-full transition-all duration-300 ${
                             loadingItems.has(product.id)
                               ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                              : addedItems.has(product.id)
-                              ? "bg-green-100 text-green-600"
-                              : selectedVariants[product.id]
-                              ? "hover:bg-green-100 text-green-600"
-                              : "hover:bg-blue-100 text-blue-600"
+                              : (() => {
+                                  const v = selectedVariants[product.id] || getPreselectedVariant(product);
+                                  if (v && v.availableForSale === false) return "bg-gray-100 text-gray-400 cursor-not-allowed";
+                                  return addedItems.has(product.id)
+                                    ? "bg-green-100 text-green-600"
+                                    : v
+                                    ? "hover:bg-green-100 text-green-600"
+                                    : "hover:bg-blue-100 text-blue-600";
+                                })()
                           }`}
                           title={
                             addedItems.has(product.id)
                               ? "Added to Cart!"
-                              : selectedVariants[product.id]
-                              ? "Add to Cart"
-                              : "Select Size"
+                              : (() => {
+                                  const v = selectedVariants[product.id] || getPreselectedVariant(product);
+                                  if (v && v.availableForSale === false) return "Unavailable";
+                                  if (v) return "Add to Cart";
+                                  return "Select Size";
+                                })()
                           }
                         >
                           {loadingItems.has(product.id) ? (

@@ -43,13 +43,13 @@ export default function LuxuryProductCard({ product, index }) {
                 src={images[0]}
                 alt={product.title}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
-                style={{
-                  opacity: isHovered && images[1] ? 0 : 1,
-                }}
+                style={{ opacity: isHovered && images[1] ? 0 : 1 }}
+                loading={index < 8 ? "eager" : "lazy"}
+                decoding="async"
                 onLoad={() => setLoaded((prev) => ({ ...prev, 0: true }))}
-                initial={{ opacity: 0, scale: 1.05 }}
-                animate={{ opacity: loaded[0] ? 1 : 0, scale: 1 }}
-                transition={{ duration: 0.4 }}
+                initial={{ opacity: 1, scale: 1.0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.2 }}
               />
 
               {/* Hover Image */}
@@ -58,16 +58,13 @@ export default function LuxuryProductCard({ product, index }) {
                   src={images[1]}
                   alt={`${product.title} hover`}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
-                  style={{
-                    opacity: isHovered ? 1 : 0,
-                  }}
+                  style={{ opacity: isHovered ? 1 : 0 }}
+                  loading="lazy"
+                  decoding="async"
                   onLoad={() => setLoaded((prev) => ({ ...prev, 1: true }))}
-                  initial={{ opacity: 0, scale: 1.05 }}
-                  animate={{
-                    opacity: loaded[1] ? (isHovered ? 1 : 0) : 0,
-                    scale: 1,
-                  }}
-                  transition={{ duration: 0.4 }}
+                  initial={{ opacity: 0, scale: 1.0 }}
+                  animate={{ opacity: isHovered ? 1 : 0, scale: 1 }}
+                  transition={{ duration: 0.2 }}
                 />
               )}
             </>

@@ -19,7 +19,7 @@ export default function Collections() {
       <div className="flex flex-col mt-16 md:flex-row w-full h-screen gap-[2px]">
         {/* Winter Collection */}
         <Link
-          href="/season-collection/winter"
+          href="/category/winter-collection"
           className="relative flex-1 h-full group overflow-hidden cursor-pointer"
         >
           <div
@@ -48,7 +48,7 @@ export default function Collections() {
 
         {/* Summer Collection */}
         <Link
-          href="/season-collection/summer"
+          href="/category/summer-collection"
           className="relative flex-1 h-full group overflow-hidden cursor-pointer"
         >
           <div

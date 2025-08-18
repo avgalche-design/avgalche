@@ -1,6 +1,6 @@
 // app/products/[handle]/ProductPageClient.js
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import YouMayAlsoLike from "../components/YouMayAlsoLike";
 import Image from "next/image";
 import { useCart } from "@/app/context/CartContext";
@@ -17,9 +17,19 @@ import {
 // Image Zoom Modal Component
 function ImageZoomModal({ images, selectedIndex, onClose, onImageChange }) {
   const [currentIndex, setCurrentIndex] = useState(selectedIndex);
+  const [scale, setScale] = useState(1);
+  const [translate, setTranslate] = useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
+  const [lastTouchDistance, setLastTouchDistance] = useState(null);
+  const startRef = useRef({ x: 0, y: 0 });
+  const startTranslateRef = useRef({ x: 0, y: 0 });
+  const swipeStartXRef = useRef(null);
+  const containerRef = useRef(null);
 
   useEffect(() => {
     setCurrentIndex(selectedIndex);
+    setScale(1);
+    setTranslate({ x: 0, y: 0 });
   }, [selectedIndex]);
 
   const handlePrevious = () => {
@@ -43,6 +53,71 @@ function ImageZoomModal({ images, selectedIndex, onClose, onImageChange }) {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [currentIndex]);
 
+  const distance = (t1, t2) => {
+    const dx = t1.clientX - t2.clientX;
+    const dy = t1.clientY - t2.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  const onTouchStart = (e) => {
+    if (e.touches.length === 2) {
+      setIsPanning(false);
+      setLastTouchDistance(distance(e.touches[0], e.touches[1]));
+    } else if (e.touches.length === 1) {
+      swipeStartXRef.current = e.touches[0].clientX;
+      startRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      startTranslateRef.current = { ...translate };
+      setIsPanning(scale > 1);
+    }
+  };
+
+  const onTouchMove = (e) => {
+    if (e.touches.length === 2) {
+      const newDist = distance(e.touches[0], e.touches[1]);
+      if (lastTouchDistance != null) {
+        const delta = newDist - lastTouchDistance;
+        const newScale = Math.min(3, Math.max(1, scale + delta / 200));
+        setScale(newScale);
+      }
+      setLastTouchDistance(newDist);
+    } else if (e.touches.length === 1 && isPanning) {
+      const dx = e.touches[0].clientX - startRef.current.x;
+      const dy = e.touches[0].clientY - startRef.current.y;
+      setTranslate({ x: startTranslateRef.current.x + dx, y: startTranslateRef.current.y + dy });
+    }
+  };
+
+  const onTouchEnd = (e) => {
+    if (!isPanning && scale === 1 && swipeStartXRef.current != null) {
+      const endX = (e.changedTouches && e.changedTouches[0]?.clientX) || swipeStartXRef.current;
+      const dx = endX - swipeStartXRef.current;
+      if (Math.abs(dx) > 60) {
+        if (dx < 0) handleNext();
+        else handlePrevious();
+      }
+    }
+    if (e.touches.length < 2) setLastTouchDistance(null);
+    setIsPanning(false);
+    swipeStartXRef.current = null;
+  };
+
+  const onWheel = (e) => {
+    if (!containerRef.current) return;
+    e.preventDefault();
+    const delta = -e.deltaY;
+    const newScale = Math.min(3, Math.max(1, scale + delta / 400));
+    setScale(newScale);
+  };
+
+  const onDoubleClick = () => {
+    if (scale > 1) {
+      setScale(1);
+      setTranslate({ x: 0, y: 0 });
+    } else {
+      setScale(2);
+    }
+  };
+
   return (
     <AnimatePresence>
       <motion.div
@@ -57,7 +132,7 @@ function ImageZoomModal({ images, selectedIndex, onClose, onImageChange }) {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.9 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
-          className="relative max-w-7xl max-h-[90vh] w-full h-full flex items-center justify-center"
+          className="relative max-w-7xl max-h-[90vh] w-full h-full flex items-center justify-center overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Close Button */}
@@ -86,13 +161,30 @@ function ImageZoomModal({ images, selectedIndex, onClose, onImageChange }) {
             </>
           )}
 
-          {/* Main Image */}
-          <div className="relative w-full h-full flex items-center justify-center">
-            <img
-              src={images[currentIndex]?.node.url}
-              alt={images[currentIndex]?.node.altText || "Product image"}
-              className="max-w-full max-h-full object-contain"
-            />
+          {/* Main Image with zoom/pan and swipe */}
+          <div
+            ref={containerRef}
+            className="relative w-full h-full flex items-center justify-center touch-pan-y"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+            onWheel={onWheel}
+            onDoubleClick={onDoubleClick}
+          >
+            <div
+              className="relative"
+              style={{
+                transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
+                transition: isPanning ? "none" : "transform 0.2s ease-out",
+              }}
+            >
+              <img
+                src={images[currentIndex]?.node.url}
+                alt={images[currentIndex]?.node.altText || "Product image"}
+                className="max-w-full max-h-[85vh] object-contain select-none"
+                draggable={false}
+              />
+            </div>
           </div>
 
           {/* Image Counter */}
@@ -244,6 +336,7 @@ function AnimatedBackground() {
 
 // Enhanced Size Guide Component
 function SizeGuide({ sizeGuideData }) {
+  const [unit, setUnit] = useState("cm");
   const defaultSizeGuide = {
     title: "Size Guide",
     measurements: [
@@ -258,6 +351,30 @@ function SizeGuide({ sizeGuideData }) {
 
   const sizeData = sizeGuideData ? JSON.parse(sizeGuideData) : defaultSizeGuide;
 
+  const parseRange = (text) => {
+    // e.g., "86-91cm" or "34-36in" => {min: number, max: number, unit}
+    const match = text.match(/([0-9.]+)\s*-\s*([0-9.]+)\s*(cm|in)?/i);
+    if (!match) return { raw: text };
+    return { min: parseFloat(match[1]), max: parseFloat(match[2]), unit: (match[3] || "cm").toLowerCase() };
+  };
+
+  const cmToIn = (cm) => +(cm / 2.54).toFixed(1);
+  const inToCm = (inch) => +(inch * 2.54).toFixed(0);
+
+  const displayRange = (text) => {
+    const parsed = parseRange(text);
+    if (parsed.raw) return parsed.raw;
+    if (unit === "cm") {
+      const from = parsed.unit === "in" ? inToCm(parsed.min) : parsed.min;
+      const to = parsed.unit === "in" ? inToCm(parsed.max) : parsed.max;
+      return `${from}-${to}cm`;
+    } else {
+      const from = parsed.unit === "cm" ? cmToIn(parsed.min) : parsed.min;
+      const to = parsed.unit === "cm" ? cmToIn(parsed.max) : parsed.max;
+      return `${from}-${to}in`;
+    }
+  };
+
   return (
     <div className="space-y-8">
       <div className="text-center">
@@ -268,6 +385,17 @@ function SizeGuide({ sizeGuideData }) {
       </div>
 
       <div className="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden shadow-lg">
+        <div className="flex items-center justify-center gap-3 py-3 border-b bg-white">
+          <span className={`text-xs uppercase tracking-[0.2em] ${unit === "cm" ? "text-black" : "text-gray-400"}`}>CM</span>
+          <button
+            aria-label="Toggle unit"
+            onClick={() => setUnit((u) => (u === "cm" ? "in" : "cm"))}
+            className="relative w-12 h-6 bg-gray-200 rounded-full"
+          >
+            <span className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${unit === "in" ? "translate-x-6" : "translate-x-0"}`}></span>
+          </button>
+          <span className={`text-xs uppercase tracking-[0.2em] ${unit === "in" ? "text-black" : "text-gray-400"}`}>IN</span>
+        </div>
         {/* Desktop Table */}
         <div className="hidden sm:block">
           <table className="w-full text-sm">
@@ -297,13 +425,13 @@ function SizeGuide({ sizeGuideData }) {
                     {measurement.size}
                   </td>
                   <td className="py-4 px-6 text-gray-600 group-hover:text-gray-700 transition-colors font-light">
-                    {measurement.chest}
+                    {displayRange(measurement.chest)}
                   </td>
                   <td className="py-4 px-6 text-gray-600 group-hover:text-gray-700 transition-colors font-light">
-                    {measurement.waist}
+                    {displayRange(measurement.waist)}
                   </td>
                   <td className="py-4 px-6 text-gray-600 group-hover:text-gray-700 transition-colors font-light">
-                    {measurement.length}
+                    {displayRange(measurement.length)}
                   </td>
                 </tr>
               ))}
@@ -329,25 +457,19 @@ function SizeGuide({ sizeGuideData }) {
                     <p className="text-gray-500 font-extralight tracking-[0.1em] uppercase mb-1">
                       Chest
                     </p>
-                    <p className="text-gray-700 font-light">
-                      {measurement.chest}
-                    </p>
+                    <p className="text-gray-700 font-light">{displayRange(measurement.chest)}</p>
                   </div>
                   <div>
                     <p className="text-gray-500 font-extralight tracking-[0.1em] uppercase mb-1">
                       Waist
                     </p>
-                    <p className="text-gray-700 font-light">
-                      {measurement.waist}
-                    </p>
+                    <p className="text-gray-700 font-light">{displayRange(measurement.waist)}</p>
                   </div>
                   <div>
                     <p className="text-gray-500 font-extralight tracking-[0.1em] uppercase mb-1">
                       Length
                     </p>
-                    <p className="text-gray-700 font-light">
-                      {measurement.length}
-                    </p>
+                    <p className="text-gray-700 font-light">{displayRange(measurement.length)}</p>
                   </div>
                 </div>
               </div>
@@ -378,7 +500,7 @@ export default function ProductPageClient({
 
   const [isImageZoomOpen, setIsImageZoomOpen] = useState(false);
   const { addToCart, setIsCartOpen } = useCart();
-  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { addToWishlist, removeFromWishlist, isInWishlist, setIsWishlistOpen } = useWishlist();
 
   const handleAddToCart = async () => {
     if (!selectedVariant) return;
@@ -386,22 +508,34 @@ export default function ProductPageClient({
     setIsCartOpen(true); // 👈 open modal instead of redirect
   };
 
+  const getWishlistKey = () => `${product.id}::${selectedVariant?.id || "no-variant"}`;
+
   const handleWishlistToggle = () => {
+    if (!selectedVariant) return;
+    const wishlistId = getWishlistKey();
     const productData = {
-      id: product.id,
+      id: wishlistId,
+      productId: product.id,
       title: product.title,
       handle: product.handle,
+      selectedVariantId: selectedVariant.id,
+      selectedVariantTitle: selectedVariant.title,
+      selectedVariantAvailableForSale: selectedVariant.availableForSale,
+      selectedVariantPrice: selectedVariant.price,
       images: product.images.edges,
       variants: product.variants.edges.map((edge) => ({
         id: edge.node.id,
+        title: edge.node.title,
         price: edge.node.price,
+        availableForSale: edge.node.availableForSale,
       })),
     };
 
-    if (isInWishlist(product.id)) {
-      removeFromWishlist(product.id);
+    if (isInWishlist(wishlistId)) {
+      removeFromWishlist(wishlistId);
     } else {
       addToWishlist(productData);
+      setIsWishlistOpen?.(true);
     }
   };
 
@@ -533,7 +667,13 @@ export default function ProductPageClient({
                   {product.images.edges.map(({ node }, index) => (
                     <button
                       key={index}
-                      onClick={() => setSelectedImageIndex(index)}
+                      onClick={() => {
+                        setSelectedImageIndex(index);
+                        if (typeof window !== "undefined" && window.innerWidth < 768) {
+                          setIsImageZoomOpen(true);
+                        }
+                      }}
+                      onDoubleClick={() => setIsImageZoomOpen(true)}
                       className={`relative aspect-[4/5] bg-gray-100 border overflow-hidden rounded-sm transition-all duration-300 ${
                         selectedImageIndex === index
                           ? "border-gray-400 shadow-lg"
@@ -590,7 +730,6 @@ export default function ProductPageClient({
                   {product.variants.edges.map(({ node }) => (
                     <button
                       key={node.id}
-                      disabled={!node.availableForSale}
                       onClick={() => setSelectedVariant(node)}
                       className={`
                         relative w-14 h-14 border transition-all duration-500 text-xs font-extralight tracking-wider rounded-sm
@@ -599,7 +738,7 @@ export default function ProductPageClient({
                             ? "border-black bg-black text-white shadow-lg scale-110"
                             : node.availableForSale
                             ? "border-gray-300 hover:border-black hover:bg-gray-50 hover:scale-105 text-gray-700 hover:text-black"
-                            : "border-gray-200 text-gray-400 cursor-not-allowed opacity-50"
+                            : "border-gray-200 text-gray-500"
                         }
                       `}
                     >
@@ -614,44 +753,57 @@ export default function ProductPageClient({
 
               {/* Action Buttons */}
               <div className="space-y-4 pt-6">
-                <button
-                  onClick={handleAddToCart}
-                  className={`
-          relative w-full py-4 text-sm uppercase tracking-[0.2em] font-light transition-all duration-500 rounded-sm overflow-hidden group
-          ${
-            selectedVariant
-              ? "bg-black text-white hover:bg-gray-800 hover:scale-[1.02] shadow-lg"
-              : "bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
-          }
-        `}
-                  disabled={!selectedVariant}
-                >
-                  <span className="relative z-10">
-                    {selectedVariant ? "Add to Cart" : "Select Size"}
-                  </span>
-                  {selectedVariant && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-                  )}
-                </button>
+                {selectedVariant ? (
+                  selectedVariant.availableForSale ? (
+                    <button
+                      onClick={handleAddToCart}
+                      className="relative w-full py-4 text-sm uppercase tracking-[0.2em] font-light transition-all duration-500 rounded-sm overflow-hidden group bg-black text-white hover:bg-gray-800 hover:scale-[1.02] shadow-lg"
+                    >
+                      <span className="relative z-10">Add to Cart</span>
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setIsWishlistOpen?.(true)}
+                      className="relative w-full py-4 text-sm uppercase tracking-[0.2em] font-light transition-all duration-500 rounded-sm overflow-hidden group border border-gray-300 bg-white text-black"
+                    >
+                      <span className="relative z-10">Notify me</span>
+                    </button>
+                  )
+                ) : (
+                  <button
+                    className="relative w-full py-4 text-sm uppercase tracking-[0.2em] font-light transition-all duration-500 rounded-sm overflow-hidden group bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200"
+                    disabled
+                  >
+                    <span className="relative z-10">Select Size</span>
+                  </button>
+                )}
 
                 <button
                   onClick={handleWishlistToggle}
+                  disabled={!selectedVariant}
                   className={`relative w-full border py-4 text-sm uppercase tracking-[0.2em] font-extralight transition-all duration-500 rounded-sm group overflow-hidden flex items-center justify-center gap-2 ${
-                    isInWishlist(product.id)
-                      ? "border-red-300 bg-red-50 text-red-600 hover:border-red-400 hover:bg-red-100"
+                    !selectedVariant
+                      ? "cursor-not-allowed opacity-60 border-gray-200"
+                      : !selectedVariant.availableForSale
+                      ? "bg-black text-white border-black hover:bg-black"
                       : "border-gray-300 hover:border-black hover:bg-gray-50"
                   }`}
                 >
                   <FaHeart
                     className={`text-sm ${
-                      isInWishlist(product.id)
-                        ? "text-red-500"
+                      selectedVariant && isInWishlist(`${product.id}::${selectedVariant.id}`)
+                        ? (!selectedVariant.availableForSale ? "text-white" : "text-red-500")
+                        : !selectedVariant?.availableForSale
+                        ? "text-white"
                         : "text-gray-400"
                     }`}
                   />
                   <span className="relative z-10">
-                    {isInWishlist(product.id)
-                      ? "Remove from Wishlist"
+                    {selectedVariant
+                      ? isInWishlist(`${product.id}::${selectedVariant.id}`)
+                        ? `Remove from Wishlist (${selectedVariant.title})`
+                        : `Add to Wishlist (${selectedVariant.title})`
                       : "Add to Wishlist"}
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-100 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>

@@ -165,6 +165,14 @@ export function CartProvider({ children }) {
     try {
       if (!cart?.id) return;
 
+      // Optimistic update
+      const previousCart = cart;
+      setCart((prev) => {
+        if (!prev) return prev;
+        const updatedEdges = (prev.lines?.edges || []).filter((e) => e.node.id !== lineId);
+        return { ...prev, lines: { ...(prev.lines || {}), edges: updatedEdges } };
+      });
+
       const response = await fetch("/api/cart", {
         method: "POST",
         headers: {
@@ -178,6 +186,7 @@ export function CartProvider({ children }) {
       });
 
       if (!response.ok) {
+        setCart(previousCart);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
@@ -191,6 +200,16 @@ export function CartProvider({ children }) {
   const updateCartItemQuantity = async (lineId, quantity) => {
     try {
       if (!cart?.id) return;
+
+      // Optimistic update
+      const previousCart = cart;
+      setCart((prev) => {
+        if (!prev) return prev;
+        const updatedEdges = (prev.lines?.edges || []).map((e) =>
+          e.node.id === lineId ? { ...e, node: { ...e.node, quantity } } : e
+        );
+        return { ...prev, lines: { ...(prev.lines || {}), edges: updatedEdges } };
+      });
 
       const response = await fetch("/api/cart", {
         method: "POST",
@@ -206,6 +225,7 @@ export function CartProvider({ children }) {
       });
 
       if (!response.ok) {
+        setCart(previousCart);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
