@@ -125,13 +125,16 @@ export default function HeroSection() {
       </div>
 
       {/* Brand Title */}
-      <h1
+      {/* <h1
         className="logo absolute bottom-4 left-1/2 -translate-x-1/2 font-light text-3xl md:text-6xl xl:text-[120px] text-black drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]"
         style={{
           zIndex: 30,
           userSelect: "none",
         }}
       >
+        AV GaLche
+      </h1> */}
+      <h1 className="logo absolute bottom-4 left-1/2 -translate-x-1/2 font-light text-3xl md:text-6xl xl:text-[120px] text-black">
         AV GaLche
       </h1>
     </section>
