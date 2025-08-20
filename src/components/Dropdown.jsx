@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Instagram, Facebook, Twitter } from "lucide-react";
+import { X } from "lucide-react";
+import { FaInstagram, FaFacebookF } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
 import { useWishlist } from "../app/context/WishlistContext";
 
@@ -203,9 +205,14 @@ export default function DiorStyleTopDropdown({ open, onClose }) {
 
             {/* Footer with Social Icons */}
             <div className="border-t border-black/10 p-6 flex gap-5 shrink-0">
-              <Instagram className="w-5 h-5 cursor-pointer hover:opacity-70" />
-              <Facebook className="w-5 h-5 cursor-pointer hover:opacity-70" />
-              <Twitter className="w-5 h-5 cursor-pointer hover:opacity-70" />
+              <Link href="https://www.instagram.com/av_galche?igsh=MTI3eDZpdXBrbm1xZQ%3D%3D">
+                <FaInstagram className="w-5 h-5 cursor-pointer hover:opacity-70" />
+              </Link>
+              <Link href="https://x.com/avgalche?s=21">
+                <FaXTwitter className="w-5 h-5 cursor-pointer hover:opacity-70" />
+              </Link>
+              <FaFacebookF className="w-5 h-5 cursor-pointer hover:opacity-70" />
+              {/* <FaSnapchatGhost className="hover:text-black cursor-pointer" /> */}
             </div>
           </motion.aside>
         </>
