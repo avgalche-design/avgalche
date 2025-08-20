@@ -76,7 +76,13 @@ export default function Navbar() {
         <div className="absolute cursor-pointer left-0 right-0 mx-auto flex items-center justify-center gap-4 pointer-events-none">
           <Link href="/">
             <img
-              src="/logos/black.png"
+              src={
+                isHome
+                  ? isScrolled && showNavbar
+                    ? "/logos/black.png" // scrolled on home: black logo
+                    : "/logos/white.png" // initial or hidden navbar on home: white logo
+                  : "/logos/black.png" // non-home always black logo
+              }
               alt="Logo"
               className="h-10 md:h-22 pointer-events-auto"
             />

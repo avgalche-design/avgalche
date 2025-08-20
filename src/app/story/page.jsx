@@ -21,6 +21,14 @@ const AVGalcheVault = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
   const [isTierModalOpen, setIsTierModalOpen] = useState(false);
+  const [expandedTiers, setExpandedTiers] = useState({});
+
+  const toggleExpand = (index) => {
+    setExpandedTiers((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
 
   // Animation Variants
   const containerVariants = {
@@ -73,7 +81,7 @@ const AVGalcheVault = () => {
         "Galche's Vault isn't just a Vault it's a statement.",
       ],
       image:
-        "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+        "https://plus.unsplash.com/premium_photo-1677995700874-1d6a47693543?q=80&w=923&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
       name: "Argent Privé",
@@ -91,7 +99,7 @@ const AVGalcheVault = () => {
         "Step inside. Stay ahead. Belong to the Vault.",
       ],
       image:
-        "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+        "https://plus.unsplash.com/premium_photo-1677995700883-30df169c7517?q=80&w=1223&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
       name: "Apex Privé",
@@ -113,7 +121,7 @@ const AVGalcheVault = () => {
         "Ephemeral Flash-Drops Access ultra-limited 48-hour capsules five-piece design drops available exclusively to Vault members, never repeated.",
       ],
       image:
-        "https://images.unsplash.com/photo-1469334031218-e382a71b716b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
+        "https://plus.unsplash.com/premium_photo-1677995700946-f6ea044f5291?q=80&w=965&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
       name: "Aurum Privé",
@@ -137,7 +145,7 @@ const AVGalcheVault = () => {
         "Ephemeral Flash-Drops Unlock access to exclusive 48-hour capsule drops of five ultra-limited designs never restocked, never replicated.",
       ],
       image:
-        "https://images.unsplash.com/photo-1509631179647-0177331693ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=2088&q=80",
+        "https://plus.unsplash.com/premium_photo-1677995700893-348b83925e28?q=80&w=965&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
   ];
 
@@ -228,7 +236,7 @@ const AVGalcheVault = () => {
             custom={0}
           >
             At AV GaLche we believe in
-            <span className="text-[#F5BA90]"> celebrating</span>
+            <span className="text-black/70"> celebrating</span>
             <br className="hidden sm:block" />
             our most cherished patrons
           </motion.h2>
@@ -269,9 +277,9 @@ const AVGalcheVault = () => {
                   BEGIN YOUR JOURNEY
                 </div>
                 <h3 className="text-4xl sm:text-5xl md:text-6xl font-thin mb-6 leading-tight">
-                  Become a <span className="text-[#f5ba90]">Member</span>
+                  Become a <span className="text-black/70">Member</span>
                 </h3>
-                <div className="w-16 sm:w-20 h-px bg-[#f5ba90] mb-8"></div>
+                <div className="w-16 sm:w-20 h-px bg-black/70 mb-8"></div>
               </div>
 
               <p className="text-base sm:text-lg md:text-xl font-light leading-relaxed text-gray-700 mb-8">
@@ -300,7 +308,7 @@ const AVGalcheVault = () => {
       <section className="min-h-screen flex items-center bg-[#EBEBEB] text-black">
         <div className="w-full flex flex-col items-center px-6 sm:px-12 lg:px-24 py-20 text-center">
           {/* Top subtitle */}
-          <div className="text-xs sm:text-sm font-light tracking-[0.3em] text-amber-300 mb-6">
+          <div className="text-xs sm:text-sm font-light tracking-[0.3em] text-black/70 mb-6">
             THE COLLECTION
           </div>
 
@@ -310,7 +318,7 @@ const AVGalcheVault = () => {
           </h2>
 
           {/* Decorative divider */}
-          <div className="w-20 h-px bg-amber-300 mb-8"></div>
+          <div className="w-20 h-px bg-black/70 mb-8"></div>
 
           {/* Description */}
           <p className="text-base sm:text-lg text-black/70 md:text-xl font-light mb-16 leading-relaxed opacity-90 max-w-3xl">
@@ -326,13 +334,13 @@ const AVGalcheVault = () => {
               (tier, idx) => (
                 <div
                   key={tier}
-                  className="group relative border border-gray-700 hover:border-amber-300 transition-all duration-500 cursor-pointer p-6 flex flex-col items-center justify-center overflow-hidden"
+                  className="group relative border border-gray-700 hover:border-black/65 transition-all duration-500 cursor-pointer p-6 flex flex-col items-center justify-center overflow-hidden"
                 >
                   {/* subtle hover glow */}
-                  <div className="absolute inset-0 bg-amber-300 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
+                  <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
 
                   {/* Tier number / icon */}
-                  <div className="text-3xl font-light text-amber-300 mb-3">
+                  <div className="text-3xl font-light text-black/70 mb-3">
                     {idx + 1}
                   </div>
                   <div className="text-sm sm:text-base font-light tracking-wide">
@@ -357,10 +365,10 @@ const AVGalcheVault = () => {
       {tiers.map((tier, index) => (
         <section
           key={index}
-          className="min-h-screen flex items-center bg-white"
+          className="min-h-screen mt-4 flex items-center bg-white"
         >
           <div
-            className={`w-full grid grid-cols-1 lg:grid-cols-2 min-h-screen lg:gap-x-4 ${
+            className={`w-full grid grid-cols-1 lg:grid-cols-2 min-h-screen lg:gap-x-2 ${
               index % 2 === 1 ? "lg:grid-flow-col-dense" : ""
             }`}
           >
@@ -371,7 +379,7 @@ const AVGalcheVault = () => {
               }`}
             >
               <div
-                className="relative bg-cover bg-center transform hover:scale-105 w-[80%] lg:w-[65%] h-[60%] overflow-hidden transition-transform duration-[3000ms]"
+                className="relative bg-cover bg-center transform hover:scale-105 w-full max-w-[80%] sm:max-w-[80%] lg:w-[65%] h-64 sm:h-80 lg:h-[60%] overflow-hidden transition-transform duration-[3000ms]"
                 style={{ backgroundImage: `url('${tier.image}')` }}
               />
               {/* Floating tier indicator */}
@@ -383,7 +391,7 @@ const AVGalcheVault = () => {
 
             {/* TEXT COLUMN */}
             <div
-              className={`flex items-center justify-center p-12 lg:p-12 ${
+              className={`flex items-center justify-center p-8 sm:p-12 lg:p-12 ${
                 index % 2 === 1 ? "lg:col-start-1" : ""
               } bg-white`}
             >
@@ -405,23 +413,27 @@ const AVGalcheVault = () => {
                 <p className="text-xl font-light mb-8 leading-relaxed text-gray-700">
                   {tier.description}
                 </p>
-                <div className="space-y-4 mb-12">
-                  {tier.benefits.map((benefit, idx) => (
-                    <div key={idx} className="flex items-center">
-                      <div className="w-2 h-2 bg-black rounded-full mr-4"></div>
+                <div className="space-y-4 mb-4">
+                  {(expandedTiers[index]
+                    ? tier.benefits
+                    : tier.benefits.slice(0, 4)
+                  ).map((benefit, idx) => (
+                    <div key={idx} className="inline-flex items-start mb-2">
+                      <span className="inline-block w-2 h-2 bg-black rounded-full mr-4 mt-1 align-middle"></span>
                       <span className="text-black/70 font-light">
                         {benefit}
                       </span>
                     </div>
                   ))}
                 </div>
-                <Link href="/products">
-                  <button className="relative uppercase text-black p-1 font-medium group">
-                    <h2>unlock this tier</h2>
-                    <span className="absolute left-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
-                    <span className="absolute right-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
+                {tier.benefits.length > 4 && (
+                  <button
+                    onClick={() => toggleExpand(index)}
+                    className="text-sm font-medium underline text-black hover:text-amber-300 transition-colors"
+                  >
+                    {expandedTiers[index] ? "Show Less" : "Show More"}
                   </button>
-                </Link>
+                )}
               </div>
             </div>
           </div>
@@ -455,20 +467,21 @@ const AVGalcheVault = () => {
 
           {/* Buttons */}
           <div className="space-y-5">
-            <button className="w-full text-sm  text-black border border-black/70 rounded-md md:px-8 md:py-5 p-4 md:text-lg font-medium tracking-wide hover:bg-black hover:text-white transition-all duration-300 flex items-center justify-center group ">
+            {/* <button className="w-full text-sm  text-black border border-black/70 rounded-md md:px-8 md:py-5 p-4 md:text-lg font-medium tracking-wide hover:bg-black hover:text-white transition-all duration-300 flex items-center justify-center group ">
               <User className="md:w-5 md:h-5 h-3 w-3 mr-3" />
               Sign In to Your Account
               <ArrowRight className="w-3 md:w-5 h-3 md:h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
-            </button>
-
-            <button
-              onClick={() => setIsTierModalOpen(true)}
-              className="w-full border border-black/70 text-sm rounded-md text-black md:px-8 md:py-5 p-4 md:text-lg font-light tracking-wide hover:bg-black hover:text-white  transition-all duration-500 flex items-center justify-center group"
-            >
-              <Lock className="md:w-5 md:h-5 h-3 w-3 mr-3" />
-              Calculate My Tier
-              <ArrowRight className="w-3 md:w-5 h-3 md:h-5 group-hover:translate-x-1 transition-transform duration-300" />
-            </button>
+            </button> */}
+            <Link href="/products">
+              <button
+                onClick={() => setIsTierModalOpen(true)}
+                className="w-full border border-black/70 text-sm rounded-md text-black md:px-8 md:py-5 p-4 md:text-lg font-light tracking-wide hover:bg-black hover:text-white  transition-all duration-500 flex items-center justify-center group"
+              >
+                <Lock className="md:w-5 md:h-5 h-3 w-3 mr-3" />
+                Become a Member
+                <ArrowRight className="w-3 md:w-5 h-3 md:h-5 group-hover:translate-x-1 transition-transform duration-300" />
+              </button>
+            </Link>
           </div>
         </div>
       </section>
