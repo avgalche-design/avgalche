@@ -4,17 +4,19 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 import Link from "next/link";
+import { useCurrency } from "@/app/context/CurrencyContext";
 
 export default function LuxuryProductCard({ product, index }) {
   const [isHovered, setIsHovered] = useState(false);
   const [loaded, setLoaded] = useState({}); // track loaded state per image
+  const { format } = useCurrency();
 
   const images =
     product.images?.map((img) => (typeof img === "string" ? img : img.url)) ??
     [];
 
   const price = parseFloat(product.variants?.[0]?.price?.amount ?? 0);
-  const currency = product.variants?.[0]?.price?.currencyCode ?? "";
+  const currency = product.variants?.[0]?.price?.currencyCode ?? "INR";
 
   return (
     <motion.div
@@ -87,8 +89,8 @@ export default function LuxuryProductCard({ product, index }) {
           <h3 className="text-[12px] tracking-[0.08em] uppercase font-extralight text-[#525252] group-hover:text-black transition-colors duration-300">
             {product.title}
           </h3>
-          <p className="text-[11px] font-light tracking-wider text-black">
-            {currency} {price.toFixed(2)}
+          <p className="text-[11px] font-bold tracking-wider text-black">
+            {format(price, currency)}
           </p>
         </div>
       </Link>

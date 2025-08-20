@@ -103,6 +103,7 @@ const PRODUCTS_QUERY = `
         handle
         description
         productType
+        createdAt
         images(first: 5) {
           edges {
             node {
@@ -142,6 +143,7 @@ export default async function ProductsPage() {
         handle: node.handle ?? "",
         description: node.description ?? "",
         category: node.productType ?? "Uncategorized",
+        createdAt: node.createdAt ?? null,
         images:
           node.images?.edges?.map((ie) => ({
             url: ie?.node?.url ?? null,

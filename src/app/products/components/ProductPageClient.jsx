@@ -2,6 +2,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import YouMayAlsoLike from "../components/YouMayAlsoLike";
+import { useCurrency } from "@/app/context/CurrencyContext";
 import Image from "next/image";
 import { useCart } from "@/app/context/CartContext";
 import { useWishlist } from "@/app/context/WishlistContext";
@@ -493,6 +494,7 @@ export default function ProductPageClient({
   shippingInfo,
   sizeGuideData,
 }) {
+  const { format } = useCurrency();
   const [activeTab, setActiveTab] = useState("description");
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState(null);
@@ -708,8 +710,7 @@ export default function ProductPageClient({
                   <div className="pt-6">
                     <div className="inline-block">
                       <p className="text-3xl font-extralight tracking-[0.05em] text-black">
-                        {price.currencyCode}{" "}
-                        {parseFloat(price.amount).toFixed(2)}
+                        {format(parseFloat(price.amount), price.currencyCode)}
                       </p>
                       <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-gray-400 to-transparent mt-2"></div>
                     </div>

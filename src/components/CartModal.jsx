@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../app/context/CartContext";
 import { FaTimes, FaTrash, FaMinus, FaPlus } from "react-icons/fa";
 import Image from "next/image";
+import { useCurrency } from "../app/context/CurrencyContext";
 
 export default function CartModal() {
   const {
@@ -13,6 +14,7 @@ export default function CartModal() {
     updateCartItemQuantity,
     loading,
   } = useCart();
+  const { format } = useCurrency();
 
   if (!isCartOpen) return null;
 
@@ -69,6 +71,10 @@ export default function CartModal() {
       0;
     return sum + parseFloat(price) * item.quantity;
   }, 0);
+  const subtotalCurrency =
+    lines[0]?.node?.merchandise?.price?.currencyCode ||
+    lines[0]?.node?.merchandise?.product?.priceRange?.minVariantPrice?.currencyCode ||
+    "INR";
 
   const handleQuantityChange = (lineId, currentQuantity, change) => {
     const newQuantity = Math.max(1, currentQuantity + change);
@@ -162,19 +168,17 @@ export default function CartModal() {
                         {/* Price */}
                         <div className="mt-1 sm:mt-2">
                           <p className="font-semibold text-sm sm:text-base text-black">
-                            ₹
-                            {(
-                              parseFloat(node.merchandise.price?.amount || 0) *
-                              node.quantity
-                            ).toFixed(2)}
+                            {format(
+                              parseFloat(node.merchandise.price?.amount || 0) * node.quantity,
+                              node.merchandise.price?.currencyCode || "INR"
+                            )}
                           </p>
                           {node.merchandise.price?.amount && (
                             <p className="text-xs sm:text-sm text-gray-500">
-                              ₹
-                              {parseFloat(
-                                node.merchandise.price.amount
-                              ).toFixed(2)}{" "}
-                              each
+                              {format(
+                                parseFloat(node.merchandise.price.amount),
+                                node.merchandise.price?.currencyCode || "INR"
+                              )} each
                             </p>
                           )}
                         </div>
@@ -225,7 +229,7 @@ export default function CartModal() {
                       Subtotal
                     </span>
                     <span className="text-xl sm:text-2xl font-bold text-black">
-                      ₹{subtotal.toFixed(2)}
+                      {format(subtotal, subtotalCurrency)}
                     </span>
                   </div>
                   <div className="space-y-3">

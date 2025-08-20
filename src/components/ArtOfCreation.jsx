@@ -18,7 +18,7 @@ export default function ArtOfCreation() {
         {/* Right Side - Text */}
         <div className="flex flex-col justify-center items-start  p-4 md:p-10">
           <h2 className="text-xl md:text-3xl font-serif uppercase tracking-[0.15em] mb-6">
-            The Art of Creation
+            The GaLche's Vault
           </h2>
           <p className="text-sm md:text-md leading-relaxed text-gray-700 mb-8 max-w-xl">
             Every piece at AV GaLche is more than fashion — it’s a story of

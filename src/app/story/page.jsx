@@ -149,7 +149,7 @@ const AVGalcheVault = () => {
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://plus.unsplash.com/premium_photo-1664288966231-b60fdf8d8607?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`,
           }}
         />
 
@@ -190,21 +190,27 @@ const AVGalcheVault = () => {
               <div className="w-12 sm:w-24 h-px bg-[#F5BA90]"></div>
             </div>
 
-            {/* Button */}
-            <button 
+            {/* Button used to calculate the tier in the backend code for later stage */}
+            {/* <button
               onClick={() => setIsTierModalOpen(true)}
               className="group bg-opacity-10 backdrop-blur-md border border-white border-opacity-30 text-white px-6 sm:px-12 py-3 sm:py-4 text-sm sm:text-lg font-light tracking-wider hover:bg-white hover:text-black transition-all duration-700 flex items-center mx-auto"
             >
               <span>DISCOVER YOUR TIER</span>
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2 sm:ml-4 group-hover:translate-x-2 transition-transform duration-500" />
-            </button>
+            </button> */}
+            <div className="flex flex-col items-center mx-auto text-xs w-24">
+              <span className=" text-white">Scroll Down</span>
+              <span className="mt-2">
+                <IoIosArrowRoundDown className="animate-bounce text-white text-2xl sm:text-3xl" />
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="hidden xl:block">
+      {/* <div className="hidden xl:block">
         <StoryHero />
-      </div>
+      </div> */}
 
       {/* Philosophy Section */}
       <section className="py-6 sm:py-6 md:py-12 xl:py-32 px-4 sm:px-8  text-black">
@@ -221,7 +227,7 @@ const AVGalcheVault = () => {
             variants={textVariants}
             custom={0}
           >
-            At <span className="logo">AV GaLche,</span> we believe in
+            At AV GaLche we believe in
             <span className="text-[#F5BA90]"> celebrating</span>
             <br className="hidden sm:block" />
             our most cherished patrons
@@ -455,7 +461,7 @@ const AVGalcheVault = () => {
               <ArrowRight className="w-3 md:w-5 h-3 md:h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
             </button>
 
-            <button 
+            <button
               onClick={() => setIsTierModalOpen(true)}
               className="w-full border border-black/70 text-sm rounded-md text-black md:px-8 md:py-5 p-4 md:text-lg font-light tracking-wide hover:bg-black hover:text-white  transition-all duration-500 flex items-center justify-center group"
             >
@@ -468,7 +474,7 @@ const AVGalcheVault = () => {
       </section>
 
       {/* Tier Modal */}
-      <TierModal 
+      <TierModal
         isOpen={isTierModalOpen}
         onClose={() => setIsTierModalOpen(false)}
         tiers={tiers}

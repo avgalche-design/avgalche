@@ -84,12 +84,12 @@ export default function DiorStyleTopDropdown({ open, onClose }) {
     visible: {
       y: 0,
       opacity: 1,
-      transition: { type: "spring", stiffness: 80, damping: 20 },
+      transition: { type: "tween", ease: "easeOut", duration: 0.35 },
     },
     exit: {
       y: "-100%",
       opacity: 0,
-      transition: { duration: 0.3 },
+      transition: { duration: 0.3, ease: "easeIn" },
     },
   };
 
@@ -125,14 +125,14 @@ export default function DiorStyleTopDropdown({ open, onClose }) {
 
           {/* Dropdown Panel */}
           <motion.aside
-            className="fixed left-0 top-0 z-50 w-full max-w-sm h-screen bg-white text-black shadow-2xl border-r border-black/10 flex flex-col"
+            className="fixed left-0 top-0 z-50 w-full max-w-sm h-screen bg-white text-black shadow-2xl border-r border-black/10 flex flex-col will-change-transform"
             initial="hidden"
             animate="visible"
             exit="exit"
             variants={dropdownVariants}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-black/10">
+            <div className="flex items-center justify-between px-6 py-5 border-b border-black/10 shrink-0">
               <Link href="/" className="text-2xl logo font-serif">
                 AV GaLche
               </Link>
@@ -145,7 +145,7 @@ export default function DiorStyleTopDropdown({ open, onClose }) {
             </div>
 
             {/* Menu */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+            <div className="flex-1 min-h-0 overflow-y-auto p-6 space-y-4">
               {menuData.map((item) => (
                 <div key={item.key}>
                   {item.subItems ? (
@@ -202,7 +202,7 @@ export default function DiorStyleTopDropdown({ open, onClose }) {
             </div>
 
             {/* Footer with Social Icons */}
-            <div className="border-t border-black/10 p-6 flex gap-5">
+            <div className="border-t border-black/10 p-6 flex gap-5 shrink-0">
               <Instagram className="w-5 h-5 cursor-pointer hover:opacity-70" />
               <Facebook className="w-5 h-5 cursor-pointer hover:opacity-70" />
               <Twitter className="w-5 h-5 cursor-pointer hover:opacity-70" />

@@ -12,10 +12,12 @@ import {
 } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
+import { useCurrency } from "../app/context/CurrencyContext";
 
 export default function WishlistModal() {
   const { wishlist, isWishlistOpen, setIsWishlistOpen, removeFromWishlist } =
     useWishlist();
+  const { format } = useCurrency();
 
   const { addToCart } = useCart();
   const [loadingItems, setLoadingItems] = useState(new Set());
@@ -184,7 +186,15 @@ export default function WishlistModal() {
                           )}
                           {(selectedVariants[product.id]?.price?.amount || product.selectedVariantPrice?.amount) && (
                             <p className="font-semibold text-sm sm:text-base text-black mt-1">
-                              ₹{parseFloat((selectedVariants[product.id]?.price?.amount) || product.selectedVariantPrice.amount).toFixed(2)}
+                              {format(
+                                parseFloat(
+                                  (selectedVariants[product.id]?.price?.amount) ||
+                                    product.selectedVariantPrice.amount
+                                ),
+                                (selectedVariants[product.id]?.price?.currencyCode) ||
+                                  product.selectedVariantPrice.currencyCode ||
+                                  "INR"
+                              )}
                             </p>
                           )}
                         </div>
@@ -332,7 +342,10 @@ export default function WishlistModal() {
                           </div>
                           {variant.price && (
                             <div className="text-sm text-gray-600 mt-1">
-                              ₹{parseFloat(variant.price.amount).toFixed(2)}
+                              {format(
+                                parseFloat(variant.price.amount),
+                                variant.price.currencyCode || "INR"
+                              )}
                             </div>
                           )}
                         </button>

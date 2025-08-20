@@ -5,7 +5,7 @@ import LuxuryProductCard from "./ProductCard";
 
 // Main Grid Component
 export default function ProductGridClient({ products }) {
-  const [sortOrder, setSortOrder] = useState("relevance");
+  const [sortOrder, setSortOrder] = useState("newest");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -16,7 +16,11 @@ export default function ProductGridClient({ products }) {
   const sortedProducts = [...products]
     .filter((p) => categoryFilter === "all" || p.category === categoryFilter)
     .sort((a, b) => {
-      if (sortOrder === "relevance") return 0;
+      if (sortOrder === "newest") {
+        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return dateB - dateA; // newest first
+      }
       const priceA = parseFloat(a.variants?.[0]?.price?.amount ?? 0);
       const priceB = parseFloat(b.variants?.[0]?.price?.amount ?? 0);
       if (sortOrder === "price-asc") return priceA - priceB;
@@ -59,8 +63,8 @@ export default function ProductGridClient({ products }) {
                 onChange={(e) => setSortOrder(e.target.value)}
                 className="text-xs uppercase tracking-[0.15em] font-extralight border-none bg-transparent text-black/80 focus:outline-none cursor-pointer hover:text-black transition-colors"
               >
-                <option value="relevance" className="bg-white text-black">
-                  Relevance
+                <option value="newest" className="bg-white text-black">
+                  Newest
                 </option>
                 <option value="price-asc" className="bg-white text-black">
                   Price: Low to High

@@ -1,5 +1,7 @@
+"use client";
 // components/Footer.tsx
 import Link from "next/link";
+import { useCurrency } from "../app/context/CurrencyContext";
 import {
   FaTiktok,
   FaInstagram,
@@ -13,6 +15,13 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FiPhone, FiMail } from "react-icons/fi";
 
 export default function Footer() {
+  const { selectedCurrency, supportedRegions, setIsCurrencyModalOpen } =
+    useCurrency();
+
+  const selectedLabel =
+    supportedRegions.find((r) => r.currency === selectedCurrency)?.label ||
+    "Select Region";
+
   return (
     <footer className="bg-white text-black px-6 py-10">
       {/* Premium Newsletter Section */}
@@ -75,7 +84,17 @@ export default function Footer() {
           <div>
             <h3 className="font-serif text-lg mb-3">AV GaLche Concierge</h3>
             <ul className="space-y-1 text-gray-700">
-              <li>Contact</li>
+              <li>
+                <a
+                  href="https://api.whatsapp.com/send?phone=918851760427&text=Good%20day%2C%20AV%20GaLche%20Concierge.%20I%20would%20like%20to%20explore%20your%20exclusive%20collection%20and%20discover%20pieces%20tailored%20to%20my%20style.%20Could%20you%20kindly%20assist%20me%20with%20a%20private%20consultation%3F"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-black transition-colors duration-300"
+                >
+                  Contact on Whatsapp
+                </a>
+              </li>
+
               <li>FAQ</li>
               <li>Return & Refund</li>
             </ul>
@@ -130,10 +149,13 @@ export default function Footer() {
           </div>
 
           {/* Country */}
-          <div className="text-sm text-gray-600">
+          <button
+            className="text-sm text-gray-600 hover:text-black"
+            onClick={() => setIsCurrencyModalOpen(true)}
+          >
             Country / Region{" "}
-            <span className="font-medium text-black">India (English)</span>
-          </div>
+            <span className="font-medium text-black">{selectedLabel}</span>
+          </button>
         </div>
       </div>
     </footer>

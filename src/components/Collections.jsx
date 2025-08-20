@@ -38,7 +38,7 @@ export default function Collections() {
             <span className="text-white/80 text-sm  font-light tracking-wide">
               Explore luxurious styles for the season
             </span>
-            <button className="relative text-white/80 text-sm p-1 font-medium group">
+            <button className="relative text-white/80 active:bg-neutral-200 md:active:bg-inherit text-sm p-1 font-medium group">
               <h2>Discover Collection</h2>
               <span className="absolute left-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
               <span className="absolute right-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
@@ -65,7 +65,7 @@ export default function Collections() {
             <span className="text-white/80 text-sm font-light tracking-wide">
               Light, bright, and bold essentials
             </span>
-            <button className="relative text-white/80 text-sm p-1 font-medium group">
+            <button className="relative text-white/80 active:bg-neutral-200 md:active:bg-inherit text-sm p-1 font-medium group">
               <h2>Discover Collection</h2>
               <span className="absolute left-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>
               <span className="absolute right-0 bottom-0 h-[1px] w-1/4 bg-white transition-all duration-500 group-hover:w-full"></span>

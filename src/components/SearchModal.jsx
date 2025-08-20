@@ -4,11 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaTimes, FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import { useSearch } from "../app/context/SearchContext";
+import { useCurrency } from "../app/context/CurrencyContext";
 
 export default function SearchModal() {
   const searchContext = useSearch();
   const isOpen = searchContext?.isSearchOpen || false;
   const closeSearch = searchContext?.closeSearch;
+  const { format } = useCurrency();
   
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
@@ -232,10 +234,10 @@ export default function SearchModal() {
                         </p>
                         {product.variants?.[0]?.price && (
                           <p className="text-sm font-semibold text-black">
-                            $
-                            {parseFloat(
-                              product.variants[0].price.amount
-                            ).toFixed(2)}
+                            {format(
+                              parseFloat(product.variants[0].price.amount),
+                              product.variants[0].price.currencyCode || "INR"
+                            )}
                           </p>
                         )}
                       </div>

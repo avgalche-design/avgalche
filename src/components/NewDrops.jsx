@@ -245,9 +245,9 @@ export default function NewDrops() {
               Discover timeless silhouettes, refined textures, and statement
               pieces curated for the modern luxury wardrobe.
             </p>
-            <Link href="/products">
-              <button className="relative text-black p-1 font-medium group">
-                <h2 className=" text-sm md:text-2xl">Discover Collection</h2>
+            <Link href="/season-collection">
+              <button className="relative text-black active:bg-neutral-200 md:active:bg-inherit p-1 font-medium group">
+                <h2 className=" text-sm md:text-2xl">View All</h2>
                 <span className="absolute left-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
                 <span className="absolute right-0 bottom-0 h-[2px] w-1/4 bg-black transition-all duration-500 group-hover:w-full"></span>
               </button>

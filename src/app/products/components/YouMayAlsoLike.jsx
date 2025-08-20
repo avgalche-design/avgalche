@@ -1,9 +1,11 @@
 "use client";
 import Link from "next/link";
+import { useCurrency } from "@/app/context/CurrencyContext";
 
 export default function YouMayAlsoLike({ products }) {
   // Defensive: Fallback to empty list if none
   if (!products || products.length === 0) return null;
+  const { format } = useCurrency();
 
   return (
     <section>
@@ -29,8 +31,10 @@ export default function YouMayAlsoLike({ products }) {
               {product.title}
             </p>
             <p className="text-gray-600 text-sm mt-1">
-              {product.variants?.[0]?.price?.amount}{" "}
-              {product.variants?.[0]?.price?.currencyCode}
+              {format(
+                parseFloat(product.variants?.[0]?.price?.amount ?? 0),
+                product.variants?.[0]?.price?.currencyCode ?? "INR"
+              )}
             </p>
           </Link>
         ))}

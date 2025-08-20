@@ -6,9 +6,11 @@ import Footer from "../components/Footer";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import { SearchProvider } from "./context/SearchContext";
+import { CurrencyProvider } from "./context/CurrencyContext";
 import CartModal from "../components/CartModal";
 import WishlistModal from "../components/WishlistModal";
 import SearchModal from "../components/SearchModal";
+import CurrencyModal from "../components/CurrencyModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,6 +31,7 @@ export default function RootLayout({
         <CartProvider>
           <WishlistProvider>
             <SearchProvider>
+              <CurrencyProvider>
               <div className="min-h-screen flex flex-col">
                 <Navbar />
                 <main className="flex-1">{children}</main>
@@ -37,6 +40,8 @@ export default function RootLayout({
               <CartModal />
               <WishlistModal />
               <SearchModal />
+              <CurrencyModal />
+              </CurrencyProvider>
             </SearchProvider>
           </WishlistProvider>
         </CartProvider>
