@@ -14,6 +14,8 @@ import {
   FaChevronRight,
   FaHeart,
 } from "react-icons/fa";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 
 // Image Zoom Modal Component
 function ImageZoomModal({ images, selectedIndex, onClose, onImageChange }) {
@@ -84,13 +86,18 @@ function ImageZoomModal({ images, selectedIndex, onClose, onImageChange }) {
     } else if (e.touches.length === 1 && isPanning) {
       const dx = e.touches[0].clientX - startRef.current.x;
       const dy = e.touches[0].clientY - startRef.current.y;
-      setTranslate({ x: startTranslateRef.current.x + dx, y: startTranslateRef.current.y + dy });
+      setTranslate({
+        x: startTranslateRef.current.x + dx,
+        y: startTranslateRef.current.y + dy,
+      });
     }
   };
 
   const onTouchEnd = (e) => {
     if (!isPanning && scale === 1 && swipeStartXRef.current != null) {
-      const endX = (e.changedTouches && e.changedTouches[0]?.clientX) || swipeStartXRef.current;
+      const endX =
+        (e.changedTouches && e.changedTouches[0]?.clientX) ||
+        swipeStartXRef.current;
       const dx = endX - swipeStartXRef.current;
       if (Math.abs(dx) > 60) {
         if (dx < 0) handleNext();
@@ -102,13 +109,20 @@ function ImageZoomModal({ images, selectedIndex, onClose, onImageChange }) {
     swipeStartXRef.current = null;
   };
 
-  const onWheel = (e) => {
-    if (!containerRef.current) return;
-    e.preventDefault();
-    const delta = -e.deltaY;
-    const newScale = Math.min(3, Math.max(1, scale + delta / 400));
-    setScale(newScale);
-  };
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const handleWheel = (e) => {
+      e.preventDefault();
+      const delta = -e.deltaY;
+      const newScale = Math.min(3, Math.max(1, scale + delta / 400));
+      setScale(newScale);
+    };
+
+    el.addEventListener("wheel", handleWheel, { passive: false });
+    return () => el.removeEventListener("wheel", handleWheel);
+  }, [scale]);
 
   const onDoubleClick = () => {
     if (scale > 1) {
@@ -169,7 +183,6 @@ function ImageZoomModal({ images, selectedIndex, onClose, onImageChange }) {
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
-            onWheel={onWheel}
             onDoubleClick={onDoubleClick}
           >
             <div
@@ -356,7 +369,11 @@ function SizeGuide({ sizeGuideData }) {
     // e.g., "86-91cm" or "34-36in" => {min: number, max: number, unit}
     const match = text.match(/([0-9.]+)\s*-\s*([0-9.]+)\s*(cm|in)?/i);
     if (!match) return { raw: text };
-    return { min: parseFloat(match[1]), max: parseFloat(match[2]), unit: (match[3] || "cm").toLowerCase() };
+    return {
+      min: parseFloat(match[1]),
+      max: parseFloat(match[2]),
+      unit: (match[3] || "cm").toLowerCase(),
+    };
   };
 
   const cmToIn = (cm) => +(cm / 2.54).toFixed(1);
@@ -387,15 +404,31 @@ function SizeGuide({ sizeGuideData }) {
 
       <div className="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden shadow-lg">
         <div className="flex items-center justify-center gap-3 py-3 border-b bg-white">
-          <span className={`text-xs uppercase tracking-[0.2em] ${unit === "cm" ? "text-black" : "text-gray-400"}`}>CM</span>
+          <span
+            className={`text-xs uppercase tracking-[0.2em] ${
+              unit === "cm" ? "text-black" : "text-gray-400"
+            }`}
+          >
+            CM
+          </span>
           <button
             aria-label="Toggle unit"
             onClick={() => setUnit((u) => (u === "cm" ? "in" : "cm"))}
             className="relative w-12 h-6 bg-gray-200 rounded-full"
           >
-            <span className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${unit === "in" ? "translate-x-6" : "translate-x-0"}`}></span>
+            <span
+              className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+                unit === "in" ? "translate-x-6" : "translate-x-0"
+              }`}
+            ></span>
           </button>
-          <span className={`text-xs uppercase tracking-[0.2em] ${unit === "in" ? "text-black" : "text-gray-400"}`}>IN</span>
+          <span
+            className={`text-xs uppercase tracking-[0.2em] ${
+              unit === "in" ? "text-black" : "text-gray-400"
+            }`}
+          >
+            IN
+          </span>
         </div>
         {/* Desktop Table */}
         <div className="hidden sm:block">
@@ -458,19 +491,25 @@ function SizeGuide({ sizeGuideData }) {
                     <p className="text-gray-500 font-extralight tracking-[0.1em] uppercase mb-1">
                       Chest
                     </p>
-                    <p className="text-gray-700 font-light">{displayRange(measurement.chest)}</p>
+                    <p className="text-gray-700 font-light">
+                      {displayRange(measurement.chest)}
+                    </p>
                   </div>
                   <div>
                     <p className="text-gray-500 font-extralight tracking-[0.1em] uppercase mb-1">
                       Waist
                     </p>
-                    <p className="text-gray-700 font-light">{displayRange(measurement.waist)}</p>
+                    <p className="text-gray-700 font-light">
+                      {displayRange(measurement.waist)}
+                    </p>
                   </div>
                   <div>
                     <p className="text-gray-500 font-extralight tracking-[0.1em] uppercase mb-1">
                       Length
                     </p>
-                    <p className="text-gray-700 font-light">{displayRange(measurement.length)}</p>
+                    <p className="text-gray-700 font-light">
+                      {displayRange(measurement.length)}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -499,10 +538,11 @@ export default function ProductPageClient({
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-
+  const swiperRef = useRef(null);
   const [isImageZoomOpen, setIsImageZoomOpen] = useState(false);
   const { addToCart, setIsCartOpen } = useCart();
-  const { addToWishlist, removeFromWishlist, isInWishlist, setIsWishlistOpen } = useWishlist();
+  const { addToWishlist, removeFromWishlist, isInWishlist, setIsWishlistOpen } =
+    useWishlist();
 
   const handleAddToCart = async () => {
     if (!selectedVariant) return;
@@ -510,7 +550,8 @@ export default function ProductPageClient({
     setIsCartOpen(true); // 👈 open modal instead of redirect
   };
 
-  const getWishlistKey = () => `${product.id}::${selectedVariant?.id || "no-variant"}`;
+  const getWishlistKey = () =>
+    `${product.id}::${selectedVariant?.id || "no-variant"}`;
 
   const handleWishlistToggle = () => {
     if (!selectedVariant) return;
@@ -635,31 +676,38 @@ export default function ProductPageClient({
               {/* Main Image */}
               <div className="relative">
                 <div className="aspect-[4/5] bg-gray-100 border border-gray-200 overflow-hidden rounded-sm shadow-lg cursor-pointer">
-                  {product.images.edges.length > 0 ? (
-                    <>
-                      <Image
-                        key={selectedImageIndex}
-                        src={
-                          product.images.edges[selectedImageIndex]?.node.url ||
-                          product.images.edges[0].node.url
-                        }
-                        alt={
-                          product.images.edges[selectedImageIndex]?.node
-                            .altText || product.title
-                        }
-                        fill
-                        sizes="(max-width:768px) 100vw, 50vw"
-                        className="object-cover"
-                        onClick={() => setIsImageZoomOpen(true)}
-                      />
-                    </>
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-gray-500 font-extralight tracking-[0.2em] text-sm uppercase">
-                        No Image Available
-                      </span>
-                    </div>
-                  )}
+                  <Swiper
+                    spaceBetween={10}
+                    slidesPerView={1}
+                    onSwiper={(swiper) => (swiperRef.current = swiper)}
+                    onSlideChange={(swiper) =>
+                      setSelectedImageIndex(swiper.activeIndex)
+                    }
+                  >
+                    {product.images.edges.length > 0 ? (
+                      product.images.edges.map(({ node }, index) => (
+                        <SwiperSlide
+                          key={index}
+                          className="relative aspect-[4/5]"
+                        >
+                          <Image
+                            src={node.url}
+                            alt={node.altText || product.title}
+                            fill
+                            sizes="(max-width:768px) 100vw, 50vw"
+                            className="object-cover"
+                            onClick={() => setIsImageZoomOpen(true)}
+                          />
+                        </SwiperSlide>
+                      ))
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <span className="text-gray-500 font-extralight tracking-[0.2em] text-sm uppercase">
+                          No Image Available
+                        </span>
+                      </div>
+                    )}
+                  </Swiper>
                 </div>
               </div>
 
@@ -671,11 +719,14 @@ export default function ProductPageClient({
                       key={index}
                       onClick={() => {
                         setSelectedImageIndex(index);
-                        if (typeof window !== "undefined" && window.innerWidth < 768) {
+                        if (swiperRef.current) swiperRef.current.slideTo(index);
+                        if (
+                          typeof window !== "undefined" &&
+                          window.innerWidth < 768
+                        ) {
                           setIsImageZoomOpen(true);
                         }
                       }}
-                      onDoubleClick={() => setIsImageZoomOpen(true)}
                       className={`relative aspect-[4/5] bg-gray-100 border overflow-hidden rounded-sm transition-all duration-300 ${
                         selectedImageIndex === index
                           ? "border-gray-400 shadow-lg"
@@ -793,8 +844,11 @@ export default function ProductPageClient({
                 >
                   <FaHeart
                     className={`text-sm ${
-                      selectedVariant && isInWishlist(`${product.id}::${selectedVariant.id}`)
-                        ? (!selectedVariant.availableForSale ? "text-white" : "text-red-500")
+                      selectedVariant &&
+                      isInWishlist(`${product.id}::${selectedVariant.id}`)
+                        ? !selectedVariant.availableForSale
+                          ? "text-white"
+                          : "text-red-500"
                         : !selectedVariant?.availableForSale
                         ? "text-white"
                         : "text-gray-400"

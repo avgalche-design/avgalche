@@ -140,8 +140,8 @@ export default function Footer() {
                 </a>
               </li>
 
-              <li>FAQ</li>
-              <li>Return & Refund</li>
+              {/* <li>FAQ</li>
+              <li>Return & Refund</li> */}
             </ul>
           </div>
 
@@ -163,7 +163,7 @@ export default function Footer() {
           <div>
             <h3 className="font-serif text-lg mb-3">Legal & Policies</h3>
             <ul className="space-y-1 text-gray-700">
-              <li>Shipping Policy</li>
+              {/* <li>Shipping Policy</li> */}
               <li>
                 <Link href="/privacy-policy" className="hover:underline">
                   Privacy Notice
