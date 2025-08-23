@@ -679,6 +679,7 @@ export default function ProductPageClient({
                   <Swiper
                     spaceBetween={10}
                     slidesPerView={1}
+                    speed={0} // ← makes slide change instant
                     onSwiper={(swiper) => (swiperRef.current = swiper)}
                     onSlideChange={(swiper) =>
                       setSelectedImageIndex(swiper.activeIndex)

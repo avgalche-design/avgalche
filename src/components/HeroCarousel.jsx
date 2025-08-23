@@ -2,7 +2,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Facebook, Instagram, Twitter } from "lucide-react";
 import { IoIosArrowRoundDown } from "react-icons/io";
-import "./H1.css";
 
 const imagesSet1 = [
   "https://images.unsplash.com/photo-1743024599050-391c63c52d32?q=80&w=687&auto=format&fit=crop",
@@ -134,7 +133,7 @@ export default function HeroSection() {
       >
         AV GaLche
       </h1> */}
-      <h1 className="logo absolute bottom-4 left-1/2 -translate-x-1/2 font-light text-3xl md:text-6xl xl:text-[120px] text-black">
+      <h1 className="logo absolute  bottom-4 left-1/2 -translate-x-1/2 font-light text-3xl md:text-6xl xl:text-[120px] text-black">
         AV GaLche
       </h1>
     </section>
