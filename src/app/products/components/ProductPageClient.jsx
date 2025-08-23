@@ -366,14 +366,27 @@ function SizeGuide({ sizeGuideData }) {
   const sizeData = sizeGuideData ? JSON.parse(sizeGuideData) : defaultSizeGuide;
 
   const parseRange = (text) => {
-    // e.g., "86-91cm" or "34-36in" => {min: number, max: number, unit}
-    const match = text.match(/([0-9.]+)\s*-\s*([0-9.]+)\s*(cm|in)?/i);
-    if (!match) return { raw: text };
-    return {
-      min: parseFloat(match[1]),
-      max: parseFloat(match[2]),
-      unit: (match[3] || "cm").toLowerCase(),
-    };
+    // Matches "86-91cm" OR "66cm"
+    const rangeMatch = text.match(/([0-9.]+)\s*-\s*([0-9.]+)\s*(cm|in)?/i);
+    if (rangeMatch) {
+      return {
+        min: parseFloat(rangeMatch[1]),
+        max: parseFloat(rangeMatch[2]),
+        unit: (rangeMatch[3] || "cm").toLowerCase(),
+      };
+    }
+
+    const singleMatch = text.match(/([0-9.]+)\s*(cm|in)?/i);
+    if (singleMatch) {
+      const value = parseFloat(singleMatch[1]);
+      return {
+        min: value,
+        max: value,
+        unit: (singleMatch[2] || "cm").toLowerCase(),
+      };
+    }
+
+    return { raw: text };
   };
 
   const cmToIn = (cm) => +(cm / 2.54).toFixed(1);
@@ -601,7 +614,7 @@ export default function ProductPageClient({
             <div className="text-center mb-8">
               <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-gray-400 to-transparent mx-auto opacity-60"></div>
             </div>
-            <p className="text-gray-700 leading-[1.8] font-extralight tracking-[0.02em] text-base text-center max-w-2xl mx-auto">
+            <p className="text-gray-700 leading-[1.8] bg-[#F9FAFB]  border border-gray-200 rounded-md p-6 text-left font-extralight tracking-[0.02em] text-base max-w-2xl mx-auto">
               {product.description ||
                 "Embodying the essence of contemporary luxury, this piece transcends ordinary fashion. Meticulously crafted from premium materials with uncompromising attention to detail, it represents the perfect harmony between avant-garde design and timeless sophistication."}
             </p>
@@ -619,7 +632,7 @@ export default function ProductPageClient({
               <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-gray-400 to-transparent mx-auto opacity-60"></div>
             </div>
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-8">
-              <div className="space-y-3">
+              <div className="space-y-3  font-light text-gray-700">
                 <RenderShopifyRichText richTextJson={washCareInfo} />
               </div>
             </div>
@@ -867,7 +880,7 @@ export default function ProductPageClient({
               </div>
 
               {/* Product Information Tabs */}
-              <div className="pt-10 border-t border-gray-200">
+              <div className="pt-10 border-t  border-gray-200">
                 {/* Tab Navigation */}
                 <nav className="flex justify-center gap-8 mb-12">
                   {tabs.map((tab) => (
