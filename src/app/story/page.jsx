@@ -16,41 +16,41 @@ import { motion } from "framer-motion";
 import TierModal from "../../components/TierModal";
 import Link from "next/link";
 
-export const metadata = {
-  title: "The GaLche's Vault - Exclusive Membership | AV GaLche",
-  description:
-    "Explore GaLche’s Vault, AV GaLche's exclusive tiered membership program offering bespoke rewards, early access, personalized styling, and luxury experiences.",
-  keywords: [
-    "AV GaLche Vault",
-    "luxury membership India",
-    "exclusive fashion membership",
-    "tiered loyalty program",
-    "sophisticated rewards",
-  ],
-  openGraph: {
-    title: "The GaLche's Vault - Exclusive Membership | AV GaLche",
-    description:
-      "Explore GaLche’s Vault, AV GaLche's exclusive tiered membership program with bespoke rewards and luxury experiences.",
-    url: "https://www.avgalche.com/story",
-    images: [
-      {
-        url: "https://plus.unsplash.com/premium_photo-1664288966231-b60fdf8d8607?q=80&w=870&auto=format&fit=crop",
-        width: 870,
-        height: 580,
-        alt: "GaLche’s Vault Membership",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "The GaLche's Vault - Exclusive Membership | AV GaLche",
-    description:
-      "Discover GaLche’s Vault, an exclusive tiered membership program offering unmatched luxury and rewards.",
-    images: [
-      "https://plus.unsplash.com/premium_photo-1664288966231-b60fdf8d8607?q=80&w=870&auto=format&fit=crop",
-    ],
-  },
-};
+// export const metadata = {
+//   title: "The GaLche's Vault - Exclusive Membership | AV GaLche",
+//   description:
+//     "Explore GaLche’s Vault, AV GaLche's exclusive tiered membership program offering bespoke rewards, early access, personalized styling, and luxury experiences.",
+//   keywords: [
+//     "AV GaLche Vault",
+//     "luxury membership India",
+//     "exclusive fashion membership",
+//     "tiered loyalty program",
+//     "sophisticated rewards",
+//   ],
+//   openGraph: {
+//     title: "The GaLche's Vault - Exclusive Membership | AV GaLche",
+//     description:
+//       "Explore GaLche’s Vault, AV GaLche's exclusive tiered membership program with bespoke rewards and luxury experiences.",
+//     url: "https://www.avgalche.com/story",
+//     images: [
+//       {
+//         url: "https://plus.unsplash.com/premium_photo-1664288966231-b60fdf8d8607?q=80&w=870&auto=format&fit=crop",
+//         width: 870,
+//         height: 580,
+//         alt: "GaLche’s Vault Membership",
+//       },
+//     ],
+//   },
+//   twitter: {
+//     card: "summary_large_image",
+//     title: "The GaLche's Vault - Exclusive Membership | AV GaLche",
+//     description:
+//       "Discover GaLche’s Vault, an exclusive tiered membership program offering unmatched luxury and rewards.",
+//     images: [
+//       "https://plus.unsplash.com/premium_photo-1664288966231-b60fdf8d8607?q=80&w=870&auto=format&fit=crop",
+//     ],
+//   },
+// };
 
 const AVGalcheVault = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -186,7 +186,7 @@ const AVGalcheVault = () => {
 
   return (
     <>
-      <script
+      {/* <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
@@ -198,7 +198,7 @@ const AVGalcheVault = () => {
             url: "https://www.avgalche.com/story",
           }),
         }}
-      />
+      /> */}
 
       <div className="min-h-screen bg-white text-black">
         {/* Cinematic Hero */}

@@ -4,41 +4,41 @@ import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-export const metadata = {
-  title: "Season Collections - AV GaLche",
-  description:
-    "Explore AV GaLche’s curated seasonal collections featuring timeless designs and sophisticated styles.",
-  keywords: [
-    "AV GaLche collections",
-    "seasonal fashion",
-    "luxury fashion India",
-    "timeless designs",
-    "sophisticated style",
-  ],
-  openGraph: {
-    title: "Season Collections | AV GaLche",
-    description:
-      "Explore AV GaLche’s curated seasonal collections featuring timeless designs and sophisticated styles.",
-    url: "https://www.avgalche.com/season-collection",
-    images: [
-      {
-        url: "https://images.unsplash.com/photo-1628535890509-2a8b79b9b034?q=80&w=687&auto=format&fit=crop",
-        width: 687,
-        height: 1024,
-        alt: "Seasonal Collection",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Season Collections | AV GaLche",
-    description:
-      "Explore AV GaLche’s curated seasonal collections featuring timeless designs and sophisticated styles.",
-    images: [
-      "https://images.unsplash.com/photo-1628535890509-2a8b79b9b034?q=80&w=687&auto=format&fit=crop",
-    ],
-  },
-};
+// export const metadata = {
+//   title: "Season Collections - AV GaLche",
+//   description:
+//     "Explore AV GaLche’s curated seasonal collections featuring timeless designs and sophisticated styles.",
+//   keywords: [
+//     "AV GaLche collections",
+//     "seasonal fashion",
+//     "luxury fashion India",
+//     "timeless designs",
+//     "sophisticated style",
+//   ],
+//   openGraph: {
+//     title: "Season Collections | AV GaLche",
+//     description:
+//       "Explore AV GaLche’s curated seasonal collections featuring timeless designs and sophisticated styles.",
+//     url: "https://www.avgalche.com/season-collection",
+//     images: [
+//       {
+//         url: "https://images.unsplash.com/photo-1628535890509-2a8b79b9b034?q=80&w=687&auto=format&fit=crop",
+//         width: 687,
+//         height: 1024,
+//         alt: "Seasonal Collection",
+//       },
+//     ],
+//   },
+//   twitter: {
+//     card: "summary_large_image",
+//     title: "Season Collections | AV GaLche",
+//     description:
+//       "Explore AV GaLche’s curated seasonal collections featuring timeless designs and sophisticated styles.",
+//     images: [
+//       "https://images.unsplash.com/photo-1628535890509-2a8b79b9b034?q=80&w=687&auto=format&fit=crop",
+//     ],
+//   },
+// };
 
 // Register GSAP plugin
 if (typeof window !== "undefined") {
@@ -207,7 +207,7 @@ function CollectionSection({ collection }) {
 
   return (
     <>
-      <script
+      {/* <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
@@ -219,7 +219,7 @@ function CollectionSection({ collection }) {
             image: collection.images.map((img) => img.url),
           }),
         }}
-      />
+      /> */}
 
       <div ref={sectionRef} className="min-h-screen bg-white">
         {/* Header */}
