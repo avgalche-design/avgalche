@@ -7,13 +7,14 @@ export default function HeroSection() {
       {/* No fixed aspect ratio, height controlled by Tailwind */}
       <div className="relative w-full h-[600px] md:h-screen">
         <video
+          preload="auto"
           autoPlay
           muted
           loop
           playsInline
           className="absolute top-0 left-0 w-full h-full object-cover"
         >
-          <source src="/videos/car.mp4" type="video/mp4" />
+          <source src="/videos/carc.mp4" type="video/mp4" />
         </video>
 
         {/* Dark Gradient Overlay */}

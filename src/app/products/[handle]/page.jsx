@@ -2,6 +2,7 @@
 import { shopifyFetch } from "../../../lib/shopify";
 import YouMayAlsoLike from "../components/YouMayAlsoLike";
 import ProductPageClient from "../components/ProductPageClient";
+import ProductJsonLd from "../../../components/SEO/ProductJsonLd";
 
 const PRODUCT_QUERY = `
   query ProductByHandle($handle: String!) {
@@ -176,13 +177,18 @@ Refund & Return Policy: Returns and refunds are accepted within 14 days of deliv
     .filter((prod) => prod.handle !== handle);
 
   return (
-    <ProductPageClient
-      product={product}
-      price={price}
-      relatedProducts={relatedProducts}
-      washCareInfo={washCareInfo}
-      shippingInfo={shippingInfo}
-      sizeGuideData={metafields.size_guide}
-    />
+    <>
+      {/* ✅ Dynamic Product Schema */}
+      <ProductJsonLd product={{ ...product, handle }} price={price} />
+
+      <ProductPageClient
+        product={product}
+        price={price}
+        relatedProducts={relatedProducts}
+        washCareInfo={washCareInfo}
+        shippingInfo={shippingInfo}
+        sizeGuideData={metafields.size_guide}
+      />
+    </>
   );
 }
