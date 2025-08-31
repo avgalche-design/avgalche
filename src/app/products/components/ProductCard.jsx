@@ -44,7 +44,7 @@ export default function LuxuryProductCard({ product, index }) {
               <motion.img
                 src={images[0]}
                 alt={product.title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                className="absolute inset-0 w-full h-full object-cover bg-[radial-gradient(circle_at_center,_#f8f9fa_0%,_#e5e7eb_50%,_#d6d9dd_100%)] transition-transform duration-1000 ease-out group-hover:scale-105"
                 style={{ opacity: isHovered && images[1] ? 0 : 1 }}
                 loading={index < 8 ? "eager" : "lazy"}
                 decoding="async"

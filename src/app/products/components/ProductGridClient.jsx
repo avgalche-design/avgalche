@@ -83,7 +83,7 @@ export default function ProductGridClient({ products }) {
 
       {/* Grid */}
       {sortedProducts.length > 0 ? (
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-16 gap-x-8 gap-y-16">
+        <div className="grid grid-cols-2  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-16 gap-x-8 gap-y-16">
           {sortedProducts.map((product, index) => (
             <LuxuryProductCard
               key={product.id || index}

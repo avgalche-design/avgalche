@@ -688,7 +688,7 @@ export default function ProductPageClient({
             <div className="space-y-8">
               {/* Main Image */}
               <div className="relative">
-                <div className="aspect-[4/5] bg-gray-100 border border-gray-200 overflow-hidden rounded-sm shadow-lg cursor-pointer">
+                <div className="aspect-[4/5] bg-white border  border-gray-200 overflow-hidden  cursor-pointer">
                   <Swiper
                     spaceBetween={10}
                     slidesPerView={1}
@@ -727,7 +727,7 @@ export default function ProductPageClient({
 
               {/* Product Images Grid */}
               {product.images.edges.length > 1 && (
-                <div className="grid grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 gap-4">
                   {product.images.edges.map(({ node }, index) => (
                     <button
                       key={index}
@@ -741,9 +741,9 @@ export default function ProductPageClient({
                           setIsImageZoomOpen(true);
                         }
                       }}
-                      className={`relative aspect-[4/5] bg-gray-100 border overflow-hidden rounded-sm transition-all duration-300 ${
+                      className={`relative aspect-[4/5] border overflow-hidden bg-gradient-to-b from-[#96b8d9] via-[#d1d6e2] to-[#f7d1c1]   transition-all duration-300 ${
                         selectedImageIndex === index
-                          ? "border-gray-400 shadow-lg"
+                          ? "border-gray-400 "
                           : "border-gray-200 hover:border-gray-300"
                       }`}
                     >
