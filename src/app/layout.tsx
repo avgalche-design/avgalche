@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+// import Navbar from "../components/Navbar";
+// import Footer from "../components/Footer";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import { SearchProvider } from "./context/SearchContext";
@@ -141,9 +141,9 @@ export default function RootLayout({
             <SearchProvider>
               <CurrencyProvider>
                 <div className="min-h-screen flex flex-col">
-                  <Navbar />
+                  {/* <Navbar /> */}
                   <main className="flex-1">{children}</main>
-                  <Footer />
+                  {/* <Footer /> */}
                 </div>
                 <CartModal />
                 <WishlistModal />
