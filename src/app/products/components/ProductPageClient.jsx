@@ -741,7 +741,7 @@ export default function ProductPageClient({
                           setIsImageZoomOpen(true);
                         }
                       }}
-                      className={`relative aspect-[4/5] border overflow-hidden bg-gradient-to-b from-[#96b8d9] via-[#d1d6e2] to-[#f7d1c1]   transition-all duration-300 ${
+                      className={`relative aspect-[4/5] border overflow-hidden  transition-all duration-300 ${
                         selectedImageIndex === index
                           ? "border-gray-400 "
                           : "border-gray-200 hover:border-gray-300"
