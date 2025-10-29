@@ -3,14 +3,14 @@ import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import LuxuryProductCard from "./ProductCard";
 
-// Main Grid Component
 export default function ProductGridClient({ products }) {
   const [sortOrder, setSortOrder] = useState("newest");
   const [categoryFilter, setCategoryFilter] = useState("all");
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [loading, setLoading] = useState(true); // ✅ for skeleton state
 
   useEffect(() => {
-    setIsLoaded(true);
+    const timer = setTimeout(() => setLoading(false), 800); // short delay
+    return () => clearTimeout(timer);
   }, []);
 
   const sortedProducts = [...products]
@@ -19,7 +19,7 @@ export default function ProductGridClient({ products }) {
       if (sortOrder === "newest") {
         const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
         const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-        return dateB - dateA; // newest first
+        return dateB - dateA;
       }
       const priceA = parseFloat(a.variants?.[0]?.price?.amount ?? 0);
       const priceB = parseFloat(b.variants?.[0]?.price?.amount ?? 0);
@@ -31,10 +31,21 @@ export default function ProductGridClient({ products }) {
 
   const categories = ["all", ...new Set(products.map((p) => p.category))];
 
+  // ✅ Skeleton loader that matches your card proportions
+  const SkeletonCard = () => (
+    <div className="animate-pulse">
+      <div className="bg-gray-200 rounded-2xl aspect-[3/4] w-full"></div>
+      <div className="mt-4 space-y-2">
+        <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+      </div>
+    </div>
+  );
+
   return (
     <div
       className={`transition-all duration-1000 ${
-        isLoaded ? "opacity-100" : "opacity-0"
+        loading ? "opacity-80" : "opacity-100"
       }`}
     >
       {/* Premium Filter Bar */}
@@ -43,7 +54,6 @@ export default function ProductGridClient({ products }) {
           <div className="max-w-6xl mx-auto flex items-center justify-between">
             {/* Left side filters */}
             <div className="flex items-center space-x-10">
-              {/* Filter Trigger (optional) */}
               <button
                 className="group flex items-center space-x-3 text-xs uppercase tracking-[0.15em] text-black/80 hover:text-black transition-all duration-300"
                 onClick={() => setCategoryFilter("all")}
@@ -57,7 +67,6 @@ export default function ProductGridClient({ products }) {
 
             {/* Right side controls */}
             <div className="flex items-center space-x-6">
-              {/* Sort Dropdown */}
               <select
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
@@ -81,21 +90,23 @@ export default function ProductGridClient({ products }) {
         </div>
       </section>
 
-      {/* Grid */}
-      {sortedProducts.length > 0 ? (
-        <div className="grid grid-cols-2  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-16 gap-x-8 gap-y-16">
-          {sortedProducts.map((product, index) => (
-            <LuxuryProductCard
-              key={product.id || index}
-              product={{
-                ...product,
-                images: product.images?.map((img) => img.url) || [],
-              }}
-              index={index}
-            />
-          ))}
-        </div>
-      ) : (
+      {/* Product Grid or Skeletons */}
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-16 gap-x-8 gap-y-16">
+        {loading
+          ? Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)
+          : sortedProducts.map((product, index) => (
+              <LuxuryProductCard
+                key={product.id || index}
+                product={{
+                  ...product,
+                  images: product.images?.map((img) => img.url) || [],
+                }}
+                index={index}
+              />
+            ))}
+      </div>
+
+      {!loading && sortedProducts.length === 0 && (
         <div className="text-center py-24 text-black">No Products Found</div>
       )}
     </div>
