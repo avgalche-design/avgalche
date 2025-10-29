@@ -90,22 +90,26 @@ export async function generateStaticParams() {
       }
     }
   `;
+
+  // ✅ You can leave this as force-cache, since static params rarely change
   const { products } = await shopifyFetch(
     { query: PRODUCTS_HANDLE_QUERY },
     { cache: "force-cache" }
   );
+
   return products.edges.map(({ node }) => ({ handle: node.handle }));
 }
 
 export default async function ProductPage({ params }) {
   const { handle } = await params;
 
+  // ✅ Product data revalidates automatically every 60 seconds
   const data = await shopifyFetch(
     {
       query: PRODUCT_QUERY,
       variables: { handle },
     },
-    { cache: "force-cache" } // Use static caching for build time
+    { next: { revalidate: 60 } } // ✅ updated
   );
 
   const product = data?.productByHandle;
@@ -126,7 +130,7 @@ export default async function ProductPage({ params }) {
 
   const price = product.variants.edges[0]?.node.price;
 
-  // Extract metafield data
+  // Extract metafields
   const metafields = product.metafields
     ? product.metafields.reduce((acc, metafield) => {
         if (metafield && metafield.key && metafield.value) {
@@ -161,11 +165,12 @@ Delivery & Support: Orders are delivered to the buyer's provided address, with c
 Refund & Return Policy: Returns and refunds are accepted within 14 days of delivery, subject to our return policy terms.
   `;
 
-  // Fetch related products
+  // ✅ Related products revalidate automatically as well
   const relatedData = await shopifyFetch(
     { query: RELATED_PRODUCTS_QUERY },
-    { cache: "force-cache" }
+    { next: { revalidate: 60 } } // ✅ updated
   );
+
   const relatedProducts = relatedData.products.edges
     .map((edge) => ({
       ...edge.node,
@@ -178,9 +183,7 @@ Refund & Return Policy: Returns and refunds are accepted within 14 days of deliv
 
   return (
     <>
-      {/* ✅ Dynamic Product Schema */}
       <ProductJsonLd product={{ ...product, handle }} price={price} />
-
       <ProductPageClient
         product={product}
         price={price}
