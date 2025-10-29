@@ -23,20 +23,22 @@ export default function NewDrops() {
       try {
         const res = await fetch("/api/shopify-products");
         const data = await res.json();
-        const prods = data.products.edges.map((edge) => {
-          const node = edge.node;
-          return {
-            image: node.images.edges[0]?.node.url || "/images/placeholder.png",
-            alt: node.images.edges[0]?.node.altText || node.title || "Product",
-            handle: node.handle,
-            title: node.title || "Product",
-          };
-        });
+
+        // ✅ Your API already gives a flat array (no edges)
+        const prods = data.products.map((p) => ({
+          image: p.images?.[0]?.url || "/images/placeholder.png",
+          alt: p.images?.[0]?.altText || p.title || "Product",
+          handle: p.handle,
+          title: p.title,
+        }));
+
+        console.log("Loaded products:", prods);
         setProducts(prods);
       } catch (err) {
         console.error("Error loading products:", err);
       }
     }
+
     loadProducts();
   }, []);
 
@@ -210,7 +212,7 @@ export default function NewDrops() {
           </h2>
 
           {/* Mobile Grid - only images, no animation */}
-          {/* {products.map((prod, index) => (
+          {products.slice(0, 4).map((prod, index) => (
             <Link
               href={`/products/${prod.handle || ""}`}
               key={prod.handle || index}
@@ -228,8 +230,8 @@ export default function NewDrops() {
                 </div>
               </div>
             </Link>
-          ))} */}
-          {images.map((url, index) => (
+          ))}
+          {/* {images.map((url, index) => (
             <div className="relative w-full h-48 md:h-[30rem]">
               <img
                 src={url}
@@ -237,7 +239,7 @@ export default function NewDrops() {
                 className="object-cover w-full h-full"
               />
             </div>
-          ))}
+          ))} */}
 
           {/* Paragraph */}
           <div className="mt-2 w-[300px] md:w-[600px] ">
@@ -279,8 +281,8 @@ export default function NewDrops() {
                 >
                   <img
                     src={
-                      products[7]?.image ||
-                      "https://plus.unsplash.com/premium_photo-1681223965612-8948231413b6?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      products[1]?.image ||
+                      "https://plus.unsplash.com/premium_photo-1675186049409-f9f8f60ebb5e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                     }
                     alt="Third Drop"
                     className=" h-full  w-full object-cover"
@@ -304,7 +306,7 @@ export default function NewDrops() {
                 >
                   <img
                     src={
-                      products[9]?.image ||
+                      products[3]?.image ||
                       "https://plus.unsplash.com/premium_photo-1681980021035-5db5823c974b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                     }
                     alt="Third Drop"
@@ -332,8 +334,8 @@ export default function NewDrops() {
                 <img
                   // src={products[0]?.image}
                   src={
-                    products[8]?.image ||
-                    "https://plus.unsplash.com/premium_photo-1675186049406-3fabe5f387eb?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    products[0]?.image ||
+                    "https://plus.unsplash.com/premium_photo-1675186049409-f9f8f60ebb5e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   }
                   alt={products[0]?.alt}
                   className=" h-full w-full "
@@ -348,7 +350,12 @@ export default function NewDrops() {
 
             {/* Third image */}
             <div className="relative mt-64 p-0">
-              <Link href={`/products/${products[2]?.handle || ""}`}>
+              <Link
+                href={`/products/${
+                  products[2]?.handle ||
+                  "https://plus.unsplash.com/premium_photo-1675186049409-f9f8f60ebb5e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                }`}
+              >
                 <div
                   ref={thirdImgRef}
                   className="relative overflow-hidden"
@@ -356,7 +363,7 @@ export default function NewDrops() {
                 >
                   <img
                     src={
-                      products[6]?.image ||
+                      products[2]?.image ||
                       "https://plus.unsplash.com/premium_photo-1675186049409-f9f8f60ebb5e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                     }
                     alt="Third Drop"

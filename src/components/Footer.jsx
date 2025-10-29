@@ -198,7 +198,7 @@ export default function Footer() {
 
           {/* Logo */}
           <div>
-            <h1 className="text-[black] logo text-xl md:text-4xl font-serif pointer-events-auto">
+            <h1 className="text-[black] logo text-xl md:text-4xl text-center  md:ml-26 font-serif pointer-events-auto">
               AV GaLche
             </h1>
           </div>
@@ -212,6 +212,20 @@ export default function Footer() {
             <span className="font-medium text-black">{selectedLabel}</span>
           </button>
         </div>
+      </div>
+
+      {/* Bottom crafted by */}
+      <div className="relative z-20 text-center mt-10 md:mt-6 text-xs md:text-sm tracking-wide uppercase text-neutral-400">
+        © 2025 Crafted by{" "}
+        <a
+          href="https://www.weularity.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-black hover:underline transition"
+        >
+          Weularity
+        </a>{" "}
+        — Digital Agency
       </div>
     </footer>
   );

@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 const CurrencyContext = createContext({
   selectedCurrency: "INR",
@@ -94,11 +100,13 @@ export function CurrencyProvider({ children }) {
     [selectedCurrency, isCurrencyModalOpen]
   );
 
-  return <CurrencyContext.Provider value={value}>{children}</CurrencyContext.Provider>;
+  return (
+    <CurrencyContext.Provider value={value}>
+      {children}
+    </CurrencyContext.Provider>
+  );
 }
 
 export function useCurrency() {
   return useContext(CurrencyContext);
 }
-
-

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 const ALL_PRODUCTS_QUERY = `
   {
-    products(first: 50) {
+    products(first: 50, sortKey: CREATED_AT, reverse: true) {
       edges {
         node {
           id
@@ -60,7 +60,7 @@ export async function GET() {
     return NextResponse.json({ products });
   } catch (error) {
     console.error("Shopify products API error:", error);
-    
+
     // Return appropriate error status based on error type
     let status = 500;
     if (error.message.includes("Unauthorized")) {
@@ -70,11 +70,12 @@ export async function GET() {
     } else if (error.message.includes("environment variables")) {
       status = 500;
     }
-    
+
     return NextResponse.json(
-      { 
+      {
         error: error.message,
-        details: "Please check your Shopify configuration and environment variables"
+        details:
+          "Please check your Shopify configuration and environment variables",
       },
       { status }
     );

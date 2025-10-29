@@ -169,8 +169,13 @@ export function CartProvider({ children }) {
       const previousCart = cart;
       setCart((prev) => {
         if (!prev) return prev;
-        const updatedEdges = (prev.lines?.edges || []).filter((e) => e.node.id !== lineId);
-        return { ...prev, lines: { ...(prev.lines || {}), edges: updatedEdges } };
+        const updatedEdges = (prev.lines?.edges || []).filter(
+          (e) => e.node.id !== lineId
+        );
+        return {
+          ...prev,
+          lines: { ...(prev.lines || {}), edges: updatedEdges },
+        };
       });
 
       const response = await fetch("/api/cart", {
@@ -208,7 +213,10 @@ export function CartProvider({ children }) {
         const updatedEdges = (prev.lines?.edges || []).map((e) =>
           e.node.id === lineId ? { ...e, node: { ...e.node, quantity } } : e
         );
-        return { ...prev, lines: { ...(prev.lines || {}), edges: updatedEdges } };
+        return {
+          ...prev,
+          lines: { ...(prev.lines || {}), edges: updatedEdges },
+        };
       });
 
       const response = await fetch("/api/cart", {
