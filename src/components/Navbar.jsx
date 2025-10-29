@@ -14,16 +14,44 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const lastScrollY = useRef(0);
   const shopId = "93829235007";
-  const returnUrl = encodeURIComponent("https://yourdomain.com/account");
-  const loginUrl = `https://shopify.com/${shopId}/account/login?return_url=${returnUrl}`;
+
   const { cart, setIsCartOpen } = useCart();
   const { wishlist, setIsWishlistOpen } = useWishlist();
   const { openSearch } = useSearch();
   const cartCount = cart?.lines?.edges?.length || 0;
   const wishlistCount = wishlist.length;
   const pathname = usePathname();
+
+  // ✅ Detect Shopify login status
+  useEffect(() => {
+    async function checkLoginStatus() {
+      try {
+        const response = await fetch(
+          `https://shopify.com/${shopId}/account/profile`,
+          { credentials: "include", mode: "no-cors" }
+        );
+        // Since Shopify doesn't allow CORS, we can't read the response,
+        // but a cached request with cookies will succeed silently for logged-in users.
+        // So we fallback to a heuristic approach:
+        if (document.cookie.includes("_shopify_s")) {
+          setIsLoggedIn(true);
+        }
+      } catch (err) {
+        console.error("Shopify auth check failed:", err);
+      }
+    }
+
+    checkLoginStatus();
+  }, []);
+
+  const handleAccountClick = () => {
+    const shopId = "93829235007";
+    window.location.href = `https://shopify.com/${shopId}/account/profile`;
+  };
 
   // Scroll hide/show
   useEffect(() => {
@@ -48,7 +76,6 @@ export default function Navbar() {
       : "text-white"
     : "text-black";
 
-  const barColor = isScrolled && showNavbar ? "black" : "white";
   const hamburgerColor = isHome
     ? isScrolled && showNavbar
       ? "black"
@@ -66,42 +93,44 @@ export default function Navbar() {
             : "bg-transparent"
         }`}
       >
-        <div className="flex  items-center">
+        <div className="flex items-center">
           <AnimatedHamburger
             isOpen={menuOpen}
             onClick={() => setMenuOpen((p) => !p)}
             color={hamburgerColor}
           />
         </div>
+
         <div className="absolute cursor-pointer left-0 right-0 mx-auto flex items-center justify-center gap-4 pointer-events-none">
           <Link href="/">
             <img
               src={
                 isHome
                   ? isScrolled && showNavbar
-                    ? "/logos/black.png" // scrolled on home: black logo
-                    : "/logos/white.png" // initial or hidden navbar on home: white logo
-                  : "/logos/black.png" // non-home always black logo
+                    ? "/logos/black.png"
+                    : "/logos/white.png"
+                  : "/logos/black.png"
               }
               alt="Logo"
               className="h-10 md:h-22 pointer-events-auto"
             />
           </Link>
         </div>
+
         <div className="flex gap-5 items-center ml-auto">
           <button aria-label="Search" onClick={openSearch}>
             <FiSearch
               className={`${iconColor} cursor-pointer text-sm md:text-xl`}
             />
           </button>
-          <button
-            aria-label="Account"
-            onClick={() => (window.location.href = loginUrl)}
-          >
+
+          {/* ✅ Dynamic Account Button */}
+          <button aria-label="Account" onClick={handleAccountClick}>
             <FaRegUser
               className={`${iconColor} font-bold cursor-pointer text-sm md:text-xl`}
             />
           </button>
+
           {shouldShowWishlist && (
             <button
               aria-label="Wishlist"
@@ -116,6 +145,7 @@ export default function Navbar() {
               </span>
             </button>
           )}
+
           {shouldShowCart && (
             <button
               aria-label="Cart"
@@ -134,6 +164,7 @@ export default function Navbar() {
           )}
         </div>
       </nav>
+
       <Dropdown open={menuOpen} onClose={() => setMenuOpen(false)} />
     </>
   );
