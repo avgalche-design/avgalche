@@ -1,18 +1,18 @@
 // app/products/[handle]/ProductPageClient.js
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import YouMayAlsoLike from "../components/YouMayAlsoLike";
 import { useCurrency } from "@/app/context/CurrencyContext";
 import Image from "next/image";
 import { useCart } from "@/app/context/CartContext";
 import { useWishlist } from "@/app/context/WishlistContext";
-import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaTimes,
   FaChevronLeft,
   FaChevronRight,
   FaHeart,
+  FaPlay,
 } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -548,7 +548,8 @@ export default function ProductPageClient({
 }) {
   const { format } = useCurrency();
   const [activeTab, setActiveTab] = useState("description");
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [selectedSlideIndex, setSelectedSlideIndex] = useState(0);
+  const [zoomImageIndex, setZoomImageIndex] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const swiperRef = useRef(null);
@@ -556,6 +557,174 @@ export default function ProductPageClient({
   const { addToCart, setIsCartOpen } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist, setIsWishlistOpen } =
     useWishlist();
+
+  const galleryItems = useMemo(() => {
+    const mediaEdges = product?.media?.edges ?? [];
+    const mappedMedia = mediaEdges
+      .map(({ node }) => {
+        if (!node) return null;
+
+        const baseAlt =
+          node.previewImage?.altText ||
+          node.alt ||
+          (node.image?.altText ?? null) ||
+          product.title;
+
+        const base = {
+          id: node.id || node.previewImage?.url || node.image?.url,
+          type: node.mediaContentType,
+          alt: baseAlt || product.title,
+          previewImageUrl:
+            node.previewImage?.url || node.image?.url || null,
+        };
+
+        switch (node.mediaContentType) {
+          case "IMAGE":
+            if (!node.image?.url) return null;
+            return {
+              ...base,
+              url: node.image.url,
+              isVideo: false,
+            };
+          case "VIDEO": {
+            const sources = node.sources?.filter((source) => source?.url) || [];
+            if (!sources.length) return null;
+            return {
+              ...base,
+              isVideo: true,
+              sources: sources.map((source) => ({
+                url: source.url,
+                mimeType: source.mimeType || "video/mp4",
+              })),
+            };
+          }
+          case "EXTERNAL_VIDEO":
+            if (!node.originUrl) return null;
+            let embedUrl = node.originUrl;
+            if (node.host) {
+              try {
+                const parsed = new URL(node.originUrl);
+                const pathSegments = parsed.pathname.split("/").filter(Boolean);
+                if (node.host === "YOUTUBE") {
+                  const videoId =
+                    parsed.searchParams.get("v") ||
+                    pathSegments[pathSegments.length - 1];
+                  if (videoId) {
+                    embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                  }
+                } else if (node.host === "VIMEO") {
+                  const videoId = pathSegments[pathSegments.length - 1];
+                  if (videoId) {
+                    embedUrl = `https://player.vimeo.com/video/${videoId}`;
+                  }
+                }
+              } catch (error) {
+                // fallback to originUrl if parsing fails
+              }
+            }
+            return {
+              ...base,
+              isVideo: true,
+              isExternal: true,
+              externalUrl: embedUrl,
+              externalHost: node.host,
+              externalOriginUrl: node.originUrl,
+            };
+          default:
+            if (base.previewImageUrl) {
+              return {
+                ...base,
+                url: base.previewImageUrl,
+                isVideo: false,
+              };
+            }
+            return null;
+        }
+      })
+      .filter(Boolean);
+
+    const imageEdges = product?.images?.edges ?? [];
+    const fallbackImages = imageEdges
+      .map(({ node }, index) => {
+        if (!node?.url) return null;
+        return {
+          id: node?.id || `${node.url}-${index}`,
+          type: "IMAGE",
+          alt: node.altText || product.title,
+          previewImageUrl: node.url,
+          url: node.url,
+          isVideo: false,
+        };
+      })
+      .filter(Boolean);
+
+    const combined = [...mappedMedia];
+    fallbackImages.forEach((image) => {
+      const exists = combined.some((item) => {
+        const matchesUrl =
+          (item.url && image.url && item.url === image.url) ||
+          (item.previewImageUrl &&
+            image.previewImageUrl &&
+            item.previewImageUrl === image.previewImageUrl);
+        return matchesUrl;
+      });
+      if (!exists) {
+        combined.push(image);
+      }
+    });
+
+    return combined.filter(
+      (item) => item.url || item.sources?.length || item.externalUrl
+    );
+  }, [product]);
+
+  const imageItemsForZoom = useMemo(() => {
+    return galleryItems
+      .filter((item) => !item.isVideo && item.url)
+      .map((item) => ({
+        id: item.id,
+        node: {
+          url: item.url,
+          altText: item.alt,
+        },
+      }));
+  }, [galleryItems]);
+
+  useEffect(() => {
+    if (selectedSlideIndex >= galleryItems.length && galleryItems.length > 0) {
+      setSelectedSlideIndex(0);
+    }
+  }, [galleryItems.length, selectedSlideIndex]);
+
+  useEffect(() => {
+    if (zoomImageIndex >= imageItemsForZoom.length && imageItemsForZoom.length > 0) {
+      setZoomImageIndex(0);
+    }
+  }, [imageItemsForZoom.length, zoomImageIndex]);
+
+  const openZoomAtIndex = (galleryIndex) => {
+    const targetItem = galleryItems[galleryIndex];
+    if (!targetItem || targetItem.isVideo) return;
+    const imageIndex = imageItemsForZoom.findIndex(
+      (image) => image.id === targetItem.id
+    );
+    if (imageIndex === -1) return;
+    setZoomImageIndex(imageIndex);
+    setIsImageZoomOpen(true);
+  };
+
+  const handleZoomImageChange = (imageIndex) => {
+    setZoomImageIndex(imageIndex);
+    const targetImage = imageItemsForZoom[imageIndex];
+    if (!targetImage) return;
+    const galleryIndex = galleryItems.findIndex(
+      (item) => item.id === targetImage.id
+    );
+    if (galleryIndex !== -1) {
+      setSelectedSlideIndex(galleryIndex);
+      swiperRef.current?.slideTo(galleryIndex);
+    }
+  };
 
   const handleAddToCart = async () => {
     if (!selectedVariant) return;
@@ -695,36 +864,76 @@ export default function ProductPageClient({
             <div className="space-y-8">
               {/* Main Image */}
               <div className="relative">
-                <div className="aspect-[4/5] bg-white border  border-gray-200 overflow-hidden  cursor-pointer">
+                <div className="aspect-[4/5] bg-white border  border-gray-200 overflow-hidden">
                   <Swiper
                     spaceBetween={10}
                     slidesPerView={1}
                     speed={0} // ← makes slide change instant
                     onSwiper={(swiper) => (swiperRef.current = swiper)}
-                    onSlideChange={(swiper) =>
-                      setSelectedImageIndex(swiper.activeIndex)
-                    }
+                    onSlideChange={(swiper) => {
+                      const newIndex = swiper.activeIndex;
+                      setSelectedSlideIndex(newIndex);
+                      const activeItem = galleryItems[newIndex];
+                      if (activeItem && !activeItem.isVideo) {
+                        const imageIndex = imageItemsForZoom.findIndex(
+                          (image) => image.id === activeItem.id
+                        );
+                        if (imageIndex !== -1) {
+                          setZoomImageIndex(imageIndex);
+                        }
+                      }
+                    }}
                   >
-                    {product.images.edges.length > 0 ? (
-                      product.images.edges.map(({ node }, index) => (
+                    {galleryItems.length > 0 ? (
+                      galleryItems.map((item, index) => (
                         <SwiperSlide
-                          key={index}
+                          key={item.id || index}
                           className="relative aspect-[4/5]"
                         >
-                          <Image
-                            src={node.url}
-                            alt={node.altText || product.title}
-                            fill
-                            sizes="(max-width:768px) 100vw, 50vw"
-                            className="object-cover"
-                            onClick={() => setIsImageZoomOpen(true)}
-                          />
+                          {item.isVideo ? (
+                            item.isExternal ? (
+                              <iframe
+                                src={item.externalUrl}
+                                title={item.alt || product.title}
+                                className="w-full h-full"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                              ></iframe>
+                            ) : (
+                              <video
+                                controls
+                                className="w-full h-full object-cover"
+                                poster={item.previewImageUrl || undefined}
+                              >
+                                {item.sources?.map((source) => (
+                                  <source
+                                    key={source.url}
+                                    src={source.url}
+                                    type={source.mimeType}
+                                  />
+                                ))}
+                                Your browser does not support the video tag.
+                              </video>
+                            )
+                          ) : (
+                            <Image
+                              src={item.url}
+                              alt={item.alt || product.title}
+                              fill
+                              sizes="(max-width:768px) 100vw, 50vw"
+                              className="object-cover"
+                              onClick={() => {
+                                setSelectedSlideIndex(index);
+                                openZoomAtIndex(index);
+                              }}
+                            />
+                          )}
                         </SwiperSlide>
                       ))
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <span className="text-gray-500 font-extralight tracking-[0.2em] text-sm uppercase">
-                          No Image Available
+                          No Media Available
                         </span>
                       </div>
                     )}
@@ -733,34 +942,49 @@ export default function ProductPageClient({
               </div>
 
               {/* Product Images Grid */}
-              {product.images.edges.length > 1 && (
+              {galleryItems.length > 1 && (
                 <div className="grid grid-cols-2 gap-4">
-                  {product.images.edges.map(({ node }, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        setSelectedImageIndex(index);
-                        if (swiperRef.current) swiperRef.current.slideTo(index);
-                        if (
-                          typeof window !== "undefined" &&
-                          window.innerWidth < 768
-                        ) {
-                          setIsImageZoomOpen(true);
-                        }
-                      }}
-                      className={`relative aspect-[4/5] border overflow-hidden  transition-all duration-300 ${
-                        selectedImageIndex === index
-                          ? "border-gray-400 "
-                          : "border-gray-200 hover:border-gray-300"
-                      }`}
-                    >
-                      <img
-                        src={node.url}
-                        alt={node.altText || product.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </button>
-                  ))}
+                  {galleryItems.map((item, index) => {
+                    const thumbnailSrc = item.previewImageUrl || item.url;
+                    return (
+                      <button
+                        key={item.id || index}
+                        onClick={() => {
+                          setSelectedSlideIndex(index);
+                          swiperRef.current?.slideTo(index);
+                          if (
+                            !item.isVideo &&
+                            typeof window !== "undefined" &&
+                            window.innerWidth < 768
+                          ) {
+                            openZoomAtIndex(index);
+                          }
+                        }}
+                        className={`relative aspect-[4/5] border overflow-hidden  transition-all duration-300 ${
+                          selectedSlideIndex === index
+                            ? "border-gray-400 "
+                            : "border-gray-200 hover:border-gray-300"
+                        }`}
+                      >
+                        {thumbnailSrc ? (
+                          <img
+                            src={thumbnailSrc}
+                            alt={item.alt || product.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500 text-xs uppercase tracking-[0.2em]">
+                            No Preview
+                          </div>
+                        )}
+                        {item.isVideo && (
+                          <span className="absolute inset-0 flex items-center justify-center bg-black/30 text-white">
+                            <FaPlay className="text-lg" />
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -922,12 +1146,12 @@ export default function ProductPageClient({
       </main>
 
       {/* Image Zoom Modal */}
-      {isImageZoomOpen && (
+      {isImageZoomOpen && imageItemsForZoom.length > 0 && (
         <ImageZoomModal
-          images={product.images.edges}
-          selectedIndex={selectedImageIndex}
+          images={imageItemsForZoom}
+          selectedIndex={zoomImageIndex}
           onClose={() => setIsImageZoomOpen(false)}
-          onImageChange={setSelectedImageIndex}
+          onImageChange={handleZoomImageChange}
         />
       )}
     </>
