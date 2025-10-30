@@ -1,6 +1,27 @@
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
 
+// ✅ Add this helper block right here:
+
+function normalizeCheckoutUrl(cart) {
+  if (!cart?.checkoutUrl) return cart;
+
+  // force it to use your Shopify subdomain instead of your Vercel/custom domain
+  const shopifyDomain = `https://${process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN}`;
+
+  try {
+    // replace any wrong domain in checkout URL
+    cart.checkoutUrl = cart.checkoutUrl.replace(
+      /https:\/\/[^/]+/,
+      shopifyDomain
+    );
+  } catch (err) {
+    console.error("Failed to normalize checkout URL:", err);
+  }
+
+  return cart;
+}
+
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
@@ -76,7 +97,7 @@ export function CartProvider({ children }) {
 
         if (response.ok) {
           const data = await response.json();
-          setCart(data);
+          setCart(normalizeCheckoutUrl(data));
         } else {
           console.error("Failed to create new cart");
         }
@@ -155,7 +176,7 @@ export function CartProvider({ children }) {
       }
 
       const data = await addResponse.json();
-      setCart(data);
+      setCart(normalizeCheckoutUrl(data));
     } catch (err) {
       console.error("Failed to add to cart:", err);
     }
@@ -196,7 +217,7 @@ export function CartProvider({ children }) {
       }
 
       const data = await response.json();
-      setCart(data);
+      setCart(normalizeCheckoutUrl(data));
     } catch (err) {
       console.error("Failed to remove from cart:", err);
     }
@@ -238,7 +259,7 @@ export function CartProvider({ children }) {
       }
 
       const data = await response.json();
-      setCart(data);
+      setCart(normalizeCheckoutUrl(data));
     } catch (err) {
       console.error("Failed to update cart item:", err);
     }
@@ -249,6 +270,12 @@ export function CartProvider({ children }) {
     localStorage.removeItem("cartId");
     localStorage.removeItem("cart");
   };
+
+  useEffect(() => {
+    if (cart?.checkoutUrl) {
+      console.log("✅ Normalized Checkout URL:", cart.checkoutUrl);
+    }
+  }, [cart]);
 
   return (
     <CartContext.Provider

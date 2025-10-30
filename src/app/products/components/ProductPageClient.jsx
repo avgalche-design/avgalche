@@ -624,20 +624,27 @@ export default function ProductPageClient({
         return <SizeGuide sizeGuideData={sizeGuideData} />;
       case "wash-care":
         return (
-          <div className="space-y-6">
+          <div className="space-y-6 flex flex-col items-center justify-center">
             <div className="text-center">
               <h3 className="text-xl font-extralight tracking-[0.3em] text-black mb-2 uppercase">
                 Care Instructions
               </h3>
               <div className="w-16 h-[1px] bg-gradient-to-r from-transparent via-gray-400 to-transparent mx-auto opacity-60"></div>
             </div>
+
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-8">
-              <div className="space-y-3  font-light text-gray-700">
-                <RenderShopifyRichText richTextJson={washCareInfo} />
-              </div>
+              <ul className="space-y-2 font-light text-gray-700">
+                {washCareInfo
+                  ?.split("\n")
+                  ?.filter((line) => line.trim() !== "")
+                  ?.map((line, idx) => (
+                    <li key={idx}>{line}</li>
+                  ))}
+              </ul>
             </div>
           </div>
         );
+
       case "shipping":
         return (
           <div className="space-y-6">

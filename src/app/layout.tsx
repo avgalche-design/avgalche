@@ -15,7 +15,7 @@ import CurrencyModal from "../components/CurrencyModal";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AV GaLche - The First True Indian Luxury Fashion House",
+  title: "AV GaLche - Timeless Stories Tailored for You",
   description:
     "Founded by Gurvansh Singh Bhatia & Aashman Mahajan, AV GaLche is redefining Indian luxury with timeless designs inspired by real stories, heritage, and sophistication.",
   keywords: [

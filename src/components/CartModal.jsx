@@ -5,6 +5,8 @@ import { FaTimes, FaTrash, FaMinus, FaPlus } from "react-icons/fa";
 import Image from "next/image";
 import { useCurrency } from "../app/context/CurrencyContext";
 
+const SHOPIFY_CHECKOUT_DOMAIN = "https://s0y8ad-px.myshopify.com";
+
 export default function CartModal() {
   const {
     cart,
@@ -73,13 +75,16 @@ export default function CartModal() {
   }, 0);
   const subtotalCurrency =
     lines[0]?.node?.merchandise?.price?.currencyCode ||
-    lines[0]?.node?.merchandise?.product?.priceRange?.minVariantPrice?.currencyCode ||
+    lines[0]?.node?.merchandise?.product?.priceRange?.minVariantPrice
+      ?.currencyCode ||
     "INR";
 
   const handleQuantityChange = (lineId, currentQuantity, change) => {
     const newQuantity = Math.max(1, currentQuantity + change);
     updateCartItemQuantity(lineId, newQuantity);
   };
+
+  console.log("🛒 Checkout URL:", cart?.checkoutUrl);
 
   return (
     <AnimatePresence>
@@ -169,7 +174,8 @@ export default function CartModal() {
                         <div className="mt-1 sm:mt-2">
                           <p className="font-semibold text-sm sm:text-base text-black">
                             {format(
-                              parseFloat(node.merchandise.price?.amount || 0) * node.quantity,
+                              parseFloat(node.merchandise.price?.amount || 0) *
+                                node.quantity,
                               node.merchandise.price?.currencyCode || "INR"
                             )}
                           </p>
@@ -178,7 +184,8 @@ export default function CartModal() {
                               {format(
                                 parseFloat(node.merchandise.price.amount),
                                 node.merchandise.price?.currencyCode || "INR"
-                              )} each
+                              )}{" "}
+                              each
                             </p>
                           )}
                         </div>
@@ -233,12 +240,23 @@ export default function CartModal() {
                     </span>
                   </div>
                   <div className="space-y-3">
-                    <a
-                      href={cart.checkoutUrl}
-                      className="block w-full bg-black text-white text-center py-3 sm:py-4 rounded-md font-semibold text-base sm:text-lg hover:bg-neutral-800 border border-black transition-colors"
-                    >
-                      Proceed to Checkout
-                    </a>
+                    {cart?.checkoutUrl && (
+                      <button
+                        onClick={() => {
+                          try {
+                            if (!cart?.checkoutUrl)
+                              throw new Error("No checkout URL found");
+                            window.location.href = cart.checkoutUrl; // ✅ Use the original Shopify checkout link
+                          } catch (err) {
+                            console.error("Checkout redirect failed:", err);
+                          }
+                        }}
+                        className="block w-full bg-black text-white text-center py-3 sm:py-4 rounded-md font-semibold text-base sm:text-lg hover:bg-neutral-800 border border-black transition-colors"
+                      >
+                        Proceed to Checkout
+                      </button>
+                    )}
+
                     <button
                       onClick={() => setIsCartOpen(false)}
                       className="block w-full bg-white text-black text-center py-3 rounded-md font-semibold border border-black hover:bg-gray-100 transition-colors text-sm sm:text-base"
