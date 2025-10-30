@@ -11,6 +11,7 @@ const PRODUCT_QUERY = `
       title
       description
       productType
+      handle
       metafields(identifiers: [
         {namespace: "custom", key: "wash_care_instructions"},
         {namespace: "custom", key: "composition_care"},
@@ -26,6 +27,35 @@ const PRODUCT_QUERY = `
           node {
             url
             altText
+          }
+        }
+      }
+      media(first: 10) {
+        edges {
+          node {
+            id
+            mediaContentType
+            alt
+            previewImage {
+              url
+              altText
+            }
+            ... on MediaImage {
+              image {
+                url
+                altText
+              }
+            }
+            ... on Video {
+              sources {
+                url
+                mimeType
+              }
+            }
+            ... on ExternalVideo {
+              host
+              originUrl
+            }
           }
         }
       }
