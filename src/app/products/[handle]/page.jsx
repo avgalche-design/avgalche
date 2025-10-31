@@ -14,21 +14,41 @@ const PRODUCT_QUERY = `
       metafields(identifiers: [
         {namespace: "custom", key: "wash_care_instructions"},
         {namespace: "custom", key: "composition_care"},
-  {namespace: "custom", key: "fabric_and_care"},
+        {namespace: "custom", key: "fabric_and_care"},
         {namespace: "custom", key: "shipping_info"},
         {namespace: "custom", key: "size_guide"}
       ]) {
         key
         value
       }
-      images(first: 10) {
-        edges {
-          node {
-            url
-            altText
-          }
+      media(first: 10) {
+  edges {
+    node {
+      mediaContentType
+      alt
+      ... on MediaImage {
+        image { url }
+      }
+      ... on Video {
+        sources {
+          url
+          mimeType
+        }
+        previewImage {
+          url
         }
       }
+      ... on ExternalVideo {
+        host
+        originUrl
+        previewImage {
+          url
+        }
+      }
+    }
+  }
+}
+
       variants(first: 10) {
         edges {
           node {
@@ -54,11 +74,29 @@ const RELATED_PRODUCTS_QUERY = `
         id
         title
         handle
-        images(first: 1) {
+        media(first: 1) {
           edges {
             node {
-              url
-              altText
+              mediaContentType
+              alt
+              ... on MediaImage {
+                image {
+                  url
+                }
+              }
+              ... on Video {
+                sources {
+                  url
+                  mimeType
+                  format
+                  height
+                  width
+                }
+              }
+              ... on ExternalVideo {
+                host
+                originUrl
+              }
             }
           }
         }
@@ -171,15 +209,25 @@ Refund & Return Policy: Returns and refunds are accepted within 14 days of deliv
     { next: { revalidate: 60 } } // ✅ updated
   );
 
-  const relatedProducts = relatedData.products.edges
-    .map((edge) => ({
+  const relatedProducts =
+    relatedData?.products?.edges?.map((edge) => ({
       ...edge.node,
-      images: edge.node.images.edges.map((imgEdge) => imgEdge.node),
-      variants: edge.node.variants.edges.map((vEdge) => ({
-        price: vEdge.node.price,
-      })),
-    }))
-    .filter((prod) => prod.handle !== handle);
+      images: edge.node.media?.edges
+        ? edge.node.media.edges
+            .map((mediaEdge) => {
+              const node = mediaEdge.node;
+              if (node.mediaContentType === "IMAGE" && node.image) {
+                return { url: node.image.url, altText: node.alt || "" };
+              }
+              return null;
+            })
+            .filter(Boolean)
+        : [],
+      variants:
+        edge.node.variants?.edges?.map((vEdge) => ({
+          price: vEdge.node.price,
+        })) || [],
+    })) || [];
 
   return (
     <>

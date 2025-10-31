@@ -133,6 +133,8 @@ function ImageZoomModal({ images, selectedIndex, onClose, onImageChange }) {
     }
   };
 
+  const currentMedia = images[currentIndex]?.node;
+
   return (
     <AnimatePresence>
       <motion.div
@@ -192,12 +194,22 @@ function ImageZoomModal({ images, selectedIndex, onClose, onImageChange }) {
                 transition: isPanning ? "none" : "transform 0.2s ease-out",
               }}
             >
-              <img
-                src={images[currentIndex]?.node.url}
-                alt={images[currentIndex]?.node.altText || "Product image"}
-                className="max-w-full max-h-[85vh] object-contain select-none"
-                draggable={false}
-              />
+              {currentMedia.mediaContentType === "IMAGE" && (
+                <img
+                  src={currentMedia.image.url}
+                  alt={currentMedia.alt || "Product image"}
+                  className="w-full h-full object-cover"
+                  draggable={false}
+                />
+              )}
+              {currentMedia.mediaContentType === "VIDEO" && (
+                <video
+                  src={currentMedia.sources[0]?.url}
+                  controls
+                  className="max-w-full max-h-[85vh] object-contain select-none"
+                  draggable={false}
+                />
+              )}
             </div>
           </div>
 
@@ -211,26 +223,62 @@ function ImageZoomModal({ images, selectedIndex, onClose, onImageChange }) {
           {/* Thumbnail Navigation */}
           {images.length > 1 && (
             <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-10 flex gap-2">
-              {images.map((image, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setCurrentIndex(index);
-                    onImageChange(index);
-                  }}
-                  className={`w-16 h-16 border-2 rounded-lg overflow-hidden transition-all ${
-                    currentIndex === index
-                      ? "border-white scale-110"
-                      : "border-white/30 hover:border-white/60"
-                  }`}
-                >
-                  <img
-                    src={image.node.url}
-                    alt={image.node.altText || "Thumbnail"}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
+              {images.map((media, index) => {
+                const node = media.node;
+                let thumbSrc = "";
+                let altText = node.alt || "Thumbnail";
+
+                if (node.mediaContentType === "IMAGE" && node.image?.url) {
+                  thumbSrc = node.image.url;
+                  altText = node.alt || "Image thumbnail";
+                } else if (
+                  node.mediaContentType === "VIDEO" &&
+                  node.previewImage?.url
+                ) {
+                  thumbSrc = node.previewImage.url;
+                  altText = "Video thumbnail";
+                } else if (
+                  node.mediaContentType === "EXTERNAL_VIDEO" &&
+                  node.previewImage?.url
+                ) {
+                  thumbSrc = node.previewImage.url;
+                  altText = "Video thumbnail";
+                } else {
+                  thumbSrc = "/video-placeholder.png";
+                  altText = "Media not available";
+                }
+
+                return (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setCurrentIndex(index);
+                      onImageChange(index);
+                    }}
+                    className={`w-16 h-16 border-2 rounded-lg overflow-hidden transition-all ${
+                      currentIndex === index
+                        ? "border-white scale-110"
+                        : "border-white/30 hover:border-white/60"
+                    }`}
+                  >
+                    <img
+                      src={thumbSrc}
+                      alt={altText}
+                      className="w-full h-full object-cover"
+                    />
+                    {node.mediaContentType === "VIDEO" && (
+                      <div className="absolute inset-0 flex items-center justify-center text-white pointer-events-none">
+                        <svg
+                          className="w-6 h-6 fill-current"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           )}
         </motion.div>
@@ -578,7 +626,7 @@ export default function ProductPageClient({
       selectedVariantTitle: selectedVariant.title,
       selectedVariantAvailableForSale: selectedVariant.availableForSale,
       selectedVariantPrice: selectedVariant.price,
-      images: product.images.edges,
+      images: product.media.edges,
       variants: product.variants.edges.map((edge) => ({
         id: edge.node.id,
         title: edge.node.title,
@@ -705,22 +753,50 @@ export default function ProductPageClient({
                       setSelectedImageIndex(swiper.activeIndex)
                     }
                   >
-                    {product.images.edges.length > 0 ? (
-                      product.images.edges.map(({ node }, index) => (
-                        <SwiperSlide
-                          key={index}
-                          className="relative aspect-[4/5]"
-                        >
-                          <Image
-                            src={node.url}
-                            alt={node.altText || product.title}
-                            fill
-                            sizes="(max-width:768px) 100vw, 50vw"
-                            className="object-cover"
-                            onClick={() => setIsImageZoomOpen(true)}
-                          />
-                        </SwiperSlide>
-                      ))
+                    {product.media.edges.length > 0 ? (
+                      product.media.edges.map(({ node }, index) => {
+                        if (node.mediaContentType === "IMAGE") {
+                          return (
+                            <SwiperSlide
+                              key={index}
+                              className="relative aspect-[4/5]"
+                            >
+                              <Image
+                                src={node.image.url}
+                                alt={node.alt || product.title}
+                                fill
+                                sizes="(max-width:768px) 100vw, 50vw"
+                                className="object-cover"
+                                onClick={() => setIsImageZoomOpen(true)}
+                              />
+                            </SwiperSlide>
+                          );
+                        }
+                        if (node.mediaContentType === "VIDEO") {
+                          const videoSrc = node.sources[0]?.url;
+                          return (
+                            <SwiperSlide
+                              key={index}
+                              className="relative aspect-[4/5] flex items-center justify-center bg-black"
+                            >
+                              <video
+                                src={videoSrc}
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                className="w-full h-full object-cover"
+                                onClick={() => setIsImageZoomOpen(true)}
+                              />
+                            </SwiperSlide>
+                          );
+                        }
+                        // if (node.mediaContentType === "EXTERNAL_VIDEO") {
+                        //   // Handle external video (e.g., YouTube, Vimeo) if needed
+                        //   // For example, render iframe with node.originUrl
+                        // }
+                        return null;
+                      })
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
                         <span className="text-gray-500 font-extralight tracking-[0.2em] text-sm uppercase">
@@ -733,34 +809,63 @@ export default function ProductPageClient({
               </div>
 
               {/* Product Images Grid */}
-              {product.images.edges.length > 1 && (
+              {product.media.edges.length > 1 && (
                 <div className="grid grid-cols-2 gap-4">
-                  {product.images.edges.map(({ node }, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        setSelectedImageIndex(index);
-                        if (swiperRef.current) swiperRef.current.slideTo(index);
-                        if (
-                          typeof window !== "undefined" &&
-                          window.innerWidth < 768
-                        ) {
-                          setIsImageZoomOpen(true);
-                        }
-                      }}
-                      className={`relative aspect-[4/5] border overflow-hidden  transition-all duration-300 ${
-                        selectedImageIndex === index
-                          ? "border-gray-400 "
-                          : "border-gray-200 hover:border-gray-300"
-                      }`}
-                    >
-                      <img
-                        src={node.url}
-                        alt={node.altText || product.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </button>
-                  ))}
+                  {product.media.edges.map(({ node }, index) => {
+                    let thumbSrc = "";
+                    if (node.mediaContentType === "IMAGE" && node.image?.url) {
+                      thumbSrc = node.image.url;
+                    } else if (
+                      node.mediaContentType === "VIDEO" &&
+                      node.previewImage?.url
+                    ) {
+                      thumbSrc = node.previewImage.url;
+                    } else if (
+                      node.mediaContentType === "EXTERNAL_VIDEO" &&
+                      node.previewImage?.url
+                    ) {
+                      thumbSrc = node.previewImage.url;
+                    } else {
+                      thumbSrc = "/video-placeholder.png";
+                    }
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          setSelectedImageIndex(index);
+                          if (swiperRef.current)
+                            swiperRef.current.slideTo(index);
+                          if (
+                            typeof window !== "undefined" &&
+                            window.innerWidth < 768
+                          ) {
+                            setIsImageZoomOpen(true);
+                          }
+                        }}
+                        className={`relative aspect-[4/5] border overflow-hidden transition-all duration-300 ${
+                          selectedImageIndex === index
+                            ? "border-gray-400"
+                            : "border-gray-200 hover:border-gray-300"
+                        }`}
+                      >
+                        <img
+                          src={thumbSrc}
+                          alt={node.alt || product.title}
+                          className="w-full h-full object-cover"
+                        />
+                        {node.mediaContentType === "VIDEO" && (
+                          <div className="absolute inset-0 flex items-center justify-center text-white pointer-events-none">
+                            <svg
+                              className="w-6 h-6 fill-current"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -924,7 +1029,7 @@ export default function ProductPageClient({
       {/* Image Zoom Modal */}
       {isImageZoomOpen && (
         <ImageZoomModal
-          images={product.images.edges}
+          images={product.media.edges}
           selectedIndex={selectedImageIndex}
           onClose={() => setIsImageZoomOpen(false)}
           onImageChange={setSelectedImageIndex}
