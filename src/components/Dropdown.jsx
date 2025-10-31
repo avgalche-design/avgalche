@@ -35,6 +35,10 @@ const menuData = [
         label: "AV GaLche's Co-ord",
         href: "/category/co-ord",
       },
+      {
+        label: "Av Galche's Sweatshirt",
+        href: "/category/sweats",
+      },
     ],
   },
   {

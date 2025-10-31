@@ -94,6 +94,15 @@ const categoryMapping = {
     productTypes: ["Co-ord"],
     tags: ["co-ord", "ensemble", "set"],
   },
+  sweats: {
+    title: "AV GaLche's Sweatshirts",
+    description:
+      "Luxury comfort redefined. Explore AV GaLche's premium sweatshirts, crafted for elegance and ease.",
+    collectionNames: ["GaLche's Sweats", "galches-sweats"],
+    productTypes: ["Sweatshirt", "Sweats"],
+    tags: ["sweat", "sweats", "sweatshirt"],
+  },
+
   "womens-shirts": {
     title: "AV GaLche Women's Shirts",
     description:
