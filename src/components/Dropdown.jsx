@@ -15,7 +15,7 @@ const menuData = [
     href: "/",
   },
   {
-    label: "Gentleman's Collection",
+    label: "AV Men",
     key: "forHim",
     href: "/category/for-him",
     subItems: [
@@ -49,6 +49,10 @@ const menuData = [
       {
         label: "AV GaLche Women's Shirts",
         href: "/category/womens-shirts",
+      },
+      {
+        label: "Av Galche's Sweatshirt",
+        href: "/category/sweats",
       },
     ],
   },
