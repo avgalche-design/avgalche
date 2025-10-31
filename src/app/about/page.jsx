@@ -17,9 +17,9 @@ export default function AboutPage() {
             {/* Left paragraph */}
             <p className="text-[#70706F] text-base md:text-sm leading-relaxed md:text-left w-full md:max-w-md">
               Founded by Gurvansh Singh Bhatia and Aashman Mahajan, AV GaLche is
-              redefining Indian luxury. Inspired by real stories and timeless
-              classics, every piece blends heritage with refined modernity —
-              designed to resonate across generations.
+              redefining Indian Premium Clothing. Inspired by real stories and
+              timeless classics, every piece blends heritage with refined
+              modernity designed to resonate across generations.
             </p>
 
             {/* Right link */}
@@ -38,7 +38,7 @@ export default function AboutPage() {
           {/* Left Image */}
           <div className="relative w-full h-[400px]">
             <Image
-              src="/images/p3.avif"
+              src="/images/story1.webp"
               alt="Fashion Women"
               fill
               className="object-cover"
@@ -48,7 +48,7 @@ export default function AboutPage() {
           {/* Right Image */}
           <div className="relative w-full h-[400px]">
             <Image
-              src="/images/p4.avif"
+              src="/images/story2.webp"
               alt="Fashion Men and Women"
               fill
               className="object-cover"
@@ -82,8 +82,8 @@ export default function AboutPage() {
                 <h3 className="text-2xl font-light mb-3">Our Story</h3>
                 <p className="text-gray-600 leading-relaxed">
                   AV GaLche began as a shared dream of Gurvansh Singh Bhatia and
-                  Aashman Mahajan — not just to create clothing, but to craft a
-                  legacy of Indian luxury rooted in authenticity.
+                  Aashman Mahajan not just to create clothing, but to craft a
+                  legacy of Indian Premium Clothing rooted in authenticity.
                 </p>
               </div>
 
@@ -102,8 +102,8 @@ export default function AboutPage() {
                 <h3 className="text-2xl font-light mb-3">Our Ambition</h3>
                 <p className="text-gray-600 leading-relaxed">
                   AV GaLche stands for heritage reinvented and authenticity
-                  celebrated — a vision to redefine Indian luxury on the global
-                  stage.
+                  celebrated a vision to redefine Indian Premium Clothing on the
+                  global stage.
                 </p>
               </div>
             </div>
@@ -112,8 +112,8 @@ export default function AboutPage() {
           {/* Tagline */}
           <div className="mt-16 text-center">
             <p className="uppercase tracking-widest font-medium text-gray-800 text-sm">
-              Heritage Reinvented • Authenticity Celebrated • Indian Luxury
-              Elevated
+              Heritage Reinvented • Authenticity Celebrated • Indian Premium
+              Clothing Elevated
             </p>
           </div>
         </div>

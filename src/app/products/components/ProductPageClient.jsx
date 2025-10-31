@@ -402,12 +402,13 @@ function SizeGuide({ sizeGuideData }) {
   const defaultSizeGuide = {
     title: "Size Guide",
     measurements: [
-      { size: "XS", chest: "86-91cm", waist: "71-76cm", length: "66cm" },
-      { size: "S", chest: "91-96cm", waist: "76-81cm", length: "68cm" },
-      { size: "M", chest: "96-101cm", waist: "81-86cm", length: "70cm" },
-      { size: "L", chest: "101-106cm", waist: "86-91cm", length: "72cm" },
-      { size: "XL", chest: "106-111cm", waist: "91-96cm", length: "74cm" },
-      { size: "XXL", chest: "111-116cm", waist: "96-101cm", length: "76cm" },
+      { size: "XS", chest: "101.6cm", shoulder: "50-51cm", length: "67cm" },
+      { size: "S", chest: "106.7 cm", shoulder: "53cm", length: "69cm" },
+      { size: "M", chest: "111.8cm", shoulder: "56cm", length: "70cm" },
+      { size: "L", chest: "116.8cm", shoulder: "58cm", length: "71cm" },
+      { size: "XL", chest: "121.9cm", shoulder: "61cm", length: "72cm" },
+      { size: "XXL", chest: "127cm", shoulder: "64cm", length: "74cm" },
+      { size: "XXXL", chest: "132.1cm", shoulder: "66cm", length: "75cm" },
     ],
   };
 
@@ -443,14 +444,19 @@ function SizeGuide({ sizeGuideData }) {
   const displayRange = (text) => {
     const parsed = parseRange(text);
     if (parsed.raw) return parsed.raw;
+
+    // Use only one value (average or single)
+    let value = parsed.min;
+    if (parsed.max && parsed.max !== parsed.min) {
+      value = (parsed.min + parsed.max) / 2; // take the average if a range
+    }
+
     if (unit === "cm") {
-      const from = parsed.unit === "in" ? inToCm(parsed.min) : parsed.min;
-      const to = parsed.unit === "in" ? inToCm(parsed.max) : parsed.max;
-      return `${from}-${to}cm`;
+      const cmValue = parsed.unit === "in" ? inToCm(value) : value;
+      return `${cmValue.toFixed(1)}cm`;
     } else {
-      const from = parsed.unit === "cm" ? cmToIn(parsed.min) : parsed.min;
-      const to = parsed.unit === "cm" ? cmToIn(parsed.max) : parsed.max;
-      return `${from}-${to}in`;
+      const inValue = parsed.unit === "cm" ? cmToIn(value) : value;
+      return `${inValue.toFixed(1)}in`;
     }
   };
 
@@ -503,7 +509,7 @@ function SizeGuide({ sizeGuideData }) {
                   Chest
                 </th>
                 <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-gray-600 text-xs uppercase">
-                  Waist
+                  Shoulder
                 </th>
                 <th className="text-left py-4 px-6 font-extralight tracking-[0.15em] text-gray-600 text-xs uppercase">
                   Length
@@ -523,7 +529,7 @@ function SizeGuide({ sizeGuideData }) {
                     {displayRange(measurement.chest)}
                   </td>
                   <td className="py-4 px-6 text-gray-600 group-hover:text-gray-700 transition-colors font-light">
-                    {displayRange(measurement.waist)}
+                    {displayRange(measurement.shoulder)}
                   </td>
                   <td className="py-4 px-6 text-gray-600 group-hover:text-gray-700 transition-colors font-light">
                     {displayRange(measurement.length)}
@@ -558,10 +564,10 @@ function SizeGuide({ sizeGuideData }) {
                   </div>
                   <div>
                     <p className="text-gray-500 font-extralight tracking-[0.1em] uppercase mb-1">
-                      Waist
+                      Shoulder
                     </p>
                     <p className="text-gray-700 font-light">
-                      {displayRange(measurement.waist)}
+                      {displayRange(measurement.shoulder)}
                     </p>
                   </div>
                   <div>

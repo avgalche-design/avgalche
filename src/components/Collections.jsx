@@ -25,8 +25,7 @@ export default function Collections() {
           <div
             className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-out group-hover:scale-105"
             style={{
-              backgroundImage:
-                "url('https://images.unsplash.com/photo-1704989969259-39f5189359bf?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+              backgroundImage: "url('/images/winter2.jpg')",
             }}
           />
           {/* Darker gradient for text legibility */}
@@ -54,7 +53,7 @@ export default function Collections() {
           <div
             className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-out group-hover:scale-105"
             style={{
-              backgroundImage: "url('/images/summer.jpg')",
+              backgroundImage: "url('/images/summer.webp')",
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/10 transition-opacity duration-500 group-hover:from-black/80" />

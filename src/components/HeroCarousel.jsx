@@ -3,18 +3,9 @@ import React, { useRef, useEffect, useState } from "react";
 import { Facebook, Instagram, Twitter } from "lucide-react";
 import { IoIosArrowRoundDown } from "react-icons/io";
 
-const imagesSet1 = [
-  "https://images.unsplash.com/photo-1743024599050-391c63c52d32?q=80&w=687&auto=format&fit=crop",
-  // "https://images.unsplash.com/photo-1600481006437-5ef63a680aa5?q=80&w=687&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1694979182073-59729fdfcaf5?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1559907286-d76559dcbdcc?q=80&w=735&auto=format&fit=crop",
-];
+const imagesSet1 = ["/images/a2.webp", "/images/a23.webp", "/images/a3.webp"];
 
-const imagesSet2 = [
-  "https://plus.unsplash.com/premium_photo-1675186049419-d48f4b28fe7c?q=80&w=1587&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1682752392983-12ab417802d7?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1575403538007-acb790100421?q=80&w=687&auto=format&fit=crop",
-];
+const imagesSet2 = ["/images/a5.webp", "/images/a1.webp", "/images/a6.webp"];
 
 export default function HeroSection() {
   const set1Ref = useRef(null);

@@ -183,24 +183,36 @@ export default async function ProductPage({ params }) {
     metafields.fabric_and_care ||
     metafields.wash_care_instructions ||
     `
-    • Machine wash cold with like colors
-    • Do not bleach
-    • Tumble dry low heat
-    • Iron on low temperature
-    • Do not dry clean
-    • Wash inside out to preserve print and color
+    • Turn inside out before washing to preserve texture, weave, and print.
+• Zip up before wash if applicable.
+• Cold gentle cycle or light hand wash recommended.
+• Avoid bleach, soaking, friction, and harsh detergents.
+• Do not tumble dry or wring.
+• Dry flat or line dry in shade; let the fabric rest naturally.
+• Cool iron on reverse side, avoiding printed, embroidered, or velvet areas.
+• Do not rub or soak velvet; allow it to dry flat in shade to maintain softness.
   `;
 
   const shippingInfo =
     metafields.shipping_info ||
     `
-    Shipping Method: Orders are shipped via registered courier or speed post—internationally through international couriers and domestically through domestic couriers.
-
-Dispatch Timeline: Orders are dispatched within 6–8 days or as per the confirmed delivery date; delays by courier/postal services are beyond AG Enterprises' control.
-
-Delivery & Support: Orders are delivered to the buyer's provided address, with confirmation sent to the registered email; for support, contact 8851760427 or support@avgalche.com.
-
-Refund & Return Policy: Returns and refunds are accepted within 14 days of delivery, subject to our return policy terms.
+  Shipping & Delivery At AG Enterprises, we ensure your orders are shipped securely and promptly.
+• Domestic Shipping:
+Delivered via trusted domestic courier partners.
+• International Shipping:
+Handled through reliable international courier services.
+All orders are dispatched within the next business day or as per the confirmed delivery schedule.
+Please note: Delivery delays caused by courier or postal services are beyond our control.                                                                                                       Order Confirmation & Support
+Once your order is dispatched, a confirmation email will be sent to your registered email address.
+For any queries or support, feel free to contact us:
+‪+91 8851760427‬
+support@avgalche.com
+Returns & Refunds
+We offer a 7-day return and refund window from the date of delivery.
+Returns are subject to our Return Policy Terms, which ensure a smooth and fair process.
+To initiate a return or refund:
+• Visit My Account on our website and follow the refund initiation steps.
+• If you're unable to reach our customer support team, this is the fastest way to begin your request.
   `;
 
   // ✅ Related products revalidate automatically as well
