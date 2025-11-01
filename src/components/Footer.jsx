@@ -216,7 +216,7 @@ export default function Footer() {
 
       {/* Bottom crafted by */}
       <div className="relative z-20 text-center mt-10 md:mt-6 text-xs md:text-sm tracking-wide uppercase text-neutral-400">
-        © 2025 Crafted by{" "}
+        © 2025 AV GaLche Crafted by{" "}
         <a
           href="https://www.weularity.com"
           target="_blank"
