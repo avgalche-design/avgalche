@@ -47,7 +47,7 @@ const menuData = [
     href: "/category/for-her",
     subItems: [
       {
-        label: "AV GaLche Women's Shirts",
+        label: "AV GaLche Women's Shirts & Tees",
         href: "/category/womens-shirts",
       },
       {
