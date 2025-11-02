@@ -11,6 +11,7 @@ import CartModal from "../components/CartModal";
 import WishlistModal from "../components/WishlistModal";
 import SearchModal from "../components/SearchModal";
 import CurrencyModal from "../components/CurrencyModal";
+import Clarity from "@/components/Clairty";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -136,6 +137,7 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className}>
+        <Clarity />
         <CartProvider>
           <WishlistProvider>
             <SearchProvider>
