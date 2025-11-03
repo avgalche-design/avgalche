@@ -18,11 +18,11 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "AV GaLche - Timeless Stories Tailored for You",
   description:
-    "Founded by Gurvansh Singh Bhatia & Aashman Mahajan, AV GaLche is redefining Indian luxury with timeless designs inspired by real stories, heritage, and sophistication.",
+    "Founded by Gurvansh Singh Bhatia & Aashman Mahajan, AV GaLche is redefining Indian Premium Clothing with timeless designs inspired by real stories, heritage, and sophistication.",
   keywords: [
     "AV GaLche",
-    "luxury fashion India",
-    "Indian luxury brand",
+    "Premium Clothing fashion India",
+    "Indian Premium Clothing brand",
     "heritage fashion",
     "timeless design",
     "sophisticated clothing",
@@ -30,25 +30,25 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://www.avgalche.com",
-    title: "AV GaLche - Luxury Fashion from India",
+    title: "AV GaLche - Premium Clothing Fashion from India",
     description:
-      "Discover refined elegance and timeless heritage with AV GaLche, India’s first true global luxury fashion house.",
+      "Discover refined elegance and timeless heritage with AV GaLche, India’s first true global Premium Clothing fashion house.",
     siteName: "AV GaLche",
     images: [
       {
         url: "https://www.avgalche.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "AV GaLche Luxury Fashion",
+        alt: "AV GaLche Premium Clothing Fashion",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     site: "@AVGaLche",
-    title: "AV GaLche - Timeless Indian Luxury",
+    title: "AV GaLche - Timeless Indian Premium Clothing",
     description:
-      "AV GaLche crafts global luxury fashion from India, blending old-school classics with modern refinement.",
+      "AV GaLche crafts global Premium Clothing fashion from India, blending old-school classics with modern refinement.",
     images: "https://www.avgalche.com/og-image.jpg",
   },
   icons: {
@@ -79,7 +79,7 @@ export default function RootLayout({
       "https://twitter.com/AVGaLche",
     ],
     description:
-      "AV GaLche is India’s first true global luxury fashion house, celebrating heritage, authenticity, and timeless elegance.",
+      "AV GaLche is India’s first true global Premium Clothing fashion house, celebrating heritage, authenticity, and timeless elegance.",
   };
 
   const websiteSchema = {
