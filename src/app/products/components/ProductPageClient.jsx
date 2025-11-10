@@ -402,6 +402,7 @@ function SizeGuide({ sizeGuideData }) {
   const defaultSizeGuide = {
     title: "Size Guide",
     measurements: [
+      { size: "XXS", chest: "76.2cm", shoulder: "48cm", length: "65.5cm" },
       { size: "XS", chest: "101.6cm", shoulder: "50-51cm", length: "67cm" },
       { size: "S", chest: "106.7 cm", shoulder: "53cm", length: "69cm" },
       { size: "M", chest: "111.8cm", shoulder: "56cm", length: "70cm" },

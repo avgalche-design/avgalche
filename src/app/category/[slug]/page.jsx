@@ -90,10 +90,11 @@ const categoryMapping = {
     title: "AV GaLche's Co-ord",
     description:
       "Perfectly coordinated sets that elevate your style effortlessly.",
-    collectionNames: ["Co-ord"],
+    collectionNames: ["AV GaLche's Co-ord", "galche-co-oord"],
     productTypes: ["Co-ord"],
     tags: ["co-ord", "ensemble", "set"],
   },
+
   sweats: {
     title: "AV GaLche's Sweatshirts",
     description:

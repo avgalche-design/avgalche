@@ -32,7 +32,7 @@ export default function Collections() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/10 transition-opacity duration-500 group-hover:from-black/80" />
           <div className="relative z-10 flex flex-col h-full justify-center items-center text-center px-6">
             <h3 className="text-md md:text-xl text-white font-serif  mb-4 uppercase tracking-[0.15em] drop-shadow-lg">
-              Winter Collection
+              Fall Collection
             </h3>
             <span className="text-white/80 text-sm  font-light tracking-wide">
               Explore luxurious styles for the season
