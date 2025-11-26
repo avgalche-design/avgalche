@@ -661,22 +661,75 @@ export default function ProductPageClient({
     { id: "shipping", label: "Shipping" },
   ];
 
+  // Add this helper function OUTSIDE of your component
+  const parseDescription = (description) => {
+    if (!description) return null;
+
+    console.log("RAW DESCRIPTION:", description); // Debug
+    console.log("TYPE:", typeof description); // Debug
+
+    // Check if it's already HTML (contains <p>, <br>, etc)
+    if (description.includes("<p>") || description.includes("<br>")) {
+      return <div dangerouslySetInnerHTML={{ __html: description }} />;
+    }
+
+    // Otherwise split by newlines (handle both \n and \r\n)
+    return (
+      <>
+        {description
+          .split(/\r?\n/)
+          .filter((line) => line.trim() !== "")
+          .map((para, idx) => (
+            <p key={idx} className="mb-4 last:mb-0">
+              {para}
+            </p>
+          ))}
+      </>
+    );
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
+      // case "description":
+      //   return (
+      //     <div className="space-y-6">
+      //       <div className="text-center mb-8">
+      //         <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-gray-400 to-transparent mx-auto opacity-60"></div>
+      //       </div>
+      //       <div className="text-gray-700 leading-relaxed bg-gray-50 border border-gray-200 rounded-md p-6 text-left font-extralight tracking-0.02em text-base max-w-2xl mx-auto space-y-5">
+      //         {product.description
+      //           .split("\n")
+      //           .filter(Boolean)
+      //           .map((paragraph, idx) => (
+      //             <p key={idx} className="mb-4 last:mb-0">
+      //               {paragraph}
+      //             </p>
+      //           ))}
+      //       </div>
+      //     </div>
+      //   );
+
       case "description":
         return (
           <div className="space-y-6">
             <div className="text-center mb-8">
               <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-gray-400 to-transparent mx-auto opacity-60"></div>
             </div>
-            <div
-              className="text-gray-700 leading-[1.8] bg-[#F9FAFB] border border-gray-200 
-             rounded-md p-6 text-left font-extralight tracking-[0.02em] 
-             text-base max-w-2xl mx-auto space-y-5"
-              dangerouslySetInnerHTML={{ __html: product.description }}
-            />
+            <div className="text-gray-700 leading-[1.8] bg-[#F9FAFB] border border-gray-200 rounded-md p-6 text-left font-extralight tracking-[0.02em] text-base max-w-2xl mx-auto">
+              {product.description
+                ?.split(/(?<=[.!?])\s+(?=[A-Z])/) // Split on period/exclamation + space + capital letter
+                .map((paragraph, idx, arr) => (
+                  <p
+                    key={idx}
+                    className={`${idx === arr.length - 1 ? "" : "mb-4"}`}
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+            </div>
           </div>
         );
+
       case "size-guide":
         return <SizeGuide sizeGuideData={sizeGuideData} />;
       case "wash-care":
