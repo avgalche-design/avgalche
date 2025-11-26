@@ -9,7 +9,7 @@ const PRODUCTS_QUERY = `
         id
         title
         handle
-        description
+        descriptionHtml  
         productType
         createdAt
         images(first: 5) {

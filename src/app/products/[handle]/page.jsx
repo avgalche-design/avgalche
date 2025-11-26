@@ -9,7 +9,7 @@ const PRODUCT_QUERY = `
     productByHandle(handle: $handle) {
       id
       title
-      description
+      descriptionHtml
       productType
       metafields(identifiers: [
         {namespace: "custom", key: "wash_care_instructions"},
