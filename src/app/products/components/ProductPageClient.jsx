@@ -669,10 +669,12 @@ export default function ProductPageClient({
             <div className="text-center mb-8">
               <div className="w-12 h-[1px] bg-gradient-to-r from-transparent via-gray-400 to-transparent mx-auto opacity-60"></div>
             </div>
-            <p className="text-gray-700 leading-[1.8] bg-[#F9FAFB]  border border-gray-200 rounded-md p-6 text-left font-extralight tracking-[0.02em] text-base max-w-2xl mx-auto">
-              {product.description ||
-                "Embodying the essence of contemporary luxury, this piece transcends ordinary fashion. Meticulously crafted from premium materials with uncompromising attention to detail, it represents the perfect harmony between avant-garde design and timeless sophistication."}
-            </p>
+            <div
+              className="text-gray-700 leading-[1.8] bg-[#F9FAFB] border border-gray-200 
+             rounded-md p-6 text-left font-extralight tracking-[0.02em] 
+             text-base max-w-2xl mx-auto space-y-5"
+              dangerouslySetInnerHTML={{ __html: product.description }}
+            />
           </div>
         );
       case "size-guide":
