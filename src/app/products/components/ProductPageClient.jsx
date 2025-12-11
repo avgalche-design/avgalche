@@ -612,10 +612,35 @@ export default function ProductPageClient({
   const { addToWishlist, removeFromWishlist, isInWishlist, setIsWishlistOpen } =
     useWishlist();
 
+  // ✅ Pixel code for page view and product view
+  useEffect(() => {
+    if (!window.fbq || !product) return;
+
+    fbq("track", "PageView");
+
+    fbq("track", "ViewContent", {
+      content_ids: [product.id],
+      content_name: product.title,
+      content_type: "product",
+    });
+  }, [product]);
+
   const handleAddToCart = async () => {
     if (!selectedVariant) return;
+
+    // Facebook Add to Cart
+    if (window.fbq) {
+      fbq("track", "AddToCart", {
+        content_ids: [selectedVariant.id],
+        content_name: product.title,
+        content_type: "product",
+        value: parseFloat(selectedVariant.price?.amount || 0),
+        currency: selectedVariant.price?.currencyCode || "INR",
+      });
+    }
+
     await addToCart(selectedVariant.id, 1);
-    setIsCartOpen(true); // 👈 open modal instead of redirect
+    setIsCartOpen(true);
   };
 
   const getWishlistKey = () =>
