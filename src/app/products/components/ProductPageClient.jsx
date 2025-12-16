@@ -612,7 +612,7 @@ export default function ProductPageClient({
   const { addToWishlist, removeFromWishlist, isInWishlist, setIsWishlistOpen } =
     useWishlist();
 
-  // ✅ Pixel code for page view and product view
+  // Pixel code for page view and product view
   useEffect(() => {
     if (!window.fbq || !product) return;
 

@@ -176,6 +176,11 @@ export default function Footer() {
                 <Link href="/terms-conditions" className="hover:underline">
                   Terms & Conditions
                 </Link>
+                <li>
+                  <Link href="/return-&-exchange" className="hover:underline">
+                    Return & Exchange
+                  </Link>
+                </li>
               </li>
             </ul>
           </div>
