@@ -18,7 +18,7 @@ export default function ReturnExchangePolicy() {
       <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="prose prose-lg max-w-none text-black/80 leading-relaxed">
           <p className="text-lg mb-8">
-            At AV Galche, each piece is crafted with attention to detail and
+            At AV GaLche, each piece is crafted with attention to detail and
             quality. To maintain fairness and transparency, please review our
             return and exchange policy carefully before making a purchase.
           </p>

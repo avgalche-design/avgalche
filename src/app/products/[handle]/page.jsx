@@ -67,45 +67,35 @@ const PRODUCT_QUERY = `
 `;
 
 const RELATED_PRODUCTS_QUERY = `
-{
-  products(first: 4) {
-    edges {
-      node {
-        id
-        title
-        handle
-        media(first: 1) {
-          edges {
-            node {
-              mediaContentType
-              alt
-              ... on MediaImage {
-                image {
-                  url
+query WinterCollectionProducts {
+  collectionByHandle(handle: "winter-collection") {
+    products(first: 20) {
+      edges {
+        node {
+          id
+          title
+          handle
+          createdAt
+          media(first: 1) {
+            edges {
+              node {
+                mediaContentType
+                alt
+                ... on MediaImage {
+                  image {
+                    url
+                  }
                 }
-              }
-              ... on Video {
-                sources {
-                  url
-                  mimeType
-                  format
-                  height
-                  width
-                }
-              }
-              ... on ExternalVideo {
-                host
-                originUrl
               }
             }
           }
-        }
-        variants(first: 1) {
-          edges {
-            node {
-              price {
-                amount
-                currencyCode
+          variants(first: 1) {
+            edges {
+              node {
+                price {
+                  amount
+                  currencyCode
+                }
               }
             }
           }
@@ -221,25 +211,34 @@ To initiate a return or refund:
     { next: { revalidate: 60 } } // ✅ updated
   );
 
+  const currentHandle = handle;
+
   const relatedProducts =
-    relatedData?.products?.edges?.map((edge) => ({
-      ...edge.node,
-      images: edge.node.media?.edges
-        ? edge.node.media.edges
-            .map((mediaEdge) => {
-              const node = mediaEdge.node;
-              if (node.mediaContentType === "IMAGE" && node.image) {
-                return { url: node.image.url, altText: node.alt || "" };
-              }
-              return null;
-            })
-            .filter(Boolean)
-        : [],
-      variants:
-        edge.node.variants?.edges?.map((vEdge) => ({
-          price: vEdge.node.price,
-        })) || [],
-    })) || [];
+    relatedData?.collectionByHandle?.products?.edges
+      ?.map((edge) => ({
+        ...edge.node,
+        images: edge.node.media?.edges
+          ? edge.node.media.edges
+              .map((mediaEdge) => {
+                const node = mediaEdge.node;
+                if (node.mediaContentType === "IMAGE" && node.image) {
+                  return { url: node.image.url, altText: node.alt || "" };
+                }
+                return null;
+              })
+              .filter(Boolean)
+          : [],
+        variants:
+          edge.node.variants?.edges?.map((vEdge) => ({
+            price: vEdge.node.price,
+          })) || [],
+      }))
+      // ✅ REMOVE current product
+      .filter((product) => product.handle !== currentHandle)
+      // ✅ RANDOMIZE
+      .sort(() => 0.5 - Math.random())
+      // ✅ TAKE 4
+      .slice(0, 4) || [];
 
   return (
     <>
